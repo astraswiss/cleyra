@@ -1,3 +1,47 @@
+## 2026-07-18
+
+### Added
+
+- Homepage completa `/de` con tutte le sezioni 8.1–8.9 (`components/marketing/*`).
+- Modulo lead multi-step funzionante (`components/lead-form/*`): schema
+  Zod condiviso (`lib/lead-schema.ts`), 4 step con React Hook Form,
+  persistenza sessione, riepilogo errori accessibile, honeypot,
+  prevenzione doppio invio.
+- Nuove primitive UI: `Input`, `Select`, `Checkbox`, `RadioGroup`,
+  `Textarea`, `ProgressBar`, `Alert`, `Accordion`.
+- Endpoint `/api/leads` reale: validazione, rate limiting, honeypot
+  server-side, normalizzazione/sanitizzazione, log senza PII
+  (`lib/{rate-limit,sanitize,lead-id}.ts`).
+- `lib/attribution.ts` per la cattura UTM/click-id di prima sessione.
+- Vitest con 21 unit test per lo schema lead; Playwright come
+  devDependency per verifiche e2e manuali.
+
+### Changed
+
+- `app/de/page.tsx` da placeholder a homepage completa.
+- `app/api/leads/route.ts` da stub 501 a endpoint funzionante (con
+  persistenza ancora solo in memoria, non un database reale).
+- `docs/IMPLEMENTATION_PLAN.md`, `docs/PROJECT_STATUS.md`,
+  `docs/ARCHITECTURE.md` aggiornati allo stato reale.
+
+### Fixed
+
+- N/D
+
+### Removed
+
+- N/D
+
+### Verification
+
+- `npm run build`, `npm run lint`, `npx vitest run` (21/21) verdi
+- Verifica manuale `curl` su `/api/leads`: successo, validazione, rate
+  limit (429 alla 6ª richiesta), honeypot
+- Verifica e2e manuale con Playwright headless: flusso completo del
+  modulo dalla homepage al redirect `/de/danke`, inclusa la
+  preservazione dei dati nella navigazione indietro e la visualizzazione
+  del riepilogo errori quando manca il consenso privacy
+
 ## 2026-07-17 (2)
 
 ### Added

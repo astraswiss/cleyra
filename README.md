@@ -43,16 +43,25 @@ npm run build      # build produzione (include typecheck e lint)
 npm run start      # avvio build produzione
 npm run lint       # lint
 npm run typecheck  # controllo tipi (tsc --noEmit)
+npm run test       # unit test (Vitest)
 ```
 
 ## Database e migrazioni
 
-Non ancora collegati. Vedi `docs/ARCHITECTURE.md` e `docs/DECISIONS.md`.
+Non ancora collegati. L'endpoint `/api/leads` valida e risponde
+correttamente, ma tiene i lead solo in un array in memoria di processo
+(non sopravvive a un riavvio) finché un database reale non è scelto e
+collegato. Vedi `docs/ARCHITECTURE.md` e `docs/DECISIONS.md`.
 
 ## Test
 
-Nessun test automatico ancora presente (Fase 6). Vedi
-`docs/IMPLEMENTATION_PLAN.md` per l'elenco pianificato.
+```bash
+npm run test
+```
+
+Unit test per `lib/lead-schema.ts` (validazione CAP, date, limiti
+immobile, consenso privacy). Nessun component test o suite e2e ancora
+committata — vedi `docs/IMPLEMENTATION_PLAN.md` (QA-001/QA-002).
 
 ## Build
 
