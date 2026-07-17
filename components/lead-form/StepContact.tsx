@@ -18,7 +18,7 @@ export function StepContact() {
 
   return (
     <fieldset className="flex flex-col gap-5">
-      <legend className="text-2xl font-semibold">
+      <legend className="font-display text-2xl font-bold tracking-tight text-ink-900">
         Wie dürfen wir Sie kontaktieren?
       </legend>
 
@@ -77,7 +77,7 @@ export function StepContact() {
         {...register("marketingConsent")}
       />
 
-      <p className="text-sm text-slate-600">
+      <p className="text-sm text-ink-600">
         Die Anfrage ist kostenlos und unverbindlich. Ein Auftrag entsteht
         erst, wenn Sie eine Offerte des Reinigungspartners akzeptieren.
       </p>

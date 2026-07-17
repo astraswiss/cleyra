@@ -39,7 +39,7 @@ export function MobileMenu() {
         aria-controls={menuId}
         aria-label={isOpen ? "Menü schliessen" : "Menü öffnen"}
         onClick={() => setIsOpen((open) => !open)}
-        className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900"
+        className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md text-ink-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
       >
         <span aria-hidden="true">{isOpen ? "✕" : "☰"}</span>
       </button>
@@ -47,13 +47,17 @@ export function MobileMenu() {
       {isOpen ? (
         <div
           id={menuId}
-          className="fixed inset-0 top-[64px] z-40 bg-white px-4 py-6"
+          className="fixed inset-0 top-[64px] z-40 bg-[#FBFAF8] px-4 py-6"
         >
           <nav aria-label="Hauptnavigation mobil">
-            <ul className="flex flex-col gap-4 text-lg">
+            <ul className="flex flex-col gap-4 text-lg font-medium text-ink-800">
               {navItems.map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} onClick={() => setIsOpen(false)}>
+                  <Link
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    className="hover:text-brand-700"
+                  >
                     {item.label}
                   </Link>
                 </li>

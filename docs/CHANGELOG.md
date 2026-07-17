@@ -1,3 +1,34 @@
+## 2026-07-18 (2)
+
+### Added
+
+- Sistema di design: palette `brand`/`clay`/`ink` in
+  `tailwind.config.ts`, tipografia `Manrope` + `Inter` self-hosted via
+  `next/font/google`, `components/ui/Icon.tsx` (set di icone SVG inline).
+
+### Changed
+
+- Tutti i componenti `ui/`, `layout/`, `marketing/` e `lead-form/`
+  aggiornati dalla palette Tailwind di default (slate/gray) alla nuova
+  palette; card, pill, badge, ombre morbide applicate in modo coerente.
+- Header reso "sticky" con sfondo sfumato; footer e sezione CTA finale
+  ora in verde alpino scuro per dare un bookending visivo alla pagina.
+
+### Fixed
+
+- N/D
+
+### Removed
+
+- N/D
+
+### Verification
+
+- `npm run build`, `npm run lint`, `npx vitest run` (21/21) verdi
+- Verifica visiva con screenshot Playwright (desktop 1440px e mobile
+  375px): hero, service list, region pills, form card, CTA finale e
+  footer controllati prima di considerare il lavoro concluso
+
 ## 2026-07-18
 
 ### Added

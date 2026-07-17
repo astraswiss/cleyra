@@ -1,12 +1,21 @@
-Last updated: 2026-07-18 00:15 Europe/Zurich
-Current phase: Fase 1–2–3 avanzate in parallelo (fondazioni, homepage, modulo lead); Fase 4 (backend) parziale
+Last updated: 2026-07-18 00:45 Europe/Zurich
+Current phase: Fase 1–2–3 avanzate in parallelo (fondazioni, homepage, modulo lead); Fase 4 (backend) parziale; sistema di design rivisto
 Overall status: in_progress
 Current branch: claude/new-session-huwuyt
-Last verified commit: fbc2963 (routes + header/footer) — questa sessione aggiunge un nuovo commit sopra
+Last verified commit: da2b64e (homepage + lead form + API-001) — questa sessione aggiunge un nuovo commit sopra
 
 ## Cosa è già funzionante
 
 - Tutto il checkpoint precedente (Fase 0/1: continuity docs, scaffold, 14 rotte, header/footer/menu mobile).
+- **Sistema di design rivisto** (DEC-20260718-01): palette dedicata
+  `brand` (verde alpino)/`clay` (terracotta)/`ink` (neutri caldi) al
+  posto dei colori di default Tailwind; tipografia `Manrope` (display) +
+  `Inter` (corpo), self-hosted via `next/font/google`; set di icone SVG
+  proprietarie (`components/ui/Icon.tsx`); card, pill, badge e ombre
+  morbide (`shadow-soft`/`shadow-card`) applicate in modo coerente su
+  homepage, form e footer/header. Verificato visivamente con screenshot
+  Playwright (desktop 1440px e mobile 375px) prima e dopo, non solo con
+  build/lint.
 - Homepage `/de` completa con tutte le sezioni 8.1–8.9 (Hero, TrustStrip,
   Problem, ProcessSteps, ServiceList, RegionLinks, BenefitsGrid,
   PartnerTransparency con la dichiarazione di intermediazione, FaqPreview

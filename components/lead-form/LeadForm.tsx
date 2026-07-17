@@ -264,7 +264,7 @@ export function LeadForm() {
           nextLabel={STEP_NEXT_LABELS[step] ?? "Weiter"}
         />
 
-        <p className="mt-4 text-sm text-slate-600">
+        <p className="mt-4 text-sm text-ink-600">
           {step === TOTAL_STEPS
             ? "Die Anfrage ist kostenlos und unverbindlich. Ein Auftrag entsteht erst, wenn Sie eine Offerte des Reinigungspartners akzeptieren."
             : "Dauert etwa 2 Minuten. Kein Benutzerkonto erforderlich."}

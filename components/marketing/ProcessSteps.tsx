@@ -15,20 +15,24 @@ const steps = [
 
 export function ProcessSteps() {
   return (
-    <section className="py-12">
-      <h2 className="text-3xl font-semibold">So funktioniert Cleyra</h2>
-      <ol className="mt-8 grid gap-8 sm:grid-cols-3">
+    <section className="py-14">
+      <h2 className="font-display text-3xl font-bold tracking-tight text-ink-900">
+        So funktioniert Cleyra
+      </h2>
+      <ol className="mt-10 grid gap-10 sm:grid-cols-3 sm:gap-8">
         {steps.map((step, index) => (
-          <li key={step.title}>
-            <span className="text-sm font-semibold text-slate-500">
-              {index + 1}.
+          <li key={step.title} className="relative pl-14 sm:pl-0">
+            <span className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-full bg-brand-700 font-display text-lg font-bold text-white sm:static sm:mb-4">
+              {index + 1}
             </span>
-            <p className="mt-1 text-lg font-medium">{step.title}</p>
-            <p className="mt-2 text-base text-slate-700">{step.text}</p>
+            <p className="text-lg font-semibold text-ink-900">{step.title}</p>
+            <p className="mt-2 text-base leading-relaxed text-ink-600">
+              {step.text}
+            </p>
           </li>
         ))}
       </ol>
-      <p className="mt-8 text-sm text-slate-600">
+      <p className="mt-9 text-sm text-ink-500">
         Die Anfrage bei Cleyra ist kostenlos und unverbindlich.
       </p>
     </section>

@@ -19,9 +19,9 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             ref={ref}
             aria-invalid={Boolean(errorMessage) || undefined}
             aria-describedby={errorId}
-            className={`h-5 w-5 rounded border-slate-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 ${className}`}
+            className={`h-5 w-5 rounded border-ink-300 text-brand-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 ${className}`}
           />
-          <label htmlFor={id} className="text-sm">
+          <label htmlFor={id} className="text-sm text-ink-700">
             {label}
           </label>
         </div>

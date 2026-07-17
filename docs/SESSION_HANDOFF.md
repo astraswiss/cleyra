@@ -1,132 +1,112 @@
 # Session handoff
 
-Last updated: 2026-07-18 00:15 Europe/Zurich
-Session objective: Proseguire dopo Fase 1 con la homepage completa
-(HOME-001), il modulo lead multi-step (Fase 3, FORM-001..007) e un
-endpoint `/api/leads` reale con validazione/antispam (API-001 parziale),
-su istruzione dell'utente di continuare a costruire segnalando solo dove
-serve il suo intervento.
+Last updated: 2026-07-18 00:45 Europe/Zurich
+Session objective: Il proprietario ha segnalato che il sito "non ha molto
+carattere" a livello di design; rivedere il sistema di design (palette,
+tipografia, icone) mantenendo lo stile "pulito, affidabile, locale,
+contemporaneo, non luxury" richiesto dalla spec (sezione 6).
 Result: completed
 
 ## What changed
 
-- **Homepage** (`app/de/page.tsx`): tutte le sezioni 8.1–8.9 implementate
-  in `components/marketing/*` (Hero, TrustStrip, Problem inline,
-  ProcessSteps, ServiceList, RegionLinks, BenefitsGrid,
-  PartnerTransparency, FaqPreview con `Accordion`, sezione `#anfrage` con
-  il modulo lead incorporato, FinalCta).
-- **Modulo lead** (`components/lead-form/*`): schema Zod condiviso
-  (`lib/lead-schema.ts`), 4 step (`StepLocationService`, `StepProperty`,
-  `StepExtras` + `PhotoUploader`, `StepContact`), orchestratore
-  `LeadForm.tsx` con React Hook Form + `zodResolver`, persistenza in
-  `sessionStorage`, progress bar, riepilogo errori accessibile, honeypot,
-  prevenzione doppio invio.
-- **Endpoint `/api/leads`**: sostituito lo stub 501 con validazione Zod
-  reale, honeypot server-side, rate limiting in memoria (5/60s per IP),
-  normalizzazione email/telefono, sanitizzazione `notes`, log senza PII.
-  **Non collegato a un database reale** — i lead restano in un array in
-  memoria di processo (`inMemoryLeads`), persi a ogni riavvio.
-- **Attribution**: `lib/attribution.ts` cattura UTM/GCLID/GBRAID/WBRAID/
-  referrer al primo touch della sessione e li allega al payload inviato
-  a `/api/leads` (non ancora persistiti né usati da analytics).
-- **Test**: aggiunto Vitest con 21 unit test su `lib/lead-schema.ts`
-  (`npm run test`). Aggiunto Playwright come devDependency per una
-  verifica e2e manuale ad-hoc (script temporaneo, non committato).
-- Aggiornati `docs/IMPLEMENTATION_PLAN.md`, `docs/PROJECT_STATUS.md`,
-  `docs/ARCHITECTURE.md` per riflettere lo stato reale.
+- Nuova palette in `tailwind.config.ts`: `brand` (verde alpino, per CTA
+  primarie, link, footer, sezione CTA finale), `clay` (terracotta caldo,
+  uso sobrio per accenti/icone), `ink` (neutri caldi al posto di
+  slate/gray).
+- Tipografia: `Manrope` (display, per H1/H2/H3/legend) + `Inter` (corpo),
+  self-hosted tramite `next/font/google` in `app/layout.tsx` (nessuna
+  richiesta esterna a runtime — verificato che il fetch dei font
+  funziona in build attraverso il proxy di rete dell'ambiente).
+- Nuovo `components/ui/Icon.tsx`: piccolo set di icone SVG inline
+  (check, mapPin, handshake, document, spark, phone) usato in TrustStrip,
+  ServiceList, RegionLinks, BenefitsGrid, PartnerTransparency — al posto
+  di bullet/checkmark testuali, senza aggiungere una libreria di icone.
+- Tutti i componenti `components/marketing/*`, `components/layout/*`,
+  `components/ui/{Input,Select,Checkbox,RadioGroup,Textarea,ProgressBar,
+  Alert,Accordion,Button}.tsx` e `components/lead-form/*` aggiornati dalla
+  palette Tailwind di default alla nuova palette (card con `shadow-soft`/
+  `shadow-card`, pill arrotondate, badge colorati).
+- Header reso "sticky" con sfondo semi-trasparente sfumato; footer e
+  sezione CTA finale in verde alpino scuro (`brand-900`) per dare un
+  bookending visivo coerente alla pagina.
+- Registrata la decisione in `docs/DECISIONS.md` (DEC-20260718-01).
 
 ## Exact current state
 
-- Homepage e modulo lead funzionano end-to-end in locale: compilazione
-  dei 4 step, navigazione avanti/indietro senza perdita dati, validazione
-  con focus/riepilogo errori, invio riuscito → redirect `/de/danke`.
-  Verificato con un browser reale (Playwright headless, script temporaneo
-  non salvato nel repo).
-- `/api/leads` valida/sanifica/rate-limita correttamente ma **non
-  persiste realmente i lead** (solo in memoria) e **non invia e-mail**.
-  Questo è un limite noto e documentato, non un bug nascosto.
-- Le landing locali, le pagine informative e le pagine legali restano
-  invariate rispetto al checkpoint precedente (placeholder minimi).
-- `npm run build`, `npm run lint`, `npx vitest run` tutti verdi.
+- Tutto quanto costruito nelle sessioni precedenti (routes, header/footer,
+  homepage, modulo lead, endpoint `/api/leads`) è invariato
+  funzionalmente: questa sessione ha toccato solo styling/markup visivo,
+  non la logica applicativa.
+- `npm run build`, `npm run lint`, `npx vitest run` (21/21) tutti verdi
+  dopo le modifiche.
+- Verificato **visivamente**, non solo con build/lint: screenshot
+  Playwright a 1440px (hero, service list, region pills, form card, CTA
+  finale, footer) e a 375px (hero mobile) — non salvati nel repository,
+  solo ispezionati durante la sessione.
 - Repository: modifiche di questa sessione non ancora committate al
-  momento di scrivere questo file (da fare subito dopo, come richiesto
-  dal hook di fine sessione).
+  momento di scrivere questo file (da fare subito dopo).
 
 ## Files touched
 
-- `app/de/page.tsx` — homepage completa
-- `app/api/leads/route.ts` — validazione/antispam reali (non più stub)
-- `components/marketing/*` — 9 nuovi componenti sezione homepage
-- `components/ui/{Input,Select,Checkbox,RadioGroup,Textarea,ProgressBar,Alert,Accordion}.tsx` — nuove primitive
-- `components/lead-form/*` — 7 nuovi componenti (LeadForm e 4 step + navigazione/errori + uploader)
-- `lib/lead-schema.ts`, `lib/attribution.ts`, `lib/rate-limit.ts`, `lib/sanitize.ts`, `lib/lead-id.ts` — nuova logica condivisa
-- `lib/__tests__/lead-schema.test.ts` — 21 unit test
-- `vitest.config.ts` — nuovo
-- `package.json` — aggiunte `zod`, `react-hook-form`, `@hookform/resolvers`, `vitest` (devDep), `playwright` (devDep), script `test`
-- `docs/IMPLEMENTATION_PLAN.md`, `docs/PROJECT_STATUS.md`, `docs/ARCHITECTURE.md` — aggiornati
+- `tailwind.config.ts` — palette `brand`/`clay`/`ink`, `fontFamily`,
+  `boxShadow`, `borderRadius`
+- `app/layout.tsx` — `next/font/google` (Manrope + Inter) via CSS variables
+- `app/globals.css` — background/testo di base, `prefers-reduced-motion`
+- `components/ui/Icon.tsx` — nuovo
+- `components/ui/{Button,Input,Select,Checkbox,RadioGroup,Textarea,ProgressBar,Alert,Accordion}.tsx` — ricolorati
+- `components/layout/{Header,Footer,MobileMenu}.tsx` — ricolorati, header sticky, footer scuro
+- `components/marketing/*` — tutti i 9 componenti aggiornati con icone e nuova palette
+- `components/lead-form/*` — colori aggiornati (nessuna modifica alla logica)
+- `app/de/*/page.tsx` (tutte le pagine placeholder) — h1/testo allineati alla nuova palette/tipografia
+- `docs/DECISIONS.md` — nuova voce DEC-20260718-01
+- `docs/PROJECT_STATUS.md`, `docs/ARCHITECTURE.md`, `docs/CHANGELOG.md` — aggiornati
 
 ## Verification performed
 
-- `npm run build` — successo, 18 route (typecheck e lint inclusi)
+- `npm run build` — successo, 18 route (font Google scaricati e
+  self-hosted correttamente in fase di build attraverso il proxy)
 - `npm run lint` — nessun warning/errore
-- `npx vitest run` — 21/21 test verdi
-- `curl` manuale su `/api/leads`: lead valido → `200` con `leadId`/
-  `redirectUrl`; payload invalido → `400 VALIDATION_ERROR` con
-  `fieldErrors`; 6 richieste in 60s dallo stesso IP → `429 RATE_LIMITED`
-  alla 6ª; honeypot compilato → `200` fittizio, log conferma nessuna
-  elaborazione
-- Verifica e2e con Playwright headless (script temporaneo cancellato a
-  fine verifica, non committato): homepage → compilazione 4 step →
-  Zurück preserva i dati (`rooms=3`) → submit senza `privacyConsent`
-  mostra il riepilogo errori senza navigare → submit valido con consenso
-  → redirect a `/de/danke`. Un solo warning console: `404` su una
-  risorsa non identificata nei log server (probabile favicon mancante,
-  cosmetico)
+- `npx vitest run` — 21/21 verdi (nessuna modifica alla logica, solo a
+  markup/stile)
+- Screenshot Playwright headless a due viewport (1440px, 375px) ispezionati
+  visivamente per hero, service list, region links, form card, CTA
+  finale, footer — nessuno script committato nel repository
 
 ## Known problems
 
-- `/api/leads` non persiste realmente i lead (solo array in memoria) e
-  non invia e-mail — bloccato su API-002/API-005 (scelta provider).
-- Rate limiter in memoria non funziona correttamente in ambienti
-  multi-istanza/serverless (ogni istanza ha la sua Map).
-- Nessun upload reale delle foto: solo `photoCount` viene inviato.
-- Nessun favicon configurato (404 cosmetico nel browser).
-- Nessuna suite e2e Playwright committata nel repository (solo verifica
-  manuale ad-hoc in questa sessione) — da formalizzare in QA-002.
-- Nessun component test automatico per gli step del modulo — da fare in
-  QA-001.
-- Landing locali e pagine informative restano placeholder minimi.
+- Nessuna regressione funzionale nota. Restano tutti i limiti già
+  documentati in precedenza (persistenza lead solo in memoria, nessuna
+  e-mail, landing locali/pagine informative ancora placeholder minimi,
+  nessun favicon).
+- Contrasto colore non verificato con uno strumento automatico (solo
+  ispezione visiva) — da includere nell'audit accessibilità di QA-003.
 
 ## Exact next actions
 
-1. API-002 — Scegliere un provider database (con il proprietario) e
-   sostituire `inMemoryLeads` in `app/api/leads/route.ts` con una
-   persistenza reale; aggiornare `.env.example` con `DATABASE_URL` reale
-   quando noto.
-2. LOCAL-002/003/004 — Espandere `app/de/endreinigung-{visp,brig,naters}/page.tsx`
-   con la struttura a 10 sezioni (spec 9.4) usando `lib/locations.ts` più
-   una FAQ locale per ciascuna e link reciproci.
-3. QA-001/QA-002 — Scrivere component test per `LeadForm` e i 4 step
-   (React Testing Library o simile) e una suite e2e Playwright committata
-   in `e2e/` basata sugli scenari di spec sezione 27, riutilizzando la
-   logica dello script di verifica ad-hoc di questa sessione.
-4. API-003/FORM-005 — Scegliere uno storage per gli allegati e collegare
-   l'upload reale in `PhotoUploader.tsx` + un endpoint dedicato o
-   estensione di `/api/leads`.
-5. INFO-001 — Scrivere il copy completo per `so-funktionierts`, `faq`,
-   `ueber-cleyra`, `kontakt` (oggi solo H1 placeholder).
+1. QA-003 (parziale) — Verificare il contrasto colore della nuova
+   palette con uno strumento (es. axe, Lighthouse) prima di considerare
+   il design system finale.
+2. API-002 — Scegliere un provider database e sostituire `inMemoryLeads`
+   in `app/api/leads/route.ts` con una persistenza reale.
+3. LOCAL-002/003/004 — Espandere le landing locali con la struttura a 10
+   sezioni, ora che i componenti marketing/UI hanno uno stile coerente
+   da riusare.
+4. QA-001/QA-002 — Formalizzare test automatici (component test per gli
+   step del modulo, suite e2e Playwright committata).
+5. INFO-001 — Copy completo per `so-funktionierts`, `faq`, `ueber-cleyra`,
+   `kontakt`, ora riutilizzando lo stesso stile della homepage.
 
 ## Before continuing
 
 - Leggere `CLEYRA_WEBSITE_SPEC.md`, `docs/PROJECT_STATUS.md` e questo
   file prima di qualsiasi modifica.
-- Non riaprire le decisioni registrate in `docs/DECISIONS.md` senza un
-  motivo concreto.
-- Non presentare `/api/leads` come "pronto" senza chiarire che la
-  persistenza è solo in memoria — rischio di far credere a un
-  proprietario non tecnico che i lead vengano davvero salvati.
-- Non pubblicare le pagine legali senza testo approvato.
-- Non pubblicare la landing Naters con i comuni vicini attuali senza
-  conferma del proprietario.
+- Non tornare alla palette Tailwind di default (slate/gray) senza
+  discuterne con il proprietario — è stata sostituita su suo feedback
+  esplicito (DEC-20260718-01).
+- Non introdurre una libreria di icone come dipendenza senza necessità
+  concreta: il set attuale in `components/ui/Icon.tsx` copre i casi
+  d'uso attuali ed è facilmente estendibile.
+- Non riaprire le altre decisioni in `docs/DECISIONS.md` senza un motivo
+  concreto.
 - Verificare `git status` prima di operazioni distruttive; committare e
   pushare le modifiche di questa sessione se non già fatto.

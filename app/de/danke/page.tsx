@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function DankePage() {
   return (
     <main className="mx-auto max-w-content px-4 py-16">
-      <h1 className="text-3xl font-semibold">
+      <h1 className="font-display text-3xl font-bold tracking-tight text-ink-900">
         Vielen Dank. Ihre Anfrage ist bei Cleyra eingegangen.
       </h1>
       <p className="mt-4 text-lg">
@@ -28,7 +28,7 @@ export default function DankePage() {
           Offerte.
         </li>
       </ol>
-      <p className="mt-6 text-sm text-slate-600">
+      <p className="mt-6 text-sm text-ink-600">
         Bitte achten Sie in den nächsten Stunden auf Anrufe und E-Mails.
       </p>
     </main>

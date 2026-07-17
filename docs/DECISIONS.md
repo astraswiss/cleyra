@@ -30,6 +30,36 @@ Formato ADR leggero. Registrare solo decisioni durature, non correzioni minori.
   decisione; vedi `PROJECT_STATUS.md` per i dati richiesti al proprietario.
 - Related files/tasks: API-002, API-005
 
+## DEC-20260718-01 — Sistema di design: palette e tipografia
+
+- Status: accepted
+- Date: 2026-07-18
+- Context: Il primo scaffold usava i colori/font di default di Tailwind
+  (slate/gray, font di sistema), che il proprietario ha giudicato privi
+  di carattere visivo per un sito rivolto a privati nel Vallese.
+- Decision: introdotta una palette dedicata in `tailwind.config.ts`:
+  `brand` (verde alpino, per CTA primarie, link, sezione finale scura,
+  footer), `clay` (terracotta caldo, uso sobrio per icone/accenti), `ink`
+  (neutri caldi per testo, al posto di `slate`/`gray`). Tipografia:
+  `Manrope` (display, per H1/H2/H3 e componenti UI enfatizzati) + `Inter`
+  (corpo testo), entrambi self-hosted tramite `next/font/google` (nessuna
+  richiesta esterna a runtime). Introdotto anche un piccolo set di icone
+  SVG inline proprietarie (`components/ui/Icon.tsx`) al posto di
+  bullet/checkmark testuali, senza aggiungere una libreria di icone come
+  dipendenza.
+- Alternatives considered: mantenere la palette neutra di default
+  (scartata: "non ha molto carattere" — feedback esplicito del
+  proprietario); usare una libreria di icone (es. lucide-react) — scartata
+  per evitare una dipendenza non necessaria quando bastavano poche icone
+  inline.
+- Consequences: tutti i componenti `ui/`, `layout/`, `marketing/` e
+  `lead-form/` sono stati aggiornati per usare la nuova palette; il
+  sistema di design resta comunque "pulito, affidabile, locale,
+  contemporaneo" e non "luxury", come richiesto dalla spec sezione 6.
+- Related files/tasks: `tailwind.config.ts`, `app/layout.tsx`,
+  `app/globals.css`, `components/ui/Icon.tsx`, tutti i componenti
+  `components/marketing/*`
+
 ## DEC-20260717-03 — Placeholder legali non pubblicabili
 
 - Status: accepted

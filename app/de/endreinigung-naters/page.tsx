@@ -14,9 +14,9 @@ export const metadata: Metadata = {
 export default function NatersLandingPage() {
   return (
     <main className="mx-auto max-w-content px-4 py-16">
-      <h1 className="text-3xl font-semibold">{location.h1}</h1>
+      <h1 className="font-display text-3xl font-bold tracking-tight text-ink-900">{location.h1}</h1>
       <p className="mt-4 text-lg">{location.intro}</p>
-      <p className="mt-4 text-sm text-slate-600">
+      <p className="mt-4 text-sm text-ink-600">
         Auch für: {location.nearbyPlaces.join(", ")}
       </p>
     </main>

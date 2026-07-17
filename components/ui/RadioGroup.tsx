@@ -24,7 +24,7 @@ export function RadioGroup({
 
   return (
     <fieldset className="flex flex-col gap-2">
-      <legend className="text-sm font-medium">{legend}</legend>
+      <legend className="text-sm font-semibold text-ink-800">{legend}</legend>
       <div className="flex flex-col gap-2">
         {options.map((option) => {
           const id = `${name}-${option.value}`;
@@ -39,9 +39,9 @@ export function RadioGroup({
                 onChange={() => onChange?.(option.value)}
                 onBlur={onBlur}
                 aria-describedby={errorId}
-                className="h-5 w-5 border-slate-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900"
+                className="h-5 w-5 border-ink-300 text-brand-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
               />
-              <label htmlFor={id} className="text-sm">
+              <label htmlFor={id} className="text-sm text-ink-700">
                 {option.label}
               </label>
             </div>

@@ -5,7 +5,9 @@ Stato tecnico reale, non desiderato. Aggiornare a ogni cambio di struttura.
 ## Stack e versioni principali
 
 - Next.js 14.2.35 (App Router), TypeScript strict
-- Tailwind CSS
+- Tailwind CSS con palette dedicata (`brand`/`clay`/`ink`, vedi
+  `tailwind.config.ts` e DEC-20260718-01) e font self-hosted
+  (`Manrope` display + `Inter` corpo, via `next/font/google`)
 - React Hook Form 7 + `@hookform/resolvers` (zodResolver) + Zod 4 per il
   modulo lead
 - Vitest per gli unit test; Playwright installato come devDependency (per
@@ -134,8 +136,10 @@ headless).
   da `siteConfig`, dichiarazione di intermediazione, copyright dinamico
 - `components/layout/Container.tsx` — wrapper larghezza massima 1180px
 - `components/ui/*` — Button, Input, Select, Checkbox, RadioGroup,
-  Textarea, ProgressBar, Alert, Accordion: primitive di form/UI accessibili
-  (label associate, `aria-describedby`/`aria-invalid`, errori con `role="alert"`)
+  Textarea, ProgressBar, Alert, Accordion, Icon: primitive di form/UI
+  accessibili (label associate, `aria-describedby`/`aria-invalid`, errori
+  con `role="alert"`) più un piccolo set di icone SVG inline proprietarie
+  (`Icon.tsx`, nessuna libreria di icone come dipendenza)
 - `components/marketing/*` — una sezione della homepage per componente,
   copy fedele alla spec sezioni 8.1–8.9
 - `components/lead-form/LeadForm.tsx` — orchestratore client: React Hook

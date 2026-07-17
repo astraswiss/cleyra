@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function FaqPage() {
   return (
     <main className="mx-auto max-w-content px-4 py-16">
-      <h1 className="text-3xl font-semibold">Häufige Fragen</h1>
+      <h1 className="font-display text-3xl font-bold tracking-tight text-ink-900">Häufige Fragen</h1>
     </main>
   );
 }

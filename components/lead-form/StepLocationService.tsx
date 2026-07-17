@@ -23,7 +23,7 @@ export function StepLocationService() {
 
   return (
     <fieldset className="flex flex-col gap-5">
-      <legend className="text-2xl font-semibold">
+      <legend className="font-display text-2xl font-bold tracking-tight text-ink-900">
         Wo soll gereinigt werden?
       </legend>
 
