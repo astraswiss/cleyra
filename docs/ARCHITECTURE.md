@@ -36,12 +36,35 @@ Browser
 ├── docs/
 ├── app/
 │   ├── layout.tsx
-│   ├── page.tsx            # redirect "/" → "/de"
+│   ├── page.tsx                    # redirect "/" → "/de"
+│   ├── api/
+│   │   └── leads/route.ts          # stub 501, non implementato (API-001)
 │   └── de/
-│       ├── layout.tsx
-│       └── page.tsx        # homepage placeholder
+│       ├── layout.tsx              # Header + Footer + skip link
+│       ├── page.tsx                # homepage placeholder
+│       ├── endreinigung-visp/page.tsx
+│       ├── endreinigung-brig/page.tsx
+│       ├── endreinigung-naters/page.tsx
+│       ├── umzugsreinigung-oberwallis/page.tsx
+│       ├── so-funktionierts/page.tsx
+│       ├── faq/page.tsx
+│       ├── ueber-cleyra/page.tsx
+│       ├── kontakt/page.tsx
+│       ├── datenschutz/page.tsx           # TODO LEGAL REVIEW
+│       ├── impressum/page.tsx             # TODO LEGAL REVIEW
+│       ├── vermittlungsbedingungen/page.tsx  # TODO LEGAL REVIEW
+│       └── danke/page.tsx          # noindex, nofollow
+├── components/
+│   ├── layout/
+│   │   ├── Container.tsx
+│   │   ├── Header.tsx
+│   │   ├── MobileMenu.tsx          # client component
+│   │   └── Footer.tsx
+│   └── ui/
+│       └── Button.tsx
 ├── lib/
-│   └── site-config.ts
+│   ├── site-config.ts
+│   └── locations.ts                # modello LocationLanding + dati Visp/Brig/Naters
 ├── next.config.mjs
 ├── tailwind.config.ts
 ├── postcss.config.js
@@ -54,32 +77,47 @@ Browser
 
 | Rotta | Stato |
 |---|---|
-| `/` | redirect a `/de` — implementato |
-| `/de` | placeholder — homepage completa non ancora implementata (Fase 2) |
-| `/de/endreinigung-visp` | non implementata |
-| `/de/endreinigung-brig` | non implementata |
-| `/de/endreinigung-naters` | non implementata |
-| `/de/umzugsreinigung-oberwallis` | non implementata |
-| `/de/so-funktionierts` | non implementata |
-| `/de/faq` | non implementata |
-| `/de/ueber-cleyra` | non implementata |
-| `/de/kontakt` | non implementata |
-| `/de/datenschutz` | non implementata |
-| `/de/impressum` | non implementata |
-| `/de/vermittlungsbedingungen` | non implementata |
-| `/de/danke` | non implementata |
-| `/api/leads` | non implementata |
+| `/` | redirect a `/de` — implementato e verificato (307) |
+| `/de` | placeholder (hero + disclaimer) — sezioni 8.2-8.9 mancanti (HOME-001) |
+| `/de/endreinigung-visp` | placeholder minimo — struttura 10 sezioni mancante (LOCAL-002) |
+| `/de/endreinigung-brig` | placeholder minimo — struttura 10 sezioni mancante (LOCAL-003) |
+| `/de/endreinigung-naters` | placeholder minimo — struttura 10 sezioni mancante (LOCAL-004) |
+| `/de/umzugsreinigung-oberwallis` | placeholder minimo (LOCAL-005) |
+| `/de/so-funktionierts` | placeholder minimo (INFO-001) |
+| `/de/faq` | placeholder minimo, nessuna domanda ancora (INFO-001) |
+| `/de/ueber-cleyra` | placeholder minimo (INFO-001) |
+| `/de/kontakt` | placeholder minimo, nessun modulo contatto separato (INFO-001) |
+| `/de/datenschutz` | placeholder `TODO LEGAL REVIEW` — non pubblicabile |
+| `/de/impressum` | placeholder `TODO LEGAL REVIEW` — non pubblicabile |
+| `/de/vermittlungsbedingungen` | placeholder `TODO LEGAL REVIEW` — non pubblicabile |
+| `/de/danke` | placeholder, `noindex, nofollow` verificato; contenuto dinamico da leadId non ancora collegato (API-006) |
+| `/api/leads` | stub, risponde `501 NOT_IMPLEMENTED` a POST (API-001) |
+
+Tutte le rotte sono state verificate manualmente con `curl` in questa
+sessione: nessun 404 involontario.
 
 ## Componenti principali
 
-Nessuno oltre al layout root e al placeholder homepage. Struttura
-`components/{layout,ui,marketing,lead-form,seo}` prevista dalla spec
-(sezione 23) ma non ancora creata.
+- `components/layout/Header.tsx` — logo, nav desktop, CTA, monta `MobileMenu`
+- `components/layout/MobileMenu.tsx` — client component: toggle, chiusura
+  su Escape e su selezione link, blocco scroll body mentre aperto
+- `components/layout/Footer.tsx` — link principali, link legali, contatti
+  da `siteConfig`, dichiarazione di intermediazione, copyright dinamico
+- `components/layout/Container.tsx` — wrapper larghezza massima 1180px
+- `components/ui/Button.tsx` — bottone polimorfo (link o button), varianti
+  primary/secondary, stato loading/disabled
+
+Struttura `components/marketing/*`, `components/lead-form/*`,
+`components/seo/*` prevista dalla spec (sezione 23) ma non ancora creata
+(Fase 2/3).
 
 ## Contenuti configurabili
 
-`lib/site-config.ts` — nome sito, locale, contatti (da env), zone servite,
-versione privacy. Da espandere in Fase 2/3 con copy CTA e limiti allegati.
+- `lib/site-config.ts` — nome sito, locale, contatti (da env), zone
+  servite, versione privacy, testo dichiarazione di intermediazione.
+- `lib/locations.ts` — modello `LocationLanding` e dati per Visp,
+  Brig-Glis, Naters (CAP, comuni vicini, meta title/description, H1,
+  intro). Da espandere con FAQ locale in Fase 2.
 
 ## Modello dati lead
 

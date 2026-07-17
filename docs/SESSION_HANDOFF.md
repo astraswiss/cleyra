@@ -1,102 +1,108 @@
 # Session handoff
 
-Last updated: 2026-07-17 23:15 Europe/Zurich
-Session objective: Impostare la memoria operativa del progetto (Fase 0) e
-uno scaffold Next.js minimo e verificato, su richiesta esplicita
-dell'utente di fermarsi dopo la Fase 0 per revisione.
+Last updated: 2026-07-17 23:45 Europe/Zurich
+Session objective: Proseguire dopo Fase 0 con Fase 1 (FOUND-006 struttura
+rotte completa, LAYOUT-001 header/footer), su richiesta dell'utente di
+continuare autonomamente segnalando solo dove serve il suo intervento.
 Result: completed
 
 ## What changed
 
-- Creati tutti i file di continuità richiesti dalla spec sezione 0:
-  `CLAUDE.md`, `docs/PROJECT_OVERVIEW.md`, `docs/ARCHITECTURE.md`,
-  `docs/IMPLEMENTATION_PLAN.md`, `docs/PROJECT_STATUS.md`,
-  `docs/DECISIONS.md`, `docs/SESSION_HANDOFF.md` (questo file),
-  `docs/CHANGELOG.md`, `README.md`.
-- Copiata la specifica caricata dall'utente in `CLEYRA_WEBSITE_SPEC.md`
-  nella root del repository (era solo in un percorso di upload, non nel
-  repo).
-- Scaffold Next.js 14 (App Router) + TypeScript strict + Tailwind CSS:
-  `package.json`, `tsconfig.json`, `next.config.mjs`, `tailwind.config.ts`,
-  `postcss.config.js`, `.eslintrc.json`, `.gitignore`, `.env.example`.
-- Codice applicativo minimo: `app/layout.tsx` (lang `de-CH`),
-  `app/page.tsx` (redirect `/` → `/de`), `app/de/layout.tsx`,
-  `app/de/page.tsx` (homepage placeholder con hero e dichiarazione di
-  intermediazione), `lib/site-config.ts`.
-- `npm install` eseguito; `next` fissato a `14.2.35` (non `14.2.5`) per
-  evitare una vulnerabilità nota della versione iniziale.
+- Creata la struttura rotte completa sotto `app/de/*` per tutte le 14
+  pagine previste dalla spec sezione 5, più uno stub `app/api/leads/route.ts`
+  (risponde `501 NOT_IMPLEMENTED`, non implementa ancora nulla — API-001
+  resta da fare).
+- Creati i componenti layout: `components/layout/Header.tsx`,
+  `MobileMenu.tsx` (client component, Escape/selezione link chiudono il
+  menu, blocco scroll), `Footer.tsx`, `Container.tsx`, e
+  `components/ui/Button.tsx` (polimorfo link/button, varianti,
+  stato loading/disabled).
+- `app/de/layout.tsx` ora monta Header + Footer + skip link
+  "Zum Hauptinhalt springen" per tutte le pagine tedesche.
+- Aggiunto `lib/locations.ts` con il modello `LocationLanding` e i dati
+  per Visp, Brig-Glis, Naters (CAP, comuni vicini, meta uniche); le tre
+  landing locali li usano invece di duplicare testo.
+- Pagine legali create come placeholder marcati `TODO LEGAL REVIEW`
+  (Datenschutz, Impressum, Vermittlungsbedingungen) — non pubblicabili
+  finché non arriva testo approvato.
+- `/de/danke` creata con `noindex, nofollow` verificato nell'HTML.
+- Aggiornati `docs/IMPLEMENTATION_PLAN.md`, `docs/PROJECT_STATUS.md`,
+  `docs/ARCHITECTURE.md` per riflettere lo stato reale.
 
 ## Exact current state
 
-- Repository Git locale su branch `claude/new-session-huwuyt`, **nessun
-  commit ancora creato** in questo repository (era vuoto all'inizio della
-  sessione).
-- `node_modules/` installato localmente (ignorato da Git).
-- Nessuna variabile d'ambiente reale impostata; solo `.env.example`.
+- Tutte le 14 rotte `/de/*` + `/` + `/api/leads` verificate con `curl`
+  manuale: 200/307/501 come atteso, nessun 404 involontario.
+- Contenuto delle pagine è ancora minimo/placeholder ovunque tranne
+  header/footer — corrisponde alla Fase 1 (fondazioni), non alla Fase 2
+  (contenuti marketing completi).
+- `npm run build` e `npm run lint` verdi con la nuova struttura.
+- Repository: working tree con modifiche non ancora committate al momento
+  di scrivere questo file (da committare subito dopo, come richiesto dal
+  hook di fine sessione).
 
 ## Files touched
 
-- `CLAUDE.md` — istruzioni operative di sessione
-- `CLEYRA_WEBSITE_SPEC.md` — copia della specifica di prodotto
-- `README.md` — istruzioni di avvio sviluppatore
-- `docs/PROJECT_OVERVIEW.md` — panoramica prodotto
-- `docs/ARCHITECTURE.md` — architettura tecnica reale
-- `docs/IMPLEMENTATION_PLAN.md` — piano con task ID (Fasi 0–6)
-- `docs/PROJECT_STATUS.md` — fotografia stato attuale
-- `docs/DECISIONS.md` — 3 decisioni registrate (stack, provider da
-  scegliere, placeholder legali)
-- `docs/CHANGELOG.md` — voce iniziale
-- `package.json`, `tsconfig.json`, `next.config.mjs`, `tailwind.config.ts`,
-  `postcss.config.js`, `.eslintrc.json`, `.gitignore`, `.env.example` —
-  configurazione progetto
-- `app/layout.tsx`, `app/page.tsx`, `app/de/layout.tsx`, `app/de/page.tsx`,
-  `app/globals.css` — codice applicativo minimo
-- `lib/site-config.ts` — contenuti configurabili centralizzati
+- `app/api/leads/route.ts` — stub endpoint (501)
+- `app/de/{endreinigung-visp,endreinigung-brig,endreinigung-naters,umzugsreinigung-oberwallis,so-funktionierts,faq,ueber-cleyra,kontakt,datenschutz,impressum,vermittlungsbedingungen,danke}/page.tsx` — placeholder route per ciascuna pagina
+- `app/de/layout.tsx` — monta Header/Footer/skip link
+- `app/de/page.tsx` — aggiunte ancore `#leistungen`/`#regionen`/`#anfrage`
+- `components/layout/Header.tsx`, `MobileMenu.tsx`, `Footer.tsx`, `Container.tsx` — nuovi
+- `components/ui/Button.tsx` — nuovo
+- `lib/locations.ts` — nuovo, modello e dati landing locali
+- `docs/IMPLEMENTATION_PLAN.md`, `docs/PROJECT_STATUS.md`, `docs/ARCHITECTURE.md` — aggiornati
 
 ## Verification performed
 
-- `npm install` — completato (390+ pacchetti, vedi debito tecnico in
-  `PROJECT_STATUS.md` per vulnerabilità dev residue)
-- `npm run build` — successo (compila, esegue typecheck e lint durante la
-  build, genera `/`, `/de`, `/_not-found` come pagine statiche)
+- `npm run build` — successo, 18 route generate (incl. `/api/leads`
+  dinamica), typecheck e lint inclusi nella build
 - `npm run lint` — nessun warning/errore
-- `npm run dev` + `curl` manuale — `/` risponde `307` verso `/de`; `/de`
-  risponde `200` e contiene l'H1 atteso
+- `npm run dev` + `curl` manuale su tutte le rotte `/de/*`, `/`, e POST su
+  `/api/leads` — codici di stato tutti corretti
+- Verifica manuale HTML: `/de/danke` contiene
+  `<meta name="robots" content="noindex, nofollow">`; `/de/faq` ha
+  `<title>Häufige Fragen | Cleyra</title>` (title univoco)
 
 ## Known problems
 
-- Nessun commit Git ancora creato in questa sessione: tutte le modifiche
-  sono nel working tree, non committate (il proprietario non ha ancora
-  richiesto un commit).
-- `npm audit` segnala vulnerabilità di severità alta in dipendenze dev
-  (`eslint-config-next` → `glob`/`minimatch`), non runtime; da monitorare.
-- Homepage contiene solo l'hero, non tutte le sezioni della spec (atteso,
-  task HOME-001 non ancora iniziato).
+- Nav header "Leistungen"/"Regionen" puntano ad ancore vuote nella
+  homepage (`#leistungen`, `#regionen`) — sezioni reali arriveranno con
+  HOME-001.
+- CTA "Kostenlose Anfrage" punta a `/de#anfrage`, non a un modulo
+  funzionante (il modulo è Fase 3).
+- I comuni vicini elencati per Naters in `lib/locations.ts` sono una mia
+  stima geografica ragionevole, non confermata dal proprietario come
+  "realmente servita" — la spec vieta di elencare zone non davvero
+  coperte. Da verificare prima della pubblicazione.
+- Nessun test automatico ancora scritto per header/footer/menu mobile.
 
 ## Exact next actions
 
-1. Se il proprietario approva, creare un commit Git con questo scaffold
-   (nessun commit è stato ancora creato: chiedere prima autorizzazione
-   esplicita, come da regole di sessione).
-2. FOUND-006 — creare le cartelle placeholder per tutte le rotte previste
-   in spec sezione 5 sotto `app/de/*` e `app/api/leads/route.ts`
-   (placeholder), così da eliminare rotte orfane prima della Fase 2.
-3. LAYOUT-001 — implementare `components/layout/Header.tsx`,
-   `MobileMenu.tsx`, `Footer.tsx`, `Container.tsx` secondo spec sezioni 7
-   e 17, poi collegarli in `app/layout.tsx` o `app/de/layout.tsx`.
-4. FORM-001 — creare `lib/lead-schema.ts` con lo schema Zod `CleaningLead`
-   da spec sezione 11, con unit test per CAP svizzero, date future, rooms
-   1–20, approxSqm 10–2000.
-5. Chiedere al proprietario i dati mancanti elencati in
-   `docs/PROJECT_STATUS.md` (provider database/e-mail/storage, contatti
-   reali, testi legali) prima di iniziare la Fase 4.
+1. FORM-001 — creare `lib/lead-schema.ts` con lo schema Zod `CleaningLead`
+   (spec sezione 11), unit test per CAP svizzero a 4 cifre, data non nel
+   passato, rooms 1–20, approxSqm 10–2000, serviceType/furnishedState
+   enum obbligatori.
+2. HOME-001 — implementare le sezioni 8.2–8.9 della homepage in
+   `components/marketing/*`, collegando le ancore `#leistungen` e
+   `#regionen` già presenti in `app/de/page.tsx`.
+3. FORM-002..007 — modulo lead multi-step in `components/lead-form/*`
+   usando lo schema di FORM-001; collegare la CTA header/hero/finale a
+   `/de#anfrage` una volta che il modulo esiste in quella sezione.
+4. API-001 — sostituire lo stub `app/api/leads/route.ts` con validazione
+   Zod reale, honeypot e rate limiting, anche prima di avere un database
+   collegato (può inizialmente rispondere con successo simulato o loggare
+   soltanto, ma marcato TODO per il salvataggio reale).
+5. Chiedere al proprietario: provider database/e-mail/storage, contatti
+   reali, testi legali approvati, conferma zone servite attorno a Naters.
 
 ## Before continuing
 
 - Leggere `CLEYRA_WEBSITE_SPEC.md`, `docs/PROJECT_STATUS.md` e questo
   file prima di qualsiasi modifica.
-- Non riaprire la decisione sullo stack (DEC-20260717-01) senza un motivo
-  concreto.
-- Non pubblicare le pagine legali senza testo approvato (DEC-20260717-03).
-- Working tree non committato: eseguire `git status` prima di qualunque
-  operazione distruttiva.
+- Non riaprire le decisioni registrate in `docs/DECISIONS.md` senza un
+  motivo concreto.
+- Non pubblicare le pagine legali senza testo approvato.
+- Non pubblicare la landing Naters con i comuni vicini attuali senza
+  conferma del proprietario.
+- Verificare `git status` prima di operazioni distruttive; committare e
+  pushare le modifiche di questa sessione se non già fatto.

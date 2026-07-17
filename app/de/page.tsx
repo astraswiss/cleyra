@@ -20,6 +20,11 @@ export default function HomePage() {
         regionalen Reinigungspartner.
       </p>
       <p className="mt-8 text-sm">{siteConfig.intermediaryDisclaimer}</p>
+
+      {/* TODO(HOME-001): sostituire con le sezioni 8.2-8.9 (Problem, So funktioniert's, Leistungen, Regionen, ecc.). */}
+      <section id="leistungen" className="mt-16" />
+      <section id="regionen" className="mt-16" />
+      <section id="anfrage" className="mt-16" />
     </main>
   );
 }

@@ -19,29 +19,29 @@ Piano eseguibile derivato da `CLEYRA_WEBSITE_SPEC.md` sezione 29.
   - File previsti: `docs/PROJECT_OVERVIEW.md`, `docs/ARCHITECTURE.md`, `docs/IMPLEMENTATION_PLAN.md`, `docs/PROJECT_STATUS.md`, `docs/DECISIONS.md`, `docs/SESSION_HANDOFF.md`, `docs/CHANGELOG.md`
   - Criteri di accettazione: ogni file contiene le sezioni minime richieste dalla spec sezione 0
   - Test richiesti: nessuno
-- [ ] FOUND-004 Aggiornare `README.md` per lo sviluppo locale
+- [x] FOUND-004 Aggiornare `README.md` per lo sviluppo locale
   - Dipendenze: FOUND-005 (scaffold)
   - File previsti: `README.md`
   - Criteri di accettazione: uno sviluppatore nuovo può avviare il progetto senza chiedere informazioni aggiuntive
-  - Test richiesti: `npm install && npm run dev` funzionante
+  - Test richiesti: `npm install && npm run dev` verificato manualmente
 
 ## Fase 1 — Fondazioni
 
-- [ ] FOUND-005 Scaffold Next.js (App Router, TypeScript strict, Tailwind)
+- [x] FOUND-005 Scaffold Next.js (App Router, TypeScript strict, Tailwind)
   - Dipendenze: FOUND-003
   - File previsti: `package.json`, `tsconfig.json`, `next.config.mjs`, `tailwind.config.ts`, `postcss.config.js`, `app/layout.tsx`, `app/page.tsx`, `app/de/layout.tsx`, `app/de/page.tsx`, `lib/site-config.ts`, `.env.example`, `.gitignore`
   - Criteri di accettazione: `npm run build` e `npm run typecheck` passano; `/` reindirizza a `/de`
-  - Test richiesti: build manuale verificata in questa sessione
-- [ ] FOUND-006 Struttura rotte completa (placeholder)
+  - Test richiesti: `npm run build`, `npm run lint` verificati verdi
+- [x] FOUND-006 Struttura rotte completa (placeholder)
   - Dipendenze: FOUND-005
-  - File previsti: cartelle sotto `app/de/*` per tutte le rotte della spec sezione 5
+  - File previsti: cartelle sotto `app/de/*` per tutte le rotte della spec sezione 5, `app/api/leads/route.ts` (stub 501)
   - Criteri di accettazione: tutte le rotte previste rispondono (anche come placeholder), nessun 404 involontario
-  - Test richiesti: navigazione manuale
-- [ ] LAYOUT-001 Header, footer, componenti UI di base
+  - Test richiesti: `curl` manuale su tutte le 14 rotte `/de/*` (200) + `/` (307) + `/de/danke` (`noindex, nofollow` verificato) + `/api/leads` POST (501, non 404/500 silenzioso)
+- [x] LAYOUT-001 Header, footer, componenti UI di base
   - Dipendenze: FOUND-005
-  - File previsti: `components/layout/*`, `components/ui/*`
-  - Criteri di accettazione: header/footer conformi a spec sezioni 7 e 17, accessibili da tastiera
-  - Test richiesti: component test navigazione menu mobile
+  - File previsti: `components/layout/Header.tsx`, `MobileMenu.tsx`, `Footer.tsx`, `Container.tsx`, `components/ui/Button.tsx`
+  - Criteri di accettazione: header/footer conformi a spec sezioni 7 e 17 (nessun login/dashboard/social nell'header, dichiarazione di intermediazione nel footer), skip link presente, menu mobile chiude con Escape/selezione link e blocca lo scroll
+  - Test richiesti: build/lint verdi; verifica manuale HTML (skip link, meta robots); **nessun component/e2e test automatico ancora scritto per la navigazione da tastiera del menu mobile — da fare in Fase 6 (QA-001/QA-002)**
 
 ## Fase 2 — Pagine marketing
 
@@ -50,20 +50,25 @@ Piano eseguibile derivato da `CLEYRA_WEBSITE_SPEC.md` sezione 29.
   - File previsti: `app/de/page.tsx`, `components/marketing/*`
   - Criteri di accettazione: tutte le sezioni della spec presenti nell'ordine indicato, copy esatto
   - Test richiesti: e2e caricamento homepage
-- [ ] LOCAL-001 Template landing locale + dati struttura `LocationLanding`
-  - Dipendenze: HOME-001
-  - File previsti: `lib/locations.ts`, `components/marketing/*`
-  - Criteri di accettazione: nessuna pagina duplicata, ogni landing ha H1/intro/FAQ locale unici
-  - Test richiesti: unit test dati location
-- [ ] LOCAL-002 Landing Visp — [ ] LOCAL-003 Brig-Glis — [ ] LOCAL-004 Naters
-  - Dipendenze: LOCAL-001
-  - Criteri di accettazione: contenuto locale unico per ciascuna, meta title/description unici
-- [ ] INFO-001 `/de/so-funktionierts`, `/de/faq`, `/de/ueber-cleyra`, `/de/kontakt`
-  - Dipendenze: LAYOUT-001
+- [x] LOCAL-001 (parziale) Dati struttura `LocationLanding`
+  - Dipendenze: nessuna
+  - File previsti: `lib/locations.ts`
+  - Criteri di accettazione: modello dati con H1/intro/meta unici per Visp, Brig-Glis, Naters
+  - Test richiesti: nessun unit test ancora scritto (TODO in Fase 6)
+  - Nota: manca ancora il template a 10 sezioni (`components/marketing/*`) e la FAQ locale — pagine attuali sono placeholder minimi (hero + intro + nearby places), non la struttura completa spec 9.4
+- [ ] LOCAL-002 Landing Visp — [ ] LOCAL-003 Brig-Glis — [ ] LOCAL-004 Naters (contenuto completo)
+  - Dipendenze: LOCAL-001, HOME-001
+  - Criteri di accettazione: struttura a 10 sezioni, FAQ locale con almeno una domanda locale, link reciproci tra le tre landing
+  - Nota: le route esistono già come placeholder (200 OK, meta uniche); resta da fare il contenuto completo
+- [ ] INFO-001 `/de/so-funktionierts`, `/de/faq`, `/de/ueber-cleyra`, `/de/kontakt` (contenuto completo)
+  - Dipendenze: LAYOUT-001 (fatto)
   - Criteri di accettazione: copy conforme a spec sezione 16, nessun dato aziendale inventato
-- [ ] LEGAL-001 Placeholder pagine legali (Datenschutz, Impressum, Vermittlungsbedingungen)
+  - Nota: le route esistono già come placeholder minimi (200 OK, meta uniche); resta da fare il copy completo (FAQ per categorie, sezione "Was bedeutet ausgewählter Partner", ecc.)
+- [x] LEGAL-001 Placeholder pagine legali (Datenschutz, Impressum, Vermittlungsbedingungen)
   - Dipendenze: LAYOUT-001
+  - File previsti: `app/de/datenschutz/page.tsx`, `app/de/impressum/page.tsx`, `app/de/vermittlungsbedingungen/page.tsx`
   - Criteri di accettazione: marcate `TODO LEGAL REVIEW`; pubblicazione bloccata finché non sostituite
+  - Test richiesti: verifica manuale contenuto marcato, 200 OK
 
 ## Fase 3 — Modulo lead
 
