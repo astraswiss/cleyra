@@ -1,6 +1,6 @@
 # Session Handoff
 
-Updated: 2026-07-18 16:00 Europe/Zurich
+Updated: 2026-07-18 17:00 Europe/Zurich
 
 ## Current objective
 
@@ -11,8 +11,11 @@ automatico).
 
 ## Current task
 
-Task ID: WEB-005 — FAQ, footer, pagine legali
-Status: in_progress (non ancora iniziato)
+Task ID: nessuno impostato `in_progress`.
+Status: la sessione precedente si è chiusa con WEB-005 completato (con riserva) e
+senza decidere se il prossimo task sia WEB-006 (form) o WEB-022 (design system).
+**La prossima sessione deve prima chiarire questo con l'utente**, poi impostare un
+solo task `in_progress` prima di scrivere codice, come da regola non negoziabile.
 
 ## Completed
 
@@ -20,54 +23,47 @@ Status: in_progress (non ancora iniziato)
 - WEB-001 — Setup dello stack tecnico.
 - WEB-002 — Environment validation e scheletro di tutte le rotte MVP.
 - WEB-003 — Hero e tre elementi di fiducia.
-- WEB-004 — Problema/soluzione, processo, servizi, zona servita, disclaimer di
-  intermediazione su `/de/endreinigung-oberwallis`. Tutti i controlli verdi.
-- ADR-001 (stack) e ADR-004 (redirect root) registrate come `accepted`.
-- **Nuovo task registrato su richiesta esplicita dell'utente: WEB-022 — Design
-  system (stile, layout, identità visiva)**, todo, dipende da WEB-005. Il sito è
-  ancora visivamente "grezzo" (solo Tailwind neutro di default): questo va
-  affrontato come task dedicato dopo che i contenuti della landing sono stabili, e
-  comunque prima della QA finale (WEB-020). Non dimenticarlo nella pianificazione.
+- WEB-004 — Problema/soluzione, processo, servizi, zona servita, disclaimer.
+- WEB-005 — CTA finale, FAQ (landing + `/de/faq`), disclaimer nel footer condiviso.
+  Pagine legali pubblicate come placeholder esplicito "in Vorbereitung" + `noindex`
+  (contenuto reale non disponibile, ISSUE-001 status `workaround`, blocca WEB-021).
+- ADR-001 (stack) e ADR-004 (redirect root) `accepted`.
+- WEB-022 (design system) registrata nel backlog, ancora `todo`.
 
 ## Remaining
 
-- WEB-005 in poi: footer/legal reali, poi WEB-022 (design), form, backend,
-  notifiche, analytics/SEO, test/QA/deploy. Vedi `docs/IMPLEMENTATION_PLAN.md`.
+- Decidere priorità WEB-006 vs WEB-022, poi proseguire con il resto del backlog
+  (form, backend, notifiche, analytics/SEO, test/QA/deploy). Vedi
+  `docs/IMPLEMENTATION_PLAN.md`.
 
 ## Exact next action
 
-1. Apri `docs/IMPLEMENTATION_PLAN.md` e leggi il task `WEB-005` per intero (Goal e
-   Acceptance criteria aggiornati: include ora anche la CTA finale).
-2. Aggiungi la CTA finale su `/de/endreinigung-oberwallis` (stesso testo della CTA
-   hero, `Kostenlose Anfrage starten`, testo già in `docs/CONTENT.md`).
-3. Implementa la sezione FAQ (nessun testo letterale in `CONTENT.md` per le domande:
-   da scrivere in questa sessione rispettando i vincoli — nessun dato inventato —
-   e da aggiungere a `CONTENT.md` come fatto in WEB-004).
-4. Aggiungi il disclaimer di intermediazione al footer condiviso
-   (`src/app/de/layout.tsx`), oltre ai link legali già presenti.
-5. Scrivi contenuto reale per `/de/datenschutz`, `/de/impressum`,
-   `/de/vermittlungsbedingungen`. **Attenzione a ISSUE-001** in
-   `docs/KNOWN_ISSUES.md`: i dati reali dell'organizzazione (ragione sociale,
-   indirizzo, contatti) non erano disponibili all'inizio del progetto — verificare
-   se nel frattempo sono stati forniti; altrimenti non inventarli e mantenere
-   l'issue aperta, eventualmente pubblicando un contenuto minimo corretto ma
-   incompleto e segnalandolo chiaramente.
-6. Verifica `npm run lint && npm run typecheck && npm test && npm run build`.
-7. Segna WEB-005 `done` solo se tutti i criteri sono verificati, e imposta WEB-022
-   come prossimo task `in_progress` (design system) — salvo diversa indicazione
-   dell'utente sulla priorità rispetto a WEB-006 (form).
-8. Aggiorna `docs/PROJECT_STATUS.md`, aggiungi una voce a `docs/SESSION_LOG.md` e
+1. All'inizio della sessione, **chiedi esplicitamente all'utente** se procedere con
+   WEB-006 (form step 1) o WEB-022 (design system) come prossimo task — non
+   scegliere autonomamente, perché la sessione precedente si è chiusa proprio su
+   questo punto irrisolto.
+2. Imposta il task scelto come unico `in_progress` in `docs/IMPLEMENTATION_PLAN.md`
+   prima di iniziare a scrivere codice.
+3. Se WEB-006: apri il task in `docs/IMPLEMENTATION_PLAN.md` e `docs/FORM_SPEC.md`
+   per i campi del passaggio 1 (postalCode, city, serviceType, dateMode,
+   desiredDate/desiredPeriod, rooms, propertyEmpty, notes). Crea la sezione form
+   nella landing con `id="anfrage"` (le due CTA attuali puntano già a `#anfrage`).
+4. Se WEB-022: apri il task in `docs/IMPLEMENTATION_PLAN.md` per i criteri (palette,
+   tipografia, componenti UI ricorrenti, rifinitura header/footer).
+5. Verifica sempre `npm run lint && npm run typecheck && npm test && npm run build`
+   prima di chiudere.
+6. Aggiorna `docs/PROJECT_STATUS.md`, aggiungi una voce a `docs/SESSION_LOG.md` e
    riscrivi questo file (`SESSION_HANDOFF.md`).
 
 ## Relevant files
 
-- `docs/IMPLEMENTATION_PLAN.md` — task WEB-005 e WEB-022 con criteri completi.
-- `docs/CONTENT.md` — testi esistenti (Hero, trust, processo, servizi, zona,
-  trasparenza, CTA finale); FAQ e legal ancora da scrivere.
-- `docs/KNOWN_ISSUES.md` — ISSUE-001 (dati legali reali mancanti).
-- `src/app/de/layout.tsx` — footer condiviso da estendere col disclaimer.
-- `src/app/de/{datenschutz,impressum,vermittlungsbedingungen,faq}/page.tsx` —
-  pagine da completare.
+- `docs/IMPLEMENTATION_PLAN.md` — task WEB-006 e WEB-022 con criteri completi.
+- `docs/FORM_SPEC.md` — specifica completa del form (se si sceglie WEB-006).
+- `docs/CONTENT.md` — tutto il copy attuale della landing, incluse FAQ.
+- `docs/KNOWN_ISSUES.md` — ISSUE-001 (dati legali reali mancanti, status
+  `workaround`, blocca WEB-021).
+- `src/app/de/endreinigung-oberwallis/page.tsx` — pagina landing completa.
+- `src/content/faq.ts` — FAQ condivise tra landing e `/de/faq`.
 
 ## Commands to run first
 
@@ -76,25 +72,26 @@ Status: in_progress (non ancora iniziato)
 
 ## Blockers
 
-- none (ma vedi ISSUE-001 per i contenuti legali)
+- ISSUE-001 (workaround attivo): non blocca lo sviluppo corrente, blocca solo
+  WEB-021 (lancio produzione) finché non si ottengono i dati legali reali.
 
 ## Do not forget
 
-- **WEB-022 (design system) è stato registrato ma non ancora pianificato in
-  dettaglio**: non lasciarlo cadere nel backlog. Rivalutare con l'utente quando
-  eseguirlo rispetto a WEB-006 (form).
+- **Non scegliere autonomamente tra WEB-006 e WEB-022**: chiedere all'utente
+  all'inizio della sessione.
+- Le tre pagine legali sono placeholder onesti, non contenuto finale: non
+  rimuovere il `noindex` finché ISSUE-001 non è risolta con dati reali.
+- Il disclaimer di intermediazione è testo obbligatorio non negoziabile, ora
+  presente sia nella sezione dedicata della landing sia nel footer di ogni pagina:
+  non modificarne il testo.
 - Non cambiare lo stack deciso in ADR-001 senza registrare una nuova decisione.
 - Il redirect della root (ADR-004) è temporaneo (307): da rivalutare in WEB-017.
 - ADR-002 (provider e-mail) e ADR-003 (strumento analytics) sono ancora aperte.
-- ISSUE-001: contenuti legali reali non ancora disponibili, necessari per WEB-005.
-- Il disclaimer di intermediazione è testo obbligatorio non negoziabile: usare
-  esattamente il testo in `docs/CONTENT.md`.
 - Il browser Chromium per Playwright è preinstallato in `/opt/pw-browsers/chromium`:
   non eseguire `npx playwright install`.
 - Un solo task `in_progress` alla volta nel backlog.
 - Prima di chiudere la sessione, fermare eventuali processi `next dev`/`next start`
-  e rimuovere `.next/`, `test-results/`, `playwright-report/` e script temporanei di
-  screenshot/debug.
+  e rimuovere `.next/`, `test-results/`, `playwright-report/` e script temporanei.
 
 ## Working assumptions
 

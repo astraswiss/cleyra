@@ -14,7 +14,12 @@ export default function DeLayout({
       </header>
       <div className="flex-1">{children}</div>
       <footer className="border-t border-zinc-200 px-6 py-6 text-sm text-zinc-600">
-        <nav className="flex flex-wrap gap-4">
+        <p className="max-w-3xl">
+          Cleyra ist ein Vermittlungsservice. Cleyra führt keine Reinigungsarbeiten
+          aus. Der Vertrag über die Reinigung entsteht direkt zwischen dem Kunden und
+          dem ausführenden Partnerunternehmen.
+        </p>
+        <nav className="mt-4 flex flex-wrap gap-4">
           <Link href="/de/datenschutz">Datenschutz</Link>
           <Link href="/de/impressum">Impressum</Link>
           <Link href="/de/vermittlungsbedingungen">Vermittlungsbedingungen</Link>

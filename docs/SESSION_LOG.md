@@ -168,3 +168,46 @@ Next recommended action: eseguire WEB-005 (CTA finale, FAQ, footer con disclaime
 pagine legali reali — nota ISSUE-001 sui contenuti legali reali non ancora
 disponibili), impostato come unico task `in_progress` nel backlog. WEB-022 (design
 system) resta registrato e da pianificare dopo WEB-005.
+
+---
+
+## 2026-07-18 — WEB-005: CTA finale, FAQ, footer, pagine legali (con riserva)
+
+Task: WEB-005
+Summary: Aggiunte a `/de/endreinigung-oberwallis` la sezione FAQ (5 domande/risposte,
+contenuto nuovo scritto rispettando i vincoli, nessun dato inventato) e la CTA
+finale prima del footer. FAQ estratta in `src/content/faq.ts`, condivisa con la
+pagina dedicata `/de/faq` (ora popolata, non più placeholder). Aggiunto il
+disclaimer di intermediazione obbligatorio al footer condiviso
+(`src/app/de/layout.tsx`), visibile ora su ogni pagina del sito. Prima di toccare le
+tre pagine legali (Datenschutz/Impressum/Vermittlungsbedingungen), è stata posta
+esplicitamente la domanda all'utente su come procedere in assenza dei dati reali
+dell'organizzazione (ISSUE-001): l'utente ha scelto di pubblicare un placeholder
+esplicito ("Diese Seite ist in Vorbereitung") invece di dati inventati o di
+bloccare il task. Le tre pagine sono state quindi aggiornate con questo placeholder
+e marcate `metadata.robots: noindex, nofollow`, verificato manualmente sull'HTML
+renderizzato di `/de/impressum`. `ISSUE-001` aggiornata a status `workaround`,
+esplicitamente collegata anche a WEB-021 (blocca il lancio in produzione finché non
+risolta). WEB-005 segnato `done` con una singola riga di riserva sul criterio
+relativo al contenuto legale reale (non soddisfatto per scelta esplicita, non per
+omissione).
+Files changed: `src/app/de/endreinigung-oberwallis/page.tsx`,
+`src/app/de/faq/page.tsx`, `src/app/de/layout.tsx`, `src/app/de/datenschutz/page.tsx`,
+`src/app/de/impressum/page.tsx`, `src/app/de/vermittlungsbedingungen/page.tsx`,
+`src/content/faq.ts` (nuovo), `docs/CONTENT.md`, `docs/KNOWN_ISSUES.md`,
+`docs/IMPLEMENTATION_PLAN.md`, `docs/ARCHITECTURE.md`, `docs/PROJECT_STATUS.md`,
+`docs/SESSION_HANDOFF.md`.
+Commands run: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`,
+`npx playwright test`, `npm run build && npm run start` con screenshot mobile 320px e
+verifica del meta `robots` su `/de/impressum` (script temporaneo, rimosso a fine
+verifica).
+Tests: `npm run lint` verde; `npm run typecheck` verde; `npm test` verde (2/2); `npm
+run build` verde; `npx playwright test` verde (1/1).
+Decisions: nessuna nuova ADR; workaround su ISSUE-001 deciso dall'utente via
+`AskUserQuestion` (placeholder esplicito + noindex invece di dati inventati o di
+task bloccato).
+Issues discovered: nessuno di nuovo; ISSUE-001 aggiornata (status `workaround`).
+Next recommended action: la sessione si chiude senza un task `in_progress`. Prima di
+riprendere, decidere con l'utente se eseguire prima WEB-006 (form step 1) o WEB-022
+(design system), poi impostare quel task come unico `in_progress` nel backlog prima
+di iniziare a scrivere codice.

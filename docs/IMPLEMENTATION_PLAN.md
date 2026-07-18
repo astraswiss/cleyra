@@ -203,33 +203,47 @@ H1→H2→H3 corretto, nessun elemento vietato.
 ---
 
 ## WEB-005 — FAQ, footer, pagine legali
-Status: in_progress
+Status: done (con riserva su contenuto legale reale — vedi Notes e ISSUE-001)
 Priority: P1
 Dependencies: WEB-004
 
 ### Goal
 Implementare la CTA finale, la sezione FAQ e il footer della landing (spec sezione 6,
 punti 10-12), oltre alle pagine `/de/datenschutz`, `/de/impressum`,
-`/de/vermittlungsbedingungen` con contenuto reale (non placeholder).
+`/de/vermittlungsbedingungen`.
 
 ### Acceptance criteria
-- [ ] CTA finale prima del footer (rimanda alla stessa richiesta della CTA hero).
-- [ ] Sezione FAQ con domande/risposte coerenti con `CONTENT.md`.
-- [ ] Footer con link a tutte le pagine legali e disclaimer di intermediazione.
-- [ ] Pagine `/de/datenschutz`, `/de/impressum`, `/de/vermittlungsbedingungen`
-      pubblicate con contenuto reale, non lorem ipsum.
-- [ ] Link legali raggiungibili da ogni pagina.
+- [x] CTA finale prima del footer (rimanda alla stessa richiesta della CTA hero).
+- [x] Sezione FAQ con domande/risposte coerenti con `CONTENT.md` (su landing e su
+      `/de/faq`, contenuto condiviso da `src/content/faq.ts`).
+- [x] Footer con link a tutte le pagine legali e disclaimer di intermediazione
+      (testo obbligatorio, identico su ogni pagina del sito).
+- [~] Pagine `/de/datenschutz`, `/de/impressum`, `/de/vermittlungsbedingungen`
+      pubblicate — **non con contenuto legale reale** (dati dell'organizzazione non
+      disponibili): pubblicate con testo esplicito "in Vorbereitung" e marcate
+      `noindex, nofollow`, per decisione dell'utente (2026-07-18, vedi
+      ISSUE-001). Da completare con dati reali prima del lancio in produzione
+      (WEB-021).
+- [x] Link legali raggiungibili da ogni pagina (footer condiviso).
 
 ### Validation
-- `npm run lint`
-- `npm run typecheck`
-- `npm test`
-- `npm run build`
+- `npm run lint` — verde
+- `npm run typecheck` — verde
+- `npm test` — verde (2/2)
+- `npm run build` — verde
+- `npx playwright test` — verde (1/1)
+- Verifica manuale: `noindex, nofollow` confermato su `/de/impressum` via HTML
+  renderizzato.
 
 ### Notes
-Il contenuto legale definitivo (Impressum/Datenschutz) richiede dati reali
-dell'organizzazione: se non disponibili, registrare un blocco in `KNOWN_ISSUES.md`
-invece di inventare dati.
+Il contenuto legale definitivo (Impressum/Datenschutz/Vermittlungsbedingungen)
+richiede dati reali dell'organizzazione (ragione sociale, indirizzo, contatti,
+responsabile del trattamento) che non erano disponibili in questa sessione. Non
+inventati, come da regola non negoziabile. Per esplicita richiesta dell'utente, le
+tre pagine restano pubblicate con placeholder etichettato onestamente
+("Diese Seite ist in Vorbereitung") invece di bloccare l'intero task: vedi
+`ISSUE-001` in `KNOWN_ISSUES.md` (status `workaround`), che resta aperta e blocca
+WEB-021 (lancio produzione) finché non risolta.
 
 ---
 

@@ -50,12 +50,14 @@ niente overengineering, niente librerie pesanti senza motivo.
 │   │       ├── faq/page.tsx
 │   │       ├── ueber-cleyra/page.tsx
 │   │       ├── kontakt/page.tsx
-│   │       ├── datenschutz/page.tsx
-│   │       ├── impressum/page.tsx
-│   │       ├── vermittlungsbedingungen/page.tsx
+│   │       ├── datenschutz/page.tsx           (placeholder "in Vorbereitung", noindex — ISSUE-001)
+│   │       ├── impressum/page.tsx             (placeholder "in Vorbereitung", noindex — ISSUE-001)
+│   │       ├── vermittlungsbedingungen/page.tsx (placeholder "in Vorbereitung", noindex — ISSUE-001)
 │   │       └── danke/page.tsx  (metadata.robots noindex,nofollow)
-│   └── lib/
-│       └── env.ts              (validazione env con Zod, schema vuoto per ora)
+│   ├── lib/
+│   │   └── env.ts              (validazione env con Zod, schema vuoto per ora)
+│   └── content/
+│       └── faq.ts              (domande/risposte condivise tra landing e /de/faq)
 ├── tests/
 │   ├── unit/
 │   │   ├── sanity.test.ts
@@ -76,9 +78,10 @@ niente overengineering, niente librerie pesanti senza motivo.
 Non esiste più `src/app/page.tsx`: la root `/` è gestita da un redirect (307) verso
 `/de/endreinigung-oberwallis`, vedi ADR-004 in `DECISIONS.md`.
 
-Struttura ancora da realizzare (WEB-003 in poi): `src/components/`, contenuti finali
-delle pagine da `docs/CONTENT.md`, `src/lib/validation/`, `src/lib/email/`,
-`src/lib/db/`, `prisma/schema.prisma`.
+Struttura ancora da realizzare: `src/components/`, `src/lib/validation/`,
+`src/lib/email/`, `src/lib/db/`, `prisma/schema.prisma`. Contenuto legale reale di
+`/de/datenschutz`, `/de/impressum`, `/de/vermittlungsbedingungen` bloccato su
+ISSUE-001 (dati organizzazione non disponibili).
 
 ## Rotte
 

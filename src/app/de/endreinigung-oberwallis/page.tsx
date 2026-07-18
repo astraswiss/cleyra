@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { faqItems } from "@/content/faq";
 
 export const metadata: Metadata = {
   title: "Endreinigung im Oberwallis — Cleyra",
@@ -128,6 +129,27 @@ export default function EndreinigungOberwallisPage() {
           Cleyra ist Vermittler, nicht Ausführender
         </h2>
         <p className="mt-3 text-zinc-600">{disclaimerText}</p>
+      </section>
+
+      <section className="mx-auto max-w-3xl px-6 pb-16">
+        <h2 className="text-2xl font-semibold">Häufige Fragen</h2>
+        <dl className="mt-4 space-y-6">
+          {faqItems.map((item) => (
+            <div key={item.question}>
+              <dt className="font-semibold">{item.question}</dt>
+              <dd className="mt-1 text-zinc-600">{item.answer}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+
+      <section className="mx-auto max-w-3xl px-6 pb-16 text-center">
+        <a
+          href="#anfrage"
+          className="inline-flex items-center justify-center rounded-full bg-zinc-900 px-6 py-3 font-medium text-white hover:bg-zinc-700"
+        >
+          Kostenlose Anfrage starten
+        </a>
       </section>
     </main>
   );

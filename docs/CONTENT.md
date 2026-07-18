@@ -140,6 +140,34 @@ Cleyra ist Vermittler, nicht Ausführender
 Testo: il disclaimer di intermediazione obbligatorio (vedi sezione dedicata in cima a
 questo documento), riportato identico anche in questa sezione della landing.
 
+## FAQ
+
+Testo aggiunto durante WEB-005 (2026-07-18): la spec non fornisce domande/risposte
+letterali, solo la posizione della sezione. Contenuto scritto usando solo fatti già
+stabiliti altrove in questo documento/nella spec, nessun dato inventato. Usato sia
+nella sezione FAQ della landing sia nella pagina dedicata `/de/faq`.
+
+**Ist die Anfrage kostenlos?**
+Ja. Die Anfrage über Cleyra ist kostenlos und unverbindlich. Ein Auftrag entsteht
+erst, wenn Sie eine Offerte des ausführenden Partners akzeptieren.
+
+**Wer führt die Reinigung aus?**
+Cleyra ist ein Vermittlungsservice und führt selbst keine Reinigungsarbeiten aus. Die
+Reinigung wird von einem ausgewählten regionalen Partnerunternehmen ausgeführt, mit
+dem der Vertrag direkt entsteht.
+
+**In welchen Gebieten ist Cleyra aktiv?**
+Cleyra vermittelt Anfragen aus dem Oberwallis, unter anderem aus Visp, Brig-Glis und
+Naters.
+
+**Was passiert nach dem Absenden der Anfrage?**
+Cleyra prüft Ihre Angaben und klärt, welcher regionale Reinigungspartner Ihre Region
+und Ihren Wunschtermin abdecken kann. Sie werden anschliessend kontaktiert.
+
+**Muss ich die Offerte annehmen?**
+Nein. Sie entscheiden erst nach Erhalt der Offerte des Partnerunternehmens, ob Sie
+den Auftrag erteilen möchten.
+
 ## CTA finale
 
 Testo aggiunto durante WEB-004/WEB-005 (2026-07-18): stessa CTA della hero, ripetuta
@@ -148,6 +176,12 @@ prima del footer.
 ```text
 Kostenlose Anfrage starten
 ```
+
+## Footer — disclaimer di intermediazione
+
+Il footer condiviso (`src/app/de/layout.tsx`) riporta, oltre ai link legali, il
+disclaimer di intermediazione obbligatorio per intero (stesso testo della sezione
+dedicata in cima a questo documento).
 
 ## Form — Schritt 1 (Anfrage)
 
@@ -302,11 +336,11 @@ H1: Endreinigung im Oberwallis einfach anfragen
 I seguenti testi non sono ancora stati scritti in dettaglio e vanno completati quando si
 lavora sui task corrispondenti, senza inventare contenuti nel frattempo:
 
-- copy completo di `/de/so-funktionierts`, `/de/faq`, `/de/ueber-cleyra`, `/de/kontakt`;
+- copy completo di `/de/so-funktionierts`, `/de/ueber-cleyra`, `/de/kontakt`
+  (`/de/faq` è invece coperta dalla sezione "FAQ" qui sopra, scritta in WEB-005);
 - contenuto legale di `/de/datenschutz`, `/de/impressum`, `/de/vermittlungsbedingungen`
-  (richiede dati reali dell'organizzazione — vedi `KNOWN_ISSUES.md`);
-- messaggi di errore specifici per campo del form;
-- FAQ (domande e risposte) della landing.
+  (richiede dati reali dell'organizzazione — vedi `KNOWN_ISSUES.md`, ISSUE-001);
+- messaggi di errore specifici per campo del form.
 
 Quando questi testi vengono scritti, vanno aggiunti qui prima o insieme all'implementazione
 nel codice.
