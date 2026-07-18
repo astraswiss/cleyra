@@ -1,3 +1,22 @@
+## 2026-07-18 (3)
+
+### Fixed
+
+- Transizione tra la sezione CTA finale e il footer: `FinalCta` era una
+  card scura arrotondata "fluttuante" con margini chiari sopra e sotto,
+  seguita da un footer scuro a spigoli vivi — due forme scure disallineate
+  con una sottile striscia chiara in mezzo, percepita come un taglio
+  netto invece che una transizione (feedback diretto del proprietario:
+  "sieht aus wie geschnitten"). Reso `FinalCta` full-bleed come
+  Header/Footer, eliminato il margine prima del footer: ora CTA e footer
+  formano un unico pannello scuro continuo con un solo bordo netto verso
+  la pagina chiara sopra.
+
+### Verification
+
+- Screenshot Playwright centrato sulla transizione CTA→footer;
+  `npm run build`/`lint`/`vitest` verdi.
+
 ## 2026-07-18 (2)
 
 ### Added
