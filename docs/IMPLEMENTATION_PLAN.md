@@ -248,7 +248,7 @@ WEB-021 (lancio produzione) finché non risolta.
 ---
 
 ## WEB-022 — Design system: stile, layout e identità visiva
-Status: todo
+Status: done
 Priority: P1
 Dependencies: WEB-005
 
@@ -260,35 +260,43 @@ WEB-002/WEB-003/WEB-004. Attualmente le pagine usano solo utility Tailwind di ba
 (grigio neutro), senza un'identità visiva definita.
 
 ### Acceptance criteria
-- [ ] Palette colori definita (colore primario/brand, colori di stato per
-      errori/successo del form) e documentata in `docs/ARCHITECTURE.md`.
-- [ ] Scala tipografica coerente (dimensioni heading/testo/microcopy) applicata a
-      tutte le pagine, non solo alla landing.
-- [ ] Componenti UI ricorrenti (bottone primario/secondario, card trust point,
-      wrapper di sezione) uniformati in uno stile condiviso.
-- [ ] Header/footer condivisi rifiniti visivamente (non solo strutturalmente).
-- [ ] Nessuna libreria di componenti pesante aggiunta senza necessità: restare su
-      Tailwind CSS, coerente con ADR-001 (niente overengineering).
-- [ ] Nessun elemento vietato introdotto in fase di stile (timer, badge inventati,
-      falsa urgenza, ecc. — vedi `CLEYRA_WEBSITE_SPEC.md` sezione 6).
-- [ ] Verifica visiva manuale desktop e mobile (320px) dopo l'applicazione dello
-      stile.
+- [x] Palette colori definita (colore primario/brand `#0f766e`, hover `#115e59`,
+      colori di stato `success`/`error` riservati per il form) e documentata in
+      `docs/ARCHITECTURE.md` (sezione "Design system").
+- [x] Scala tipografica coerente (dimensioni heading/testo/microcopy) applicata a
+      tutte le pagine, non solo alla landing (H1 hero, H1 di pagina/H2 di sezione,
+      H3 card, corpo, microcopy).
+- [x] Componenti UI ricorrenti (bottone primario, card trust point/servizi, wrapper
+      di sezione) uniformati in uno stile condiviso: `src/components/Section.tsx`,
+      `PrimaryButton.tsx`, `Card.tsx`, usati su tutte le pagine `/de/*`.
+- [x] Header/footer condivisi rifiniti visivamente (logo in colore brand, footer con
+      sfondo muted e link con hover in colore brand).
+- [x] Nessuna libreria di componenti pesante aggiunta: solo Tailwind CSS, coerente
+      con ADR-001.
+- [x] Nessun elemento vietato introdotto in fase di stile (nessun timer, badge
+      inventato, falsa urgenza).
+- [x] Verifica visiva manuale desktop (1280px) e mobile (320px) dopo l'applicazione
+      dello stile, tramite screenshot Playwright su landing e su `/de/faq`.
 
 ### Validation
-- `npm run lint`
-- `npm run typecheck`
-- `npm test`
-- `npm run build`
-- Verifica visiva manuale (screenshot desktop + mobile 320px)
+- `npm run lint` — verde
+- `npm run typecheck` — verde
+- `npm test` — verde (2/2)
+- `npm run build` — verde
+- `npx playwright test` — verde (1/1)
+- Verifica visiva manuale (screenshot desktop 1280px + mobile 320px su
+  `/de/endreinigung-oberwallis` e `/de/faq`)
 
 ### Notes
 Task trasversale, aggiunto su richiesta esplicita durante la sessione WEB-004
-(2026-07-18): finché non viene eseguito, tutte le pagine restano visivamente
-"grezze" (solo struttura funzionale con stile Tailwind di default). Da eseguire
-quando i contenuti di tutte le sezioni della landing (WEB-003..WEB-005) sono stabili,
-e comunque prima della QA finale (WEB-020), così da non dover rifare due volte il
-lavoro di rifinitura visiva. Non blocca l'avanzamento di WEB-004/WEB-005/WEB-006 in
-sé, ma va tenuto presente: le pagine create in quei task useranno lo stesso stile
+(2026-07-18) ed eseguito nella sessione successiva su indicazione esplicita
+dell'utente (prima di WEB-006). Corretto anche un bug ereditato dallo scaffold di
+`create-next-app`: il `body` forzava `font-family: Arial, Helvetica` invece di usare
+il font Geist già caricato tramite `next/font`. Rimosso il supporto automatico al
+dark mode (`prefers-color-scheme`) presente nello scaffold iniziale, perché i colori
+esistenti non erano pensati per un tema scuro e avrebbero prodotto contrasti
+incoerenti (vedi dettagli in `docs/ARCHITECTURE.md`); il sito MVP resta quindi a
+tema chiaro. Le pagine create in WEB-004/WEB-005 usavano ancora lo stesso stile
 minimale di WEB-003 fino a quando WEB-022 non viene eseguito.
 
 ---

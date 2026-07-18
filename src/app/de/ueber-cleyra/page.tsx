@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Section } from "@/components/Section";
 
 export const metadata: Metadata = {
   title: "Über Cleyra — Cleyra",
@@ -6,9 +7,13 @@ export const metadata: Metadata = {
 
 export default function UeberCleyraPage() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-16">
-      <h1 className="text-2xl font-semibold">Über Cleyra</h1>
-      <p className="mt-2 text-zinc-600">Seite in Aufbau.</p>
+    <main>
+      <Section>
+        <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+          Über Cleyra
+        </h1>
+        <p className="mt-4 text-zinc-600">Seite in Aufbau.</p>
+      </Section>
     </main>
   );
 }

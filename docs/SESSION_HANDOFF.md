@@ -1,6 +1,6 @@
 # Session Handoff
 
-Updated: 2026-07-18 17:00 Europe/Zurich
+Updated: 2026-07-18 18:00 Europe/Zurich
 
 ## Current objective
 
@@ -11,11 +11,9 @@ automatico).
 
 ## Current task
 
-Task ID: nessuno impostato `in_progress`.
-Status: la sessione precedente si è chiusa con WEB-005 completato (con riserva) e
-senza decidere se il prossimo task sia WEB-006 (form) o WEB-022 (design system).
-**La prossima sessione deve prima chiarire questo con l'utente**, poi impostare un
-solo task `in_progress` prima di scrivere codice, come da regola non negoziabile.
+Task ID: WEB-006 — Form step 1 (richiesta) — UI e validazione client
+Status: da impostare `in_progress` all'inizio della prossima sessione (non ancora
+iniziato).
 
 ## Completed
 
@@ -24,46 +22,53 @@ solo task `in_progress` prima di scrivere codice, come da regola non negoziabile
 - WEB-002 — Environment validation e scheletro di tutte le rotte MVP.
 - WEB-003 — Hero e tre elementi di fiducia.
 - WEB-004 — Problema/soluzione, processo, servizi, zona servita, disclaimer.
-- WEB-005 — CTA finale, FAQ (landing + `/de/faq`), disclaimer nel footer condiviso.
-  Pagine legali pubblicate come placeholder esplicito "in Vorbereitung" + `noindex`
-  (contenuto reale non disponibile, ISSUE-001 status `workaround`, blocca WEB-021).
+- WEB-005 — CTA finale, FAQ, footer con disclaimer. Pagine legali placeholder
+  esplicito + noindex (ISSUE-001, status `workaround`, blocca WEB-021).
+- WEB-022 — Design system completo: palette (`brand` `#0f766e`), tipografia,
+  componenti `Section`/`PrimaryButton`/`Card`, header/footer rifiniti. La landing
+  MVP è ora sia funzionalmente che visivamente completa (fino al punto in cui manca
+  ancora il form vero e proprio).
 - ADR-001 (stack) e ADR-004 (redirect root) `accepted`.
-- WEB-022 (design system) registrata nel backlog, ancora `todo`.
 
 ## Remaining
 
-- Decidere priorità WEB-006 vs WEB-022, poi proseguire con il resto del backlog
-  (form, backend, notifiche, analytics/SEO, test/QA/deploy). Vedi
-  `docs/IMPLEMENTATION_PLAN.md`.
+- WEB-006 in poi: form (client + server), backend, notifiche, analytics/SEO,
+  test/QA/deploy. Vedi `docs/IMPLEMENTATION_PLAN.md`.
 
 ## Exact next action
 
-1. All'inizio della sessione, **chiedi esplicitamente all'utente** se procedere con
-   WEB-006 (form step 1) o WEB-022 (design system) come prossimo task — non
-   scegliere autonomamente, perché la sessione precedente si è chiusa proprio su
-   questo punto irrisolto.
-2. Imposta il task scelto come unico `in_progress` in `docs/IMPLEMENTATION_PLAN.md`
+1. Imposta WEB-006 come unico task `in_progress` in `docs/IMPLEMENTATION_PLAN.md`
    prima di iniziare a scrivere codice.
-3. Se WEB-006: apri il task in `docs/IMPLEMENTATION_PLAN.md` e `docs/FORM_SPEC.md`
-   per i campi del passaggio 1 (postalCode, city, serviceType, dateMode,
-   desiredDate/desiredPeriod, rooms, propertyEmpty, notes). Crea la sezione form
-   nella landing con `id="anfrage"` (le due CTA attuali puntano già a `#anfrage`).
-4. Se WEB-022: apri il task in `docs/IMPLEMENTATION_PLAN.md` per i criteri (palette,
-   tipografia, componenti UI ricorrenti, rifinitura header/footer).
-5. Verifica sempre `npm run lint && npm run typecheck && npm test && npm run build`
-   prima di chiudere.
-6. Aggiorna `docs/PROJECT_STATUS.md`, aggiungi una voce a `docs/SESSION_LOG.md` e
+2. Apri `docs/FORM_SPEC.md` per i campi esatti del passaggio 1: `postalCode`,
+   `city`, `serviceType`, `dateMode`, `desiredDate`/`desiredPeriod` (condizionali),
+   `rooms`, `propertyEmpty`, `notes`.
+3. Crea la sezione form sulla landing (`src/app/de/endreinigung-oberwallis/page.tsx`)
+   con `id="anfrage"`: le due CTA esistenti (`PrimaryButton` in Hero e in fondo
+   pagina) puntano già a `#anfrage`, quindi devono ancorarsi a un elemento reale.
+4. Il form dovrà essere un componente client (gestione stato/step): valuta se
+   crearlo in `src/components/` (es. `RequestForm.tsx`) seguendo lo stile del
+   design system appena definito (usa `PrimaryButton`, token `brand`/`error` per
+   gli stati, `Section` per il contenitore).
+5. Implementa solo il passaggio 1 con validazione client (CAP 4 cifre, data non
+   passata, campi obbligatori) e logica condizionale `dateMode`. Non implementare
+   ancora l'invio al server (quello è WEB-009).
+6. Verifica `npm run lint && npm run typecheck && npm test && npm run build`.
+7. Segna WEB-006 `done` solo se tutti i criteri sono verificati, e imposta WEB-007
+   come prossimo `in_progress`.
+8. Aggiorna `docs/PROJECT_STATUS.md`, aggiungi una voce a `docs/SESSION_LOG.md` e
    riscrivi questo file (`SESSION_HANDOFF.md`).
 
 ## Relevant files
 
-- `docs/IMPLEMENTATION_PLAN.md` — task WEB-006 e WEB-022 con criteri completi.
-- `docs/FORM_SPEC.md` — specifica completa del form (se si sceglie WEB-006).
-- `docs/CONTENT.md` — tutto il copy attuale della landing, incluse FAQ.
-- `docs/KNOWN_ISSUES.md` — ISSUE-001 (dati legali reali mancanti, status
-  `workaround`, blocca WEB-021).
-- `src/app/de/endreinigung-oberwallis/page.tsx` — pagina landing completa.
-- `src/content/faq.ts` — FAQ condivise tra landing e `/de/faq`.
+- `docs/IMPLEMENTATION_PLAN.md` — task WEB-006 con criteri completi.
+- `docs/FORM_SPEC.md` — specifica completa del form.
+- `docs/CONTENT.md` — testi/etichette dei campi del form.
+- `docs/ARCHITECTURE.md` — sezione "Design system" per palette/tipografia/componenti
+  da riusare nel form.
+- `src/app/de/endreinigung-oberwallis/page.tsx` — dove va agganciata la sezione form
+  (`id="anfrage"`).
+- `src/components/Section.tsx`, `PrimaryButton.tsx`, `Card.tsx` — componenti del
+  design system da riutilizzare.
 
 ## Commands to run first
 
@@ -72,19 +77,18 @@ solo task `in_progress` prima di scrivere codice, come da regola non negoziabile
 
 ## Blockers
 
-- ISSUE-001 (workaround attivo): non blocca lo sviluppo corrente, blocca solo
-  WEB-021 (lancio produzione) finché non si ottengono i dati legali reali.
+- ISSUE-001 (workaround attivo): non blocca WEB-006, blocca solo WEB-021.
 
 ## Do not forget
 
-- **Non scegliere autonomamente tra WEB-006 e WEB-022**: chiedere all'utente
-  all'inizio della sessione.
-- Le tre pagine legali sono placeholder onesti, non contenuto finale: non
-  rimuovere il `noindex` finché ISSUE-001 non è risolta con dati reali.
-- Il disclaimer di intermediazione è testo obbligatorio non negoziabile, ora
-  presente sia nella sezione dedicata della landing sia nel footer di ogni pagina:
-  non modificarne il testo.
+- Le tre pagine legali restano placeholder onesti (`noindex`): non toccarle in
+  WEB-006/WEB-007 a meno che l'utente non fornisca i dati reali.
+- Il disclaimer di intermediazione è testo obbligatorio non negoziabile, presente
+  sia nella sezione dedicata della landing sia nel footer: non modificarne il testo.
 - Non cambiare lo stack deciso in ADR-001 senza registrare una nuova decisione.
+- Usa i componenti del design system (`Section`, `PrimaryButton`, `Card`, token
+  colore `brand`/`success`/`error`) invece di introdurre nuovi stili ad-hoc, per
+  restare coerenti con quanto definito in WEB-022.
 - Il redirect della root (ADR-004) è temporaneo (307): da rivalutare in WEB-017.
 - ADR-002 (provider e-mail) e ADR-003 (strumento analytics) sono ancora aperte.
 - Il browser Chromium per Playwright è preinstallato in `/opt/pw-browsers/chromium`:

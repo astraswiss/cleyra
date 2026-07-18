@@ -211,3 +211,47 @@ Next recommended action: la sessione si chiude senza un task `in_progress`. Prim
 riprendere, decidere con l'utente se eseguire prima WEB-006 (form step 1) o WEB-022
 (design system), poi impostare quel task come unico `in_progress` nel backlog prima
 di iniziare a scrivere codice.
+
+---
+
+## 2026-07-18 — WEB-022: design system (stile, layout, identità visiva)
+
+Task: WEB-022
+Summary: L'utente ha scelto di eseguire WEB-022 prima di WEB-006. Definita una
+palette di colori (`brand` teal `#0f766e`, `brand-hover` `#115e59`, `success`/`error`
+riservati per il form) come theme token Tailwind v4 in `src/app/globals.css`,
+generando automaticamente le utility (`bg-brand`, `hover:bg-brand-hover`, ecc.).
+Definita una scala tipografica coerente (H1 hero, H1 pagina/H2 sezione, H3 card,
+corpo, microcopy) applicata a tutte e 9 le pagine `/de/*`, non solo alla landing.
+Estratti tre componenti condivisi: `Section` (wrapper con variante `muted` per
+alternare sfondo), `PrimaryButton` (bottone brand riutilizzato su entrambe le CTA
+della landing) e `Card` (per trust point/servizi, con `headingLevel` configurabile
+per non rompere l'ordine degli heading). Header/footer rifiniti visivamente (logo in
+colore brand, footer con sfondo muted). Corretto un bug ereditato dallo scaffold di
+`create-next-app`: il `body` forzava `font-family: Arial, Helvetica` ignorando il
+font Geist già caricato. Rimosso il supporto automatico al dark mode
+(`prefers-color-scheme`) presente nello scaffold, perché i colori esistenti non
+erano pensati per un tema scuro (contrasti incoerenti); il sito resta a tema chiaro
+per l'MVP, decisione documentata in `docs/ARCHITECTURE.md`. Nessuna libreria di
+componenti aggiunta: solo Tailwind CSS. Verificato con screenshot Playwright
+desktop (1280px) e mobile (320px) su `/de/endreinigung-oberwallis` e `/de/faq`.
+Files changed: `src/app/globals.css`, `src/app/de/layout.tsx`,
+`src/app/de/endreinigung-oberwallis/page.tsx`, `src/app/de/faq/page.tsx`,
+`src/app/de/so-funktionierts/page.tsx`, `src/app/de/ueber-cleyra/page.tsx`,
+`src/app/de/kontakt/page.tsx`, `src/app/de/danke/page.tsx`,
+`src/app/de/datenschutz/page.tsx`, `src/app/de/impressum/page.tsx`,
+`src/app/de/vermittlungsbedingungen/page.tsx`, `src/components/Section.tsx` (nuovo),
+`src/components/PrimaryButton.tsx` (nuovo), `src/components/Card.tsx` (nuovo),
+`docs/ARCHITECTURE.md`, `docs/IMPLEMENTATION_PLAN.md`, `docs/PROJECT_STATUS.md`,
+`docs/SESSION_HANDOFF.md`.
+Commands run: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`,
+`npx playwright test`, `npm run build && npm run start` con screenshot Playwright
+desktop/mobile (script temporaneo, rimosso a fine verifica).
+Tests: `npm run lint` verde; `npm run typecheck` verde; `npm test` verde (2/2); `npm
+run build` verde; `npx playwright test` verde (1/1).
+Decisions: nessuna nuova ADR; scelte di design (palette, tipografia, rimozione dark
+mode) documentate direttamente in `docs/ARCHITECTURE.md`, sezione "Design system".
+Issues discovered: nessuno di nuovo.
+Next recommended action: eseguire WEB-006 (form step 1 — richiesta: postalCode,
+city, serviceType, dateMode, desiredDate/desiredPeriod, rooms, propertyEmpty,
+notes), da impostare come unico task `in_progress` nel backlog prima di iniziare.

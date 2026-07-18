@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { faqItems } from "@/content/faq";
+import { Section } from "@/components/Section";
+import { PrimaryButton } from "@/components/PrimaryButton";
+import { Card } from "@/components/Card";
 
 export const metadata: Metadata = {
   title: "Endreinigung im Oberwallis — Cleyra",
@@ -47,8 +50,8 @@ const disclaimerText =
 export default function EndreinigungOberwallisPage() {
   return (
     <main>
-      <section className="mx-auto max-w-3xl px-6 py-16">
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+      <Section>
+        <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
           Endreinigung im Oberwallis einfach anfragen
         </h1>
         <p className="mt-4 text-lg text-zinc-600">
@@ -56,30 +59,29 @@ export default function EndreinigungOberwallisPage() {
           Ihre Anfrage und vermittelt sie an einen ausgewählten regionalen
           Reinigungspartner.
         </p>
-        <a
-          href="#anfrage"
-          className="mt-6 inline-flex items-center justify-center rounded-full bg-zinc-900 px-6 py-3 font-medium text-white hover:bg-zinc-700"
-        >
+        <PrimaryButton href="#anfrage" className="mt-6">
           Kostenlose Anfrage starten
-        </a>
+        </PrimaryButton>
         <p className="mt-3 text-sm text-zinc-500">
           Kostenlos und unverbindlich. Sie entscheiden erst nach Erhalt der Offerte.
         </p>
-      </section>
+      </Section>
 
-      <section aria-label="Warum Cleyra" className="mx-auto max-w-3xl px-6 pb-16">
-        <ul className="grid gap-6 sm:grid-cols-3">
+      <Section aria-label="Warum Cleyra" muted>
+        <ul className="grid gap-4 sm:grid-cols-3">
           {trustPoints.map((point) => (
-            <li key={point.title}>
-              <h2 className="font-semibold">{point.title}</h2>
-              <p className="mt-1 text-sm text-zinc-600">{point.text}</p>
-            </li>
+            <Card
+              key={point.title}
+              title={point.title}
+              text={point.text}
+              headingLevel="h2"
+            />
           ))}
         </ul>
-      </section>
+      </Section>
 
-      <section className="mx-auto max-w-3xl px-6 py-16">
-        <h2 className="text-2xl font-semibold">
+      <Section>
+        <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
           Die Endreinigung muss stimmen — die Suche kostet Zeit
         </h2>
         <p className="mt-3 text-zinc-600">
@@ -88,51 +90,54 @@ export default function EndreinigungOberwallisPage() {
           vermitteln sie an einen regionalen Reinigungspartner für Ihre Zone und Ihren
           Wunschtermin.
         </p>
-      </section>
+      </Section>
 
-      <section className="mx-auto max-w-3xl px-6 pb-16">
-        <h2 className="text-2xl font-semibold">So funktioniert&apos;s</h2>
+      <Section className="pt-0">
+        <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+          So funktioniert&apos;s
+        </h2>
         <ol className="mt-4 grid gap-4 sm:grid-cols-3">
           {processSteps.map((step, index) => (
             <li key={step} className="flex items-start gap-3">
-              <span className="font-semibold text-zinc-400">{index + 1}.</span>
-              <span>{step}</span>
+              <span className="font-semibold text-brand">{index + 1}.</span>
+              <span className="text-zinc-600">{step}</span>
             </li>
           ))}
         </ol>
-      </section>
+      </Section>
 
-      <section className="mx-auto max-w-3xl px-6 pb-16">
-        <h2 className="text-2xl font-semibold">
+      <Section muted>
+        <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
           Welche Reinigung Sie anfragen können
         </h2>
-        <ul className="mt-4 grid gap-6 sm:grid-cols-3">
+        <ul className="mt-4 grid gap-4 sm:grid-cols-3">
           {services.map((service) => (
-            <li key={service.title}>
-              <h3 className="font-semibold">{service.title}</h3>
-              <p className="mt-1 text-sm text-zinc-600">{service.text}</p>
-            </li>
+            <Card key={service.title} title={service.title} text={service.text} />
           ))}
         </ul>
-      </section>
+      </Section>
 
-      <section className="mx-auto max-w-3xl px-6 pb-16">
-        <h2 className="text-2xl font-semibold">Serviceregion</h2>
+      <Section>
+        <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+          Serviceregion
+        </h2>
         <p className="mt-3 text-zinc-600">
           Cleyra vermittelt Anfragen aus dem Oberwallis, unter anderem aus Visp,
           Brig-Glis und Naters.
         </p>
-      </section>
+      </Section>
 
-      <section className="mx-auto max-w-3xl px-6 pb-16">
-        <h2 className="text-2xl font-semibold">
+      <Section className="pt-0">
+        <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
           Cleyra ist Vermittler, nicht Ausführender
         </h2>
         <p className="mt-3 text-zinc-600">{disclaimerText}</p>
-      </section>
+      </Section>
 
-      <section className="mx-auto max-w-3xl px-6 pb-16">
-        <h2 className="text-2xl font-semibold">Häufige Fragen</h2>
+      <Section muted>
+        <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+          Häufige Fragen
+        </h2>
         <dl className="mt-4 space-y-6">
           {faqItems.map((item) => (
             <div key={item.question}>
@@ -141,16 +146,11 @@ export default function EndreinigungOberwallisPage() {
             </div>
           ))}
         </dl>
-      </section>
+      </Section>
 
-      <section className="mx-auto max-w-3xl px-6 pb-16 text-center">
-        <a
-          href="#anfrage"
-          className="inline-flex items-center justify-center rounded-full bg-zinc-900 px-6 py-3 font-medium text-white hover:bg-zinc-700"
-        >
-          Kostenlose Anfrage starten
-        </a>
-      </section>
+      <Section className="text-center">
+        <PrimaryButton href="#anfrage">Kostenlose Anfrage starten</PrimaryButton>
+      </Section>
     </main>
   );
 }

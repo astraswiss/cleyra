@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Section } from "@/components/Section";
 
 export const metadata: Metadata = {
   title: "Datenschutzerklärung — Cleyra",
@@ -10,12 +11,17 @@ export const metadata: Metadata = {
 
 export default function DatenschutzPage() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-16">
-      <h1 className="text-2xl font-semibold">Datenschutzerklärung</h1>
-      <p className="mt-4 text-zinc-600">
-        Diese Seite ist in Vorbereitung. Die rechtlich verbindliche
-        Datenschutzerklärung wird ergänzt, sobald die dafür nötigen Angaben vorliegen.
-      </p>
+    <main>
+      <Section>
+        <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+          Datenschutzerklärung
+        </h1>
+        <p className="mt-4 text-zinc-600">
+          Diese Seite ist in Vorbereitung. Die rechtlich verbindliche
+          Datenschutzerklärung wird ergänzt, sobald die dafür nötigen Angaben
+          vorliegen.
+        </p>
+      </Section>
     </main>
   );
 }
