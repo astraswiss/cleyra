@@ -121,6 +121,62 @@ Formato ADR leggero. Registrare solo decisioni durature, non correzioni minori.
 - Related files/tasks: `lib/lead-schema.ts`,
   `components/lead-form/{StepLocationService,StepProperty,LeadForm}.tsx`
 
+## DEC-20260718-04 — Modulo lead ridotto a 3 passaggi (proposta di ChatGPT, adottata dal proprietario)
+
+- Status: accepted
+- Date: 2026-07-18
+- Context: Anche dopo DEC-20260718-03 (rimozione di alcuni campi), il
+  proprietario ha ritenuto il modulo ancora da rivedere nel contenuto e
+  ha condiviso una proposta strutturata (elaborata con ChatGPT) per un
+  modulo a 3 passaggi da circa 9 campi reali, con la regola "raccogliere
+  solo ciò che serve a rispondere a: zona servita, servizio giusto,
+  tempistica, dimensione approssimativa, contatto". Ha chiesto di
+  implementarla così com'è.
+- Decision: modulo lead ristrutturato da 4 a 3 passaggi:
+  - **Passaggio 1 (Wo und wann)**: CAP, Ort, Art der Reinigung,
+    `dateOption` (`exact`/`flexible`) con `desiredDate` mostrato solo se
+    `exact` (validazione incrociata via `superRefine` sullo schema
+    unito, non più sui singoli step, per permettere ancora `.merge()`
+    tra gli step).
+  - **Passaggio 2 (Wohnung)**: unisce immobile e dettagli in un solo
+    step — Anzahl Zimmer, `approxSqmRange` (fasce: <50/50–80/81–110/
+    >110/nicht bekannt, non più un numero libero), `emptyState`
+    (Ja/Teilweise/Nein, sostituisce `furnishedState`), `additionalAreas`
+    ridotto a 3 checkbox (Fenster/Balkon/Keller) + un controllo "Keine"
+    solo UI (non persistito) che azzera gli altri tre, Bemerkungen
+    (invariato). **`propertyType` (Wohnung/Haus) è stato rimosso del
+    tutto**, non richiesto dalla proposta.
+  - **Passaggio 3 (Kontakt)**: invariato nei campi anagrafici;
+    `preferredContact` ora include anche `whatsapp`; **`marketingConsent`
+    è stato rimosso** (la proposta prevede una sola checkbox, quella di
+    privacy).
+  - **Foto**: rimosse dal modulo principale e proposte come passo
+    facoltativo separato nella pagina `/de/danke`
+    (`PostSubmitPhotoUpload.tsx`), dopo l'invio riuscito, per non
+    ostacolare la richiesta principale. L'endpoint `/api/leads` ora
+    include il `leadId` nel `redirectUrl` (`/de/danke?lead=...`, come
+    da esempio della spec sezione 12) così la pagina di conferma può
+    mostrare la referenza e legare l'eventuale invio foto successivo
+    (nuovo endpoint `app/api/leads/photos/route.ts`, stessa logica
+    "nessuna persistenza reale" degli altri endpoint, marcato
+    TODO(API-003)).
+- Alternatives considered: mantenere `propertyType`/`marketingConsent`
+  come campi opzionali nascosti — scartata, la proposta esplicita del
+  proprietario non li prevede e l'obiettivo dichiarato è la minima
+  raccolta dati necessaria.
+- Consequences: ulteriore deviazione consapevole da
+  CLEYRA_WEBSITE_SPEC.md sezioni 10.2–10.5 (che descrivevano 4 passaggi,
+  `propertyType` obbligatorio, `approxSqm` numerico, `marketingConsent`
+  come consenso separato). Il modello dati `CleaningLead` ha oggi meno
+  campi di quelli elencati nella spec sezione 11. Se il proprietario
+  vorrà in futuro analizzare quali informazioni mancano più spesso dopo
+  i primi lead reali (come suggerito nella proposta stessa), si
+  reintrodurranno con una nuova decisione, non silenziosamente.
+- Related files/tasks: `lib/lead-schema.ts`,
+  `components/lead-form/{StepLocationService,StepApartment,StepContact,LeadForm,PostSubmitPhotoUpload}.tsx`,
+  `app/api/leads/route.ts`, `app/api/leads/photos/route.ts`,
+  `app/de/danke/page.tsx`
+
 ## DEC-20260717-03 — Placeholder legali non pubblicabili
 
 - Status: accepted

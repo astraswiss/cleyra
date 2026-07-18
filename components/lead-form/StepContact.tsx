@@ -7,6 +7,7 @@ import { Checkbox } from "@/components/ui/Checkbox";
 const preferredContactOptions = [
   { value: "phone", label: "Telefon" },
   { value: "email", label: "E-Mail" },
+  { value: "whatsapp", label: "WhatsApp" },
 ];
 
 export function StepContact() {
@@ -24,7 +25,7 @@ export function StepContact() {
 
       <Input
         id="fullName"
-        label="Vor- und Nachname"
+        label="Vorname und Nachname"
         autoComplete="name"
         errorMessage={errors.fullName?.message}
         {...register("fullName")}
@@ -71,15 +72,9 @@ export function StepContact() {
         {...register("privacyConsent")}
       />
 
-      <Checkbox
-        id="marketingConsent"
-        label="Ich möchte gelegentlich Informationen und Angebote von Cleyra erhalten. Diese Einwilligung kann ich jederzeit widerrufen."
-        {...register("marketingConsent")}
-      />
-
       <p className="text-sm text-slate-600">
-        Die Anfrage ist kostenlos und unverbindlich. Ein Auftrag entsteht
-        erst, wenn Sie eine Offerte des Reinigungspartners akzeptieren.
+        Kostenlos und unverbindlich. Ein Auftrag entsteht erst nach Ihrer
+        Zustimmung zur Offerte.
       </p>
     </fieldset>
   );
@@ -91,5 +86,4 @@ export const stepContactFields = [
   "email",
   "preferredContact",
   "privacyConsent",
-  "marketingConsent",
 ] as const;

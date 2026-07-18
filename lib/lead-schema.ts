@@ -1,7 +1,11 @@
 import { z } from "zod";
 
-// Modello dati e validazioni per il modulo lead a quattro passaggi.
-// Vedi CLEYRA_WEBSITE_SPEC.md sezioni 10 e 11.
+// Modello dati e validazioni per il modulo lead a tre passaggi.
+// Struttura rivista (2026-07-18) per raccogliere solo ciò che serve a
+// rispondere a: zona servita, servizio giusto, tempistica, dimensione
+// approssimativa, modo di contatto — vedi docs/DECISIONS.md
+// DEC-20260718-04. Deviazione consapevole da CLEYRA_WEBSITE_SPEC.md
+// sezioni 10.2-10.5 (che descrivevano 4 passaggi).
 
 const swissPostalCodeRegex = /^\d{4}$/;
 
@@ -19,17 +23,21 @@ export const serviceTypeSchema = z.enum([
   "other",
 ]);
 
-export const propertyTypeSchema = z.enum(["apartment", "house"]);
+export const dateOptionSchema = z.enum(["exact", "flexible"]);
 
-export const furnishedStateSchema = z.enum([
-  "empty",
-  "furnished",
-  "partially_furnished",
+export const approxSqmRangeSchema = z.enum([
+  "under_50",
+  "50_80",
+  "81_110",
+  "over_110",
+  "unknown",
 ]);
 
-export const preferredContactSchema = z.enum(["phone", "email"]);
+export const emptyStateSchema = z.enum(["empty", "partial", "furnished"]);
 
-// Passaggio 1 — luogo e servizio (spec 10.2)
+export const preferredContactSchema = z.enum(["phone", "email", "whatsapp"]);
+
+// Passaggio 1 — Wo und wann
 export const stepLocationServiceSchema = z.object({
   postalCode: z
     .string()
@@ -40,46 +48,36 @@ export const stepLocationServiceSchema = z.object({
     .trim()
     .min(2, "Bitte geben Sie den Ort ein (mindestens 2 Zeichen)."),
   serviceType: serviceTypeSchema,
-  desiredDate: z
-    .string()
-    .refine(isNotBeforeToday, "Das Datum darf nicht in der Vergangenheit liegen."),
+  dateOption: dateOptionSchema,
+  // Obbligatorio solo se dateOption === "exact" (vedi superRefine sotto
+  // in leadFormSchema); qui resta opzionale per permettere il merge tra
+  // gli schema dei singoli passaggi.
+  desiredDate: z.string().optional(),
 });
 
-// Passaggio 2 — immobile (spec 10.3)
-export const stepPropertySchema = z.object({
-  propertyType: propertyTypeSchema,
+// Passaggio 2 — Wohnung (immobile + dettagli, uniti in un solo step)
+export const additionalAreasSchema = z.object({
+  windows: z.boolean(),
+  balcony: z.boolean(),
+  cellar: z.boolean(),
+});
+
+export const stepApartmentSchema = z.object({
   rooms: z
     .number()
     .int()
     .min(1, "Anzahl Zimmer muss mindestens 1 sein.")
     .max(20, "Anzahl Zimmer darf höchstens 20 sein."),
-  approxSqm: z
-    .number()
-    .min(10, "Fläche muss mindestens 10 m² sein.")
-    .max(2000, "Fläche darf höchstens 2000 m² sein."),
-  furnishedState: furnishedStateSchema,
-});
-
-// Passaggio 3 — dettagli (spec 10.4)
-export const extrasSchema = z.object({
-  windows: z.boolean(),
-  balconyTerrace: z.boolean(),
-  cellar: z.boolean(),
-  oven: z.boolean(),
-  fridge: z.boolean(),
-  blindsShutters: z.boolean(),
-  garage: z.boolean(),
-  otherAreas: z.boolean(),
-});
-
-export const stepExtrasSchema = z.object({
-  extras: extrasSchema,
+  approxSqmRange: approxSqmRangeSchema,
+  emptyState: emptyStateSchema,
+  additionalAreas: additionalAreasSchema,
   notes: z.string().trim().max(1500).optional(),
-  // TODO(FORM-005): validare gli allegati (max 5 file, max 8MB, MIME) qui
-  // e lato server; photoKeys sono generati dopo l'upload, non dal client.
+  // TODO(API-003): le fotografie non vengono più raccolte in questo
+  // passaggio ma proposte facoltativamente nella pagina di conferma
+  // (/de/danke), per non ostacolare l'invio principale.
 });
 
-// Passaggio 4 — contatti e consenso (spec 10.5)
+// Passaggio 3 — Kontakt
 export const stepContactSchema = z.object({
   fullName: z.string().trim().min(2, "Bitte geben Sie Ihren Namen ein."),
   phone: z
@@ -96,26 +94,39 @@ export const stepContactSchema = z.object({
       message:
         "Bitte bestätigen Sie, dass Sie die Datenschutzerklärung gelesen haben.",
     }),
-  // Nessun .default() qui: il default (false) è impostato nei defaultValues
-  // del modulo (LeadForm.tsx), altrimenti zodResolver produce un mismatch
-  // tra tipo di input e di output dello schema (marketingConsent opzionale
-  // in input vs richiesto in output).
-  marketingConsent: z.boolean(),
 });
 
-export const leadFormSchema = stepLocationServiceSchema
-  .merge(stepPropertySchema)
-  .merge(stepExtrasSchema)
+const leadFormObjectSchema = stepLocationServiceSchema
+  .merge(stepApartmentSchema)
   .merge(stepContactSchema);
 
-export type LeadFormValues = z.infer<typeof leadFormSchema>;
+export const leadFormSchema = leadFormObjectSchema.superRefine((data, ctx) => {
+  if (data.dateOption === "exact") {
+    if (!data.desiredDate) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["desiredDate"],
+        message: "Bitte geben Sie ein Datum an.",
+      });
+    } else if (!isNotBeforeToday(data.desiredDate)) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["desiredDate"],
+        message: "Das Datum darf nicht in der Vergangenheit liegen.",
+      });
+    }
+  }
+});
+
+export type LeadFormValues = z.infer<typeof leadFormObjectSchema>;
 
 export type LeadStatus = "new" | "submitted" | "failed";
 
-// Modello di persistenza completo (spec sezione 11). I campi tecnici
-// nascosti (leadId, createdAt, attribution, ecc.) sono generati/validati
-// server-side, mai fidati dal client (spec 10.6).
-export const cleaningLeadSchema = leadFormSchema.extend({
+// Modello di persistenza completo (spec sezione 11, adattato alla
+// struttura a 3 passaggi). I campi tecnici nascosti (leadId, createdAt,
+// attribution, ecc.) sono generati/validati server-side, mai fidati dal
+// client (spec 10.6).
+export const cleaningLeadSchema = leadFormObjectSchema.extend({
   id: z.string(),
   createdAt: z.string(),
   status: z.enum(["new", "submitted", "failed"]),

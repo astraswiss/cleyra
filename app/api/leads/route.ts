@@ -52,10 +52,11 @@ export async function POST(request: NextRequest) {
   if (typeof body === "object" && body !== null && "company" in body) {
     const honeypotValue = (body as { company?: unknown }).company;
     if (typeof honeypotValue === "string" && honeypotValue.length > 0) {
+      const fakeLeadId = generateLeadId();
       return NextResponse.json({
         success: true,
-        leadId: generateLeadId(),
-        redirectUrl: "/de/danke",
+        leadId: fakeLeadId,
+        redirectUrl: `/de/danke?lead=${fakeLeadId}`,
       });
     }
   }
@@ -107,7 +108,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       leadId,
-      redirectUrl: `/de/danke`,
+      redirectUrl: `/de/danke?lead=${leadId}`,
     });
   } catch (error) {
     console.error("[leads] errore imprevisto durante l'invio", error);

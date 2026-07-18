@@ -24,20 +24,22 @@ Stato tecnico reale, non desiderato. Aggiornare a ogni cambio di struttura.
 ```
 Browser
   → Next.js App Router (SSR/SSG pagine marketing + landing locali)
-  → LeadForm multi-step (client, stato in sessionStorage) — FUNZIONANTE
-  → POST /api/leads (Route Handler) — FUNZIONANTE (validazione/antispam)
-      → validazione Zod server-side (leadFormSchema)               ✅
-      → rate limit (in memoria, per istanza) + honeypot            ✅
-      → salvataggio lead → array in memoria, NON un DB reale        ⚠️ API-002
-      → upload foto → non implementato, solo conteggio inviato      ⚠️ API-003
-      → invio e-mail conferma/notifica → non implementato           ⚠️ API-005
-  → redirect /de/danke — FUNZIONANTE, ma senza dati lead dinamici né evento analytics
+  → LeadForm 3 passaggi (client, stato in sessionStorage)           ✅
+  → POST /api/leads (Route Handler)                                 ✅ (validazione/antispam)
+      → validazione Zod server-side (leadFormSchema)                ✅
+      → rate limit (in memoria, per istanza) + honeypot             ✅
+      → salvataggio lead → array in memoria, NON un DB reale         ⚠️ API-002
+      → invio e-mail conferma/notifica → non implementato            ⚠️ API-005
+  → redirect /de/danke?lead=<leadId>                                 ✅
+      → prompt foto facoltativo (PostSubmitPhotoUpload)               ✅ UI
+      → POST /api/leads/photos → log, nessuna persistenza reale       ⚠️ API-003
 ```
 
-Verificato end-to-end in questa sessione con un browser reale
-(Playwright headless): compilazione dei 4 step, navigazione
-avanti/indietro senza perdita dati, validazione con riepilogo errori,
-invio riuscito e redirect.
+Verificato end-to-end con un browser reale (Playwright headless):
+compilazione dei 3 step (incl. il campo data condizionale e il reset
+"Keine" delle aree aggiuntive), navigazione avanti/indietro senza
+perdita dati, validazione con riepilogo errori, invio riuscito, redirect
+con referenza visibile, e invio foto facoltativo confermato dal server.
 
 ## Struttura directory (stato attuale)
 
@@ -51,7 +53,9 @@ invio riuscito e redirect.
 │   ├── layout.tsx
 │   ├── page.tsx                    # redirect "/" → "/de"
 │   ├── api/
-│   │   └── leads/route.ts          # validazione+antispam reali, persistenza in memoria (API-001 parziale)
+│   │   └── leads/
+│   │       ├── route.ts            # validazione+antispam reali, persistenza in memoria (API-001 parziale)
+│   │       └── photos/route.ts     # invio foto facoltativo da /de/danke, nessuna persistenza reale (TODO API-003)
 │   └── de/
 │       ├── layout.tsx              # Header + Footer + skip link
 │       ├── page.tsx                # homepage completa (sezioni 8.1-8.9) + LeadForm in #anfrage
@@ -66,7 +70,7 @@ invio riuscito e redirect.
 │       ├── datenschutz/page.tsx              # TODO LEGAL REVIEW
 │       ├── impressum/page.tsx                # TODO LEGAL REVIEW
 │       ├── vermittlungsbedingungen/page.tsx  # TODO LEGAL REVIEW
-│       └── danke/page.tsx                    # noindex, nofollow
+│       └── danke/page.tsx                    # noindex, nofollow; mostra ?lead= e prompt foto facoltativo
 ├── components/
 │   ├── layout/
 │   │   ├── Container.tsx
@@ -84,9 +88,10 @@ invio riuscito e redirect.
 │   │   ├── LocationLandingPage.tsx  # template condiviso landing locali
 │   │   ├── NearbyLocations.tsx, LocalFaq.tsx
 │   └── lead-form/
-│       ├── LeadForm.tsx            # orchestratore client, RHF + zodResolver
-│       ├── Step{LocationService,Property,Extras,Contact}.tsx
-│       ├── PhotoUploader.tsx       # solo client, nessun upload reale
+│       ├── LeadForm.tsx            # orchestratore client, RHF + zodResolver, 3 passaggi
+│       ├── Step{LocationService,Apartment,Contact}.tsx
+│       ├── PhotoUploader.tsx       # selezione file, usato da PostSubmitPhotoUpload
+│       ├── PostSubmitPhotoUpload.tsx  # prompt foto facoltativo su /de/danke
 │       ├── FormNavigation.tsx, FormErrorSummary.tsx
 ├── lib/
 │   ├── site-config.ts
@@ -97,7 +102,7 @@ invio riuscito e redirect.
 │   ├── rate-limit.ts               # rate limiter in memoria (per istanza)
 │   ├── sanitize.ts                 # sanitizzazione notes, normalizzazione email/telefono
 │   ├── lead-id.ts                  # generazione leadId "CLY-YYYY-XXXXXX"
-│   └── __tests__/{lead-schema,locations}.test.ts  # 26 unit test (Vitest)
+│   └── __tests__/{lead-schema,locations}.test.ts  # 28 unit test (Vitest)
 ├── vitest.config.ts
 ├── next.config.mjs
 ├── tailwind.config.ts
@@ -124,8 +129,9 @@ invio riuscito e redirect.
 | `/de/datenschutz` | placeholder `TODO LEGAL REVIEW` — non pubblicabile |
 | `/de/impressum` | placeholder `TODO LEGAL REVIEW` — non pubblicabile |
 | `/de/vermittlungsbedingungen` | placeholder `TODO LEGAL REVIEW` — non pubblicabile |
-| `/de/danke` | raggiunta correttamente dopo l'invio; nessun dato dinamico del lead né evento analytics ancora (API-006/TRACK-001) |
+| `/de/danke` | mostra `?lead=<leadId>` e un prompt foto facoltativo; nessun evento analytics ancora (TRACK-001) |
 | `/api/leads` | **validazione/antispam reali**; persistenza solo in memoria di processo, nessuna e-mail (API-001 parziale) |
+| `/api/leads/photos` | riceve `{leadId, photoCount}` dalla pagina di conferma; nessuna persistenza reale (TODO API-003) |
 
 Tutte le rotte sono state verificate manualmente con `curl`; il modulo
 lead è stato verificato end-to-end con un browser reale (Playwright
@@ -173,33 +179,45 @@ ancora creato (Fase 5).
 
 ## Modello dati lead
 
-Implementato in `lib/lead-schema.ts` con Zod:
+Implementato in `lib/lead-schema.ts` con Zod, ristrutturato a 3 passaggi
+(DEC-20260718-04):
 
-- `stepLocationServiceSchema`, `stepPropertySchema`, `stepExtrasSchema`,
-  `stepContactSchema` — uno schema per passaggio del modulo, combinati in
-  `leadFormSchema` (usato sia dal client con `zodResolver` sia dal server
-  in `/api/leads`).
-- `cleaningLeadSchema`/`CleaningLead` — modello di persistenza completo
-  (spec sezione 11) con i campi tecnici nascosti (id, createdAt, status,
-  attribution, photoKeys, ecc.). **Non ancora scritto in nessun
-  database** — vedi "Upload e storage" e API-002.
+- `stepLocationServiceSchema` (CAP, Ort, servizio, `dateOption`/
+  `desiredDate`), `stepApartmentSchema` (rooms, `approxSqmRange`,
+  `emptyState`, `additionalAreas`, notes), `stepContactSchema` (contatti
+  + consenso) — combinati in `leadFormObjectSchema` via `.merge()`, poi
+  avvolti in `leadFormSchema` con un `superRefine` a livello di form
+  intero per la validazione incrociata `dateOption`/`desiredDate`
+  (obbligatorio solo se `dateOption === "exact"`). Usato sia dal client
+  con `zodResolver` sia dal server in `/api/leads`.
+- `cleaningLeadSchema`/`CleaningLead` — costruito da
+  `leadFormObjectSchema.extend(...)` (non da `leadFormSchema`, perché
+  `.extend()` non è disponibile su uno schema avvolto da `superRefine`)
+  con i campi tecnici nascosti (id, createdAt, status, attribution,
+  photoKeys, ecc.). **Non ancora scritto in nessun database** — vedi
+  "Upload e storage" e API-002. Non include più `propertyType` né
+  `marketingConsent` (rimossi, DEC-20260718-04).
 - Nota tipo: `privacyConsent` usa `z.boolean().refine(v => v === true)`
   invece di `z.literal(true)` per restare compatibile con un
   `defaultValues` booleano di React Hook Form (altrimenti Zod 4 genera un
   mismatch di tipo tra input e output dello schema nel resolver).
-- 21 unit test in `lib/__tests__/lead-schema.test.ts` (Vitest): CAP
-  svizzero, date passate/future, limiti rooms/approxSqm, email,
+- 28 unit test in `lib/__tests__/lead-schema.test.ts` (Vitest): CAP
+  svizzero, validazione incrociata `dateOption`/`desiredDate`, limiti
+  rooms, `approxSqmRange`/`emptyState` invalidi, email, whatsapp,
   privacyConsent.
 
 ## Upload e storage
 
-Non ancora implementato lato server. Lato client, `PhotoUploader.tsx`
-valida conteggio (max 5), dimensione (max 8MB) e tipo MIME (JPEG, PNG,
-WebP, HEIC) prima di accettare i file, ma questi restano solo in stato
-React: alla sottomissione del modulo viene inviato solo `photoCount`, i
-file stessi non lasciano il browser. Target: storage privato con URL
-firmati temporanei (spec sezione 10.3, 13) — bloccato su una decisione
-di provider (DEC-20260717-02).
+Non ancora implementato lato server. Le foto sono proposte come passo
+facoltativo nella pagina `/de/danke` (`PostSubmitPhotoUpload.tsx`, dopo
+l'invio riuscito del modulo, DEC-20260718-04), non più nel modulo
+principale. Lato client, `PhotoUploader.tsx` valida conteggio (max 5),
+dimensione (max 8MB) e tipo MIME (JPEG, PNG, WebP, HEIC) prima di
+accettare i file, ma questi restano solo in stato React: `POST
+/api/leads/photos` riceve solo `{leadId, photoCount}`, i file stessi non
+lasciano il browser. Target: storage privato con URL firmati temporanei
+(spec sezione 10.3, 13) — bloccato su una decisione di provider
+(DEC-20260717-02).
 
 ## Analytics e consent management
 
@@ -267,8 +285,11 @@ allegati sicuro (nessun file viene ancora accettato dal server).
 | `app/de/layout.tsx` | Layout sezione tedesca (Header/Footer/skip link) |
 | `app/de/page.tsx` | Homepage completa con modulo lead incorporato |
 | `app/api/leads/route.ts` | Endpoint lead: validazione, antispam, persistenza in memoria |
+| `app/api/leads/photos/route.ts` | Invio foto facoltativo da `/de/danke`, nessuna persistenza reale |
+| `app/de/danke/page.tsx` | Conferma invio, mostra `?lead=` e prompt foto facoltativo |
 | `lib/site-config.ts` | Contenuti/config centralizzati (spec sezione 24) |
-| `lib/lead-schema.ts` | Schema Zod condiviso client/server per il modulo lead |
+| `lib/lead-schema.ts` | Schema Zod condiviso client/server per il modulo lead (3 passaggi) |
 | `lib/attribution.ts` | Cattura e persistenza UTM/click-id di prima sessione |
-| `components/lead-form/LeadForm.tsx` | Orchestratore del modulo a 4 step |
+| `components/lead-form/LeadForm.tsx` | Orchestratore del modulo a 3 step |
+| `components/lead-form/PostSubmitPhotoUpload.tsx` | Prompt foto facoltativo su `/de/danke` |
 | `.env.example` | Variabili d'ambiente documentate, senza valori reali |

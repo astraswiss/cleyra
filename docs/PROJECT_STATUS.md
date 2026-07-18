@@ -1,8 +1,8 @@
-Last updated: 2026-07-18 02:10 Europe/Zurich
-Current phase: Fase 1–2–3 avanzate in parallelo (fondazioni, homepage, landing locali, modulo lead snellito); Fase 4 (backend) parziale; sistema di design ripristinato ai default, rimandato a fine progetto
+Last updated: 2026-07-18 02:40 Europe/Zurich
+Current phase: Fase 1–2–3 avanzate in parallelo (fondazioni, homepage, landing locali, modulo lead ristrutturato a 3 passaggi); Fase 4 (backend) parziale; sistema di design ripristinato ai default, rimandato a fine progetto
 Overall status: in_progress
 Current branch: claude/new-session-huwuyt
-Last verified commit: 999f155 (landing locali complete) — questa sessione aggiunge un nuovo commit sopra
+Last verified commit: 25e2773 (form snellito, 4 step) — questa sessione aggiunge un nuovo commit sopra
 
 ## Cosa è già funzionante
 
@@ -22,22 +22,45 @@ Last verified commit: 999f155 (landing locali complete) — questa sessione aggi
   footer globale. Verificato con Playwright: H1 corretto, modulo
   precompilato, FAQ locale visibile, link incrociati corretti, tutte le
   route rispondono `200`.
-- Modulo lead multi-step completo e funzionante end-to-end: 4 step,
-  progress bar, persistenza in `sessionStorage`, navigazione
-  avanti/indietro senza perdita dati, focus sul primo campo errato,
-  riepilogo errori accessibile, honeypot, prevenzione doppio invio,
-  redirect a `/de/danke`. Accetta `initialValues` per precompilare
-  città/CAP dalle landing locali. **Snellito su richiesta del
-  proprietario** (DEC-20260718-03): rimossi `Terminflexibilität`
-  (passaggio 1) e `Stockwerk`/`Lift` (passaggio 2), mantenuti note e
-  foto — deviazione consapevole dalla spec 10.2/10.3.
+- **Modulo lead ristrutturato a 3 passaggi** (DEC-20260718-04, proposta
+  del proprietario elaborata con ChatGPT), completo e funzionante
+  end-to-end:
+  - Passaggio 1 (Wo und wann): CAP, Ort, Art der Reinigung, data esatta
+    o "Ich bin flexibel" (il campo data appare solo se si sceglie
+    "Genaues Datum").
+  - Passaggio 2 (Wohnung): Anzahl Zimmer, Wohnfläche a fasce (<50/
+    50–80/81–110/>110/nicht bekannt), "Ist die Wohnung leer?"
+    (Ja/Teilweise/Nein), Zusätzliche Bereiche (Fenster/Balkon/Keller +
+    opzione "Keine" che azzera gli altri), Bemerkungen. **Nessun campo
+    Art der Immobilie** (rimosso, non richiesto dalla proposta).
+  - Passaggio 3 (Kontakt): nome, telefono, email, contatto preferito
+    (ora incluso **WhatsApp**), consenso privacy. **Nessun consenso
+    marketing separato** (rimosso).
+  - **Foto**: non più nel modulo principale — proposte come passo
+    facoltativo nella pagina `/de/danke` dopo l'invio riuscito, così non
+    rallentano la richiesta principale.
+  - Persistenza in `sessionStorage`, navigazione avanti/indietro senza
+    perdita dati, focus sul primo campo errato, riepilogo errori
+    accessibile, honeypot, prevenzione doppio invio. Accetta
+    `initialValues` per precompilare città/CAP dalle landing locali.
+  - Verificato con Playwright: il campo data si nasconde/mostra
+    correttamente, "Keine" azzera gli altri checkbox e viceversa, il
+    campo Art der Immobilie non esiste più, WhatsApp è selezionabile, il
+    flusso completo termina su `/de/danke?lead=<leadId>` con la
+    referenza visibile e il prompt foto funzionante (invio confermato,
+    log server senza PII).
 - Endpoint `/api/leads` reale (non uno stub): valida con Zod,
   normalizza email/telefono, sanitizza `notes`, applica rate limiting
   (5 richieste/60s per IP) e honeypot server-side, risponde con i codici
-  della spec. Log senza dati personali.
+  della spec, e ora include `?lead=<leadId>` nel `redirectUrl`. Log
+  senza dati personali.
+- Nuovo endpoint `/api/leads/photos` per l'invio facoltativo di foto
+  dalla pagina di conferma: stessa logica "nessuna persistenza reale"
+  del resto del sito (TODO API-003), log senza PII.
 - Schema dati `lib/lead-schema.ts` e dati location `lib/locations.ts`
-  con 26 unit test verdi (Vitest): 21 sullo schema lead, 5 sui dati delle
-  landing locali (unicità slug/meta/H1/FAQ, zone vicine presenti).
+  con 28 unit test verdi (Vitest): 23 sullo schema lead (incl. la
+  validazione incrociata `dateOption`/`desiredDate`), 5 sui dati delle
+  landing locali.
 - `lib/attribution.ts`: cattura UTM/GCLID/GBRAID/WBRAID/referrer al primo
   touch della sessione, inclusa nel payload verso `/api/leads` (non
   ancora persistita né usata da analytics).
@@ -45,9 +68,11 @@ Last verified commit: 999f155 (landing locali complete) — questa sessione aggi
 
 ## Cosa è parzialmente funzionante
 
-- **Foto**: selezione/rimozione lato client con validazione, ma
-  **nessun upload reale**: solo `photoCount` viene inviato al server.
-  Bloccato su API-003 (storage privato non ancora scelto/collegato).
+- **Foto**: ora proposte nella pagina `/de/danke` (non più nel modulo
+  principale), selezione/rimozione lato client con validazione, ma
+  **nessun upload reale**: solo `photoCount` viene inviato al nuovo
+  endpoint `/api/leads/photos`. Bloccato su API-003 (storage privato non
+  ancora scelto/collegato).
 - **Persistenza lead**: l'endpoint valida e "accetta" la richiesta ma la
   tiene solo in un array in memoria di processo (`inMemoryLeads`), non
   in un database. Si perde a ogni riavvio/cold start. **Non è una
@@ -96,7 +121,7 @@ Nessuna: checkpoint di fine sessione.
 
 - `npm run build` (18 route, typecheck+lint inclusi)
 - `npm run lint`
-- `npx vitest run` — 26/26 (21 schema lead + 5 dati location)
+- `npx vitest run` — 28/28 (23 schema lead + 5 dati location)
 - Verifica e2e manuale con Playwright headless (script ad-hoc, non
   committati): modulo lead completo dalla homepage; landing Visp con
   precompilazione città/CAP, FAQ locale, link incrociati corretti

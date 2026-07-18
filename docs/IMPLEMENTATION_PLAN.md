@@ -84,22 +84,31 @@ Piano eseguibile derivato da `CLEYRA_WEBSITE_SPEC.md` sezione 29.
 
 - [x] FORM-001 Schema dati (`lib/lead-schema.ts`, Zod, `CleaningLead`)
   - Dipendenze: FOUND-005
-  - Criteri di accettazione: schema condiviso client/server, copre tutti i campi spec sezione 11
-  - Test richiesti: `npx vitest run` — 21 unit test verdi (CAP 4 cifre, data non passata, rooms 1–20, approxSqm 10–2000, email, privacyConsent)
-  - Nota (2026-07-18): rimossi `dateFlexibility`, `floor`, `elevator` su
-    richiesta esplicita del proprietario per velocizzare il modulo — vedi
-    DEC-20260718-03. Deviazione consapevole dalla spec 10.2/10.3.
+  - Criteri di accettazione: schema condiviso client/server, copre i campi minimi necessari (spec sezione 11 adattata, vedi note sotto)
+  - Test richiesti: `npx vitest run` — 28 unit test verdi (CAP 4 cifre, cross-field dateOption/desiredDate, rooms 1–20, approxSqmRange, emptyState, email, whatsapp, privacyConsent)
+  - Nota (2026-07-18, DEC-20260718-03): rimossi `dateFlexibility`, `floor`, `elevator`.
+  - Nota (2026-07-18, DEC-20260718-04): modulo ristrutturato a 3 passaggi
+    su proposta del proprietario (elaborata con ChatGPT). `approxSqm`
+    (numero libero) sostituito da `approxSqmRange` (fasce), `furnishedState`
+    sostituito da `emptyState` (Ja/Teilweise/Nein), `extras` ridotto a
+    `additionalAreas` (Fenster/Balkon/Keller), `propertyType` e
+    `marketingConsent` **rimossi del tutto**, aggiunto `dateOption`
+    (exact/flexible) con `desiredDate` condizionale (validato con
+    `superRefine` sullo schema unito). Deviazione consapevole ulteriore
+    dalla spec 10.2–10.5.
 - [x] FORM-002 Stato multi-step + persistenza sessione
   - File previsti: `components/lead-form/LeadForm.tsx`
   - Criteri di accettazione: stato salvato in `sessionStorage` (`cleyra-lead-form-v1`), ripristinato al mount, navigazione avanti/indietro senza perdita dati
-  - Test richiesti: verificato con Playwright headless (rooms=3 preservato dopo Zurück → Weiter)
-- [x] FORM-003 `StepLocationService.tsx` (senza `dateFlexibility`, vedi DEC-20260718-03)
-- [x] FORM-004 `StepProperty.tsx` (senza `floor`/`elevator`, vedi DEC-20260718-03)
-- [x] FORM-005 (parziale) `StepExtras.tsx` + `PhotoUploader.tsx`
-  - Criteri di accettazione: UI e validazione client (max 5 file, max 8MB, MIME JPEG/PNG/WebP/HEIC) implementate
-  - Nota: **nessun upload reale** — i file restano solo lato client finché lo storage privato (API-003) non è collegato; alla sottomissione viene inviato solo `photoCount`, non i file
-- [x] FORM-006 `StepContact.tsx` + consensi
+  - Test richiesti: verificato con Playwright headless
+  - Nota (2026-07-18): passato da 4 a **3 passaggi** (DEC-20260718-04)
+- [x] FORM-003 `StepLocationService.tsx` — CAP, Ort, Art der Reinigung, `dateOption` (Genaues Datum/Ich bin flexibel) con `desiredDate` condizionale
+- [x] FORM-004 `StepApartment.tsx` — unisce immobile e dettagli (Zimmer, Wohnfläche a fasce, Ist die Wohnung leer?, Zusätzliche Bereiche con opzione "Keine", Bemerkungen); sostituisce i precedenti `StepProperty.tsx`/`StepExtras.tsx` (rimossi)
+- [x] FORM-005 `PhotoUploader.tsx` — **spostato dal modulo principale alla pagina `/de/danke`** (`PostSubmitPhotoUpload.tsx`), proposto come passo facoltativo dopo l'invio riuscito per non rallentare la richiesta principale (DEC-20260718-04)
+  - Criteri di accettazione: UI e validazione client (max 5 file, max 8MB, MIME JPEG/PNG/WebP/HEIC) invariate; nuovo endpoint `app/api/leads/photos/route.ts` riceve `{leadId, photoCount}`
+  - Nota: **nessun upload reale dei file** — solo il conteggio viene inviato, come per il resto del sito finché lo storage privato (API-003) non è collegato
+- [x] FORM-006 `StepContact.tsx` + consenso
   - Nota: `privacyConsent` implementato con `z.boolean().refine()` anziché `z.literal(true)` per compatibilità di tipo con `defaultValues` di React Hook Form (altrimenti mismatch di tipo tra input/output dello schema con zodResolver di Zod 4)
+  - Nota (2026-07-18): aggiunto `whatsapp` come canale di contatto; `marketingConsent` rimosso (DEC-20260718-04)
 - [x] FORM-007 Gestione errori, loading, prevenzione doppio invio
   - File previsti: `components/lead-form/{LeadForm,FormNavigation,FormErrorSummary}.tsx`
   - Criteri di accettazione: usabile a 320px (classi Tailwind responsive), focus sul primo campo con errore alla validazione di uno step, riepilogo errori con `aria-live`, honeypot invisibile (client + verifica server), lock client-side contro doppio invio (`submissionLockRef`)
@@ -117,9 +126,10 @@ Piano eseguibile derivato da `CLEYRA_WEBSITE_SPEC.md` sezione 29.
 - [x] API-004 (parziale) Antispam (honeypot, rate limit)
   - Nota: rate limiter in memoria per singola istanza — da sostituire con uno store condiviso prima del deploy multi-istanza/serverless (vedi TODO in `lib/rate-limit.ts`)
 - [ ] API-005 E-mail conferma utente + notifica interna (provider da decidere)
-- [ ] API-006 Pagina `/de/danke` + idempotenza evento `lead_submitted`
+- [ ] API-006 (parziale) Pagina `/de/danke` + idempotenza evento `lead_submitted`
   - Criteri di accettazione: lead salvato prima dell'invio e-mail; nessun dato personale nell'URL; evento emesso una sola volta
-  - Nota: la pagina esiste ed è raggiunta correttamente dopo l'invio, ma non mostra ancora dati dinamici del lead né emette eventi analytics (dipende da TRACK-001)
+  - Nota (2026-07-18): `redirectUrl` ora include `?lead=<leadId>` (nessun dato personale, solo il riferimento non sensibile come da spec sezione 15); la pagina mostra la referenza e propone l'invio facoltativo di foto (`PostSubmitPhotoUpload.tsx` → `app/api/leads/photos/route.ts`, stessa logica "nessuna persistenza reale" del resto del sito)
+  - Nota: manca ancora l'emissione dell'evento analytics `lead_submitted` (dipende da TRACK-001, non ancora iniziato)
 
 ## Fase 5 — SEO e analytics
 

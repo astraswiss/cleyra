@@ -1,3 +1,37 @@
+## 2026-07-18 (7)
+
+### Changed
+
+- **Modulo lead ristrutturato da 4 a 3 passaggi**, su proposta del
+  proprietario (elaborata con ChatGPT): Wo und wann (con scelta data
+  esatta/flessibile), Wohnung (immobile+dettagli uniti, superficie a
+  fasce, "leer?" invece di möbliert, aree ridotte a Fenster/Balkon/
+  Keller con opzione "Keine"), Kontakt (con WhatsApp). `propertyType` e
+  `marketingConsent` rimossi.
+- Le foto non sono più nel modulo principale: proposte come passo
+  facoltativo su `/de/danke` dopo l'invio riuscito
+  (`PostSubmitPhotoUpload.tsx` → nuovo endpoint `/api/leads/photos`).
+- `/api/leads` include ora `?lead=<leadId>` nel `redirectUrl`;
+  `/de/danke` mostra la referenza.
+
+### Added
+
+- `components/lead-form/StepApartment.tsx`, `PostSubmitPhotoUpload.tsx`.
+- `app/api/leads/photos/route.ts`.
+
+### Removed
+
+- `components/lead-form/StepProperty.tsx`, `StepExtras.tsx` (sostituiti
+  da `StepApartment.tsx`).
+
+### Verification
+
+- `npm run build`, `npm run lint`, `npx vitest run` (28/28) verdi.
+- Verifica e2e manuale Playwright: campo data condizionale, reset
+  "Keine", assenza Art der Immobilie, WhatsApp selezionabile, redirect
+  con `?lead=`, invio foto dalla pagina di conferma confermato lato
+  server (log senza PII).
+
 ## 2026-07-18 (6)
 
 ### Removed

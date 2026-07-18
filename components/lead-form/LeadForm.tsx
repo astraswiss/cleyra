@@ -12,39 +12,36 @@ import { getOrCreateAttribution } from "@/lib/attribution";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { Alert } from "@/components/ui/Alert";
 import { StepLocationService, stepLocationServiceFields } from "@/components/lead-form/StepLocationService";
-import { StepProperty, stepPropertyFields } from "@/components/lead-form/StepProperty";
-import { StepExtras, stepExtrasFields } from "@/components/lead-form/StepExtras";
+import { StepApartment, stepApartmentFields } from "@/components/lead-form/StepApartment";
 import { StepContact, stepContactFields } from "@/components/lead-form/StepContact";
 import { FormNavigation } from "@/components/lead-form/FormNavigation";
 import { FormErrorSummary } from "@/components/lead-form/FormErrorSummary";
 
 const SESSION_STORAGE_KEY = "cleyra-lead-form-v1";
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 3;
 
 const STEP_FIELDS: Record<number, FieldPath<LeadFormValues>[]> = {
   1: [...stepLocationServiceFields],
-  2: [...stepPropertyFields],
-  3: [...stepExtrasFields],
-  4: [...stepContactFields],
+  2: [...stepApartmentFields],
+  3: [...stepContactFields],
 };
 
 const STEP_NEXT_LABELS: Record<number, string> = {
   1: "Weiter zur Wohnung",
-  2: "Weiter zu den Details",
-  3: "Weiter zu Ihren Kontaktdaten",
+  2: "Weiter zu Ihren Kontaktdaten",
 };
 
 const FIELD_LABELS: Partial<Record<string, string>> = {
   postalCode: "Postleitzahl",
   city: "Ort",
   serviceType: "Art der Reinigung",
-  desiredDate: "Gewünschter Termin",
-  propertyType: "Art der Immobilie",
+  dateOption: "Gewünschtes Datum",
+  desiredDate: "Datum",
   rooms: "Anzahl Zimmer",
-  approxSqm: "Fläche",
-  furnishedState: "Möblierungszustand",
-  notes: "Anmerkungen",
-  fullName: "Vor- und Nachname",
+  approxSqmRange: "Ungefähre Wohnfläche",
+  emptyState: "Wohnung leer",
+  notes: "Bemerkungen",
+  fullName: "Vorname und Nachname",
   phone: "Telefonnummer",
   email: "E-Mail-Adresse",
   preferredContact: "Bevorzugter Kontaktweg",
@@ -55,20 +52,15 @@ const defaultValues: LeadFormValues = {
   postalCode: "",
   city: "",
   serviceType: "end_cleaning",
+  dateOption: "exact",
   desiredDate: "",
-  propertyType: "apartment",
   rooms: 1,
-  approxSqm: 10,
-  furnishedState: "empty",
-  extras: {
+  approxSqmRange: "under_50",
+  emptyState: "empty",
+  additionalAreas: {
     windows: false,
-    balconyTerrace: false,
+    balcony: false,
     cellar: false,
-    oven: false,
-    fridge: false,
-    blindsShutters: false,
-    garage: false,
-    otherAreas: false,
   },
   notes: "",
   fullName: "",
@@ -76,7 +68,6 @@ const defaultValues: LeadFormValues = {
   email: "",
   preferredContact: "email",
   privacyConsent: false,
-  marketingConsent: false,
 };
 
 type LeadFormProps = {
@@ -88,7 +79,6 @@ type LeadFormProps = {
 export function LeadForm({ initialValues }: LeadFormProps = {}) {
   const router = useRouter();
   const [step, setStep] = useState(1);
-  const [photos, setPhotos] = useState<File[]>([]);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const submissionLockRef = useRef(false);
   const honeypotRef = useRef<HTMLInputElement>(null);
@@ -131,7 +121,7 @@ export function LeadForm({ initialValues }: LeadFormProps = {}) {
     if (!isValid) {
       const firstErrorField = fields.find((field) => {
         const parts = field.split(".");
-        // supporta errori annidati come "extras.windows"
+        // supporta errori annidati come "additionalAreas.windows"
         return parts.reduce<unknown>(
           (acc, part) => (acc && typeof acc === "object" ? (acc as Record<string, unknown>)[part] : undefined),
           errors
@@ -167,9 +157,6 @@ export function LeadForm({ initialValues }: LeadFormProps = {}) {
           ...values,
           language: "de",
           ...attribution,
-          // TODO(FORM-005/API-003): inviare i file reali quando lo storage
-          // privato sarà collegato; per ora solo il conteggio è indicativo.
-          photoCount: photos.length,
           // Verifica honeypot anche lato server (difesa in profondità).
           company: honeypotRef.current?.value ?? "",
         }),
@@ -245,11 +232,8 @@ export function LeadForm({ initialValues }: LeadFormProps = {}) {
         />
 
         {step === 1 ? <StepLocationService /> : null}
-        {step === 2 ? <StepProperty /> : null}
-        {step === 3 ? (
-          <StepExtras photos={photos} onPhotosChange={setPhotos} />
-        ) : null}
-        {step === 4 ? <StepContact /> : null}
+        {step === 2 ? <StepApartment /> : null}
+        {step === 3 ? <StepContact /> : null}
 
         {submitError ? (
           <div className="mt-4">
@@ -267,8 +251,8 @@ export function LeadForm({ initialValues }: LeadFormProps = {}) {
 
         <p className="mt-4 text-sm text-slate-600">
           {step === TOTAL_STEPS
-            ? "Die Anfrage ist kostenlos und unverbindlich. Ein Auftrag entsteht erst, wenn Sie eine Offerte des Reinigungspartners akzeptieren."
-            : "Dauert etwa 2 Minuten. Kein Benutzerkonto erforderlich."}
+            ? "Kostenlos und unverbindlich. Ein Auftrag entsteht erst nach Ihrer Zustimmung zur Offerte."
+            : "Dauert etwa 90 Sekunden. Kein Benutzerkonto erforderlich."}
         </p>
       </form>
     </FormProvider>
