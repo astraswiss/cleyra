@@ -9,12 +9,6 @@ const serviceTypeOptions = [
   { value: "other", label: "Andere Reinigung" },
 ];
 
-const dateFlexibilityOptions = [
-  { value: "fixed", label: "Termin ist fix" },
-  { value: "plus_minus_1_day", label: "± 1 Tag flexibel" },
-  { value: "plus_minus_3_days", label: "± 3 Tage flexibel" },
-];
-
 export function StepLocationService() {
   const {
     register,
@@ -58,15 +52,6 @@ export function StepLocationService() {
         errorMessage={errors.desiredDate?.message}
         {...register("desiredDate")}
       />
-
-      <Select
-        id="dateFlexibility"
-        label="Terminflexibilität (optional)"
-        placeholder="Bitte wählen"
-        options={dateFlexibilityOptions}
-        errorMessage={errors.dateFlexibility?.message}
-        {...register("dateFlexibility")}
-      />
     </fieldset>
   );
 }
@@ -76,5 +61,4 @@ export const stepLocationServiceFields = [
   "city",
   "serviceType",
   "desiredDate",
-  "dateFlexibility",
 ] as const;

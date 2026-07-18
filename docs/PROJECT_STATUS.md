@@ -1,8 +1,8 @@
-Last updated: 2026-07-18 01:50 Europe/Zurich
-Current phase: Fase 1–2–3 avanzate in parallelo (fondazioni, homepage, landing locali, modulo lead); Fase 4 (backend) parziale; sistema di design ripristinato ai default, rimandato a fine progetto
+Last updated: 2026-07-18 02:10 Europe/Zurich
+Current phase: Fase 1–2–3 avanzate in parallelo (fondazioni, homepage, landing locali, modulo lead snellito); Fase 4 (backend) parziale; sistema di design ripristinato ai default, rimandato a fine progetto
 Overall status: in_progress
 Current branch: claude/new-session-huwuyt
-Last verified commit: 78d527d (rollback design) — questa sessione aggiunge un nuovo commit sopra
+Last verified commit: 999f155 (landing locali complete) — questa sessione aggiunge un nuovo commit sopra
 
 ## Cosa è già funzionante
 
@@ -26,8 +26,11 @@ Last verified commit: 78d527d (rollback design) — questa sessione aggiunge un 
   progress bar, persistenza in `sessionStorage`, navigazione
   avanti/indietro senza perdita dati, focus sul primo campo errato,
   riepilogo errori accessibile, honeypot, prevenzione doppio invio,
-  redirect a `/de/danke`. Ora accetta anche `initialValues` per
-  precompilare città/CAP dalle landing locali.
+  redirect a `/de/danke`. Accetta `initialValues` per precompilare
+  città/CAP dalle landing locali. **Snellito su richiesta del
+  proprietario** (DEC-20260718-03): rimossi `Terminflexibilität`
+  (passaggio 1) e `Stockwerk`/`Lift` (passaggio 2), mantenuti note e
+  foto — deviazione consapevole dalla spec 10.2/10.3.
 - Endpoint `/api/leads` reale (non uno stub): valida con Zod,
   normalizza email/telefono, sanitizza `notes`, applica rate limiting
   (5 richieste/60s per IP) e honeypot server-side, risponde con i codici

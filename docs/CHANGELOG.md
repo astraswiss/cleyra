@@ -1,3 +1,21 @@
+## 2026-07-18 (6)
+
+### Removed
+
+- Rimossi `dateFlexibility` (Terminflexibilität, passaggio 1) e
+  `floor`/`elevator` (Stockwerk/Lift, passaggio 2) dal modulo lead
+  (schema, step, defaultValues), su richiesta esplicita del proprietario
+  per rendere il modulo più veloce da compilare. Note e foto (passaggio
+  3) restano invariati. Deviazione consapevole dalla spec 10.2/10.3,
+  registrata in DEC-20260718-03.
+
+### Verification
+
+- `npm run build`, `npm run lint`, `npx vitest run` (26/26) verdi.
+- Verifica e2e manuale Playwright: i tre campi non sono più visibili nel
+  form; il flusso completo (4 step, submit, redirect a `/de/danke`)
+  funziona ancora.
+
 ## 2026-07-18 (5)
 
 ### Added

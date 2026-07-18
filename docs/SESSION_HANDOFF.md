@@ -1,104 +1,93 @@
 # Session handoff
 
-Last updated: 2026-07-18 01:50 Europe/Zurich
-Session objective: Proseguire dal punto indicato nella documentazione
-(`docs/PROJECT_STATUS.md`, "Prossime attività consigliate") con
-LOCAL-002/003/004: contenuto completo a 10 sezioni per le tre landing
-locali (Visp, Brig-Glis, Naters), che erano ancora placeholder minimi.
+Last updated: 2026-07-18 02:10 Europe/Zurich
+Session objective: Il proprietario ha trovato il modulo lead troppo
+lento/lungo e ha chiesto di velocizzarlo rimuovendo Terminflexibilität,
+Stockwerk e Lift (mantenendo note e foto); la parte visiva del modulo
+resta come oggi, il redesign complessivo è rimandato a fine progetto.
 Result: completed
 
 ## What changed
 
-- Esteso `lib/locations.ts`: aggiunto `localFaq` (domanda+risposta unica
-  per città) al tipo `LocationLanding` e a ciascuna delle tre landing;
-  aggiunta `getOtherLocationLandings(slug)` per i link reciproci.
-- Estratto `lib/faq-content.ts` con le domande frequenti generali
-  (prima duplicate solo in `FaqPreview.tsx`), ora condivise tra homepage
-  e landing locali.
-- Nuovi componenti:
-  - `components/marketing/NearbyLocations.tsx` — zone vicine (testo) +
-    link verso le altre due landing (nessun self-link)
-  - `components/marketing/LocalFaq.tsx` — FAQ locale (domanda unica
-    della città + le domande generali)
-  - `components/marketing/LocationLandingPage.tsx` — template
-    riutilizzabile che assembla le 10 sezioni richieste dalla spec
-    sezione 9 a partire da un oggetto `LocationLanding`
-- `components/lead-form/LeadForm.tsx`: aggiunta prop opzionale
-  `initialValues` per precompilare `city`/`postalCode` (usata dalle
-  landing locali, spec 9 "modulo con città precompilata").
-- Le tre pagine `app/de/endreinigung-{visp,brig,naters}/page.tsx` ora
-  usano `LocationLandingPage` invece del placeholder minimo precedente.
-- Nuovo `lib/__tests__/locations.test.ts` (5 test): unicità di
-  slug/meta/H1/FAQ locale, presenza di almeno una zona vicina per
-  landing, corretto comportamento di `getOtherLocationLandings`.
+- `lib/lead-schema.ts`: rimossi `dateFlexibilitySchema`,
+  `dateFlexibility` (da `stepLocationServiceSchema`), `floor` ed
+  `elevator` (da `stepPropertySchema`). Propagato automaticamente a
+  `leadFormSchema` e `cleaningLeadSchema` (merge/extend).
+- `components/lead-form/StepLocationService.tsx`: rimossa la Select
+  "Terminflexibilität (optional)".
+- `components/lead-form/StepProperty.tsx`: rimossi l'Input "Stockwerk"
+  e il Checkbox "Lift vorhanden".
+- `components/lead-form/LeadForm.tsx`: rimossi i tre campi da
+  `defaultValues` e `FIELD_LABELS`.
+- Nessuna modifica al numero di step (restano 4) né al passaggio 3
+  (note e foto invariati, come richiesto).
+- Documentato come deviazione consapevole dalla spec (sezioni 10.2/10.3)
+  in `docs/DECISIONS.md` (DEC-20260718-03).
 
 ## Exact current state
 
-- Le tre landing locali hanno ora: hero locale, trust strip, modulo con
-  città/CAP precompilati, sezione "come funziona", lista servizi, zone
-  vicine con link reciproci, trasparenza Cleyra, FAQ locale, CTA finale,
-  footer globale — cioè tutte le 10 sezioni richieste dalla spec 9.
-- Verificato con Playwright headless (script ad-hoc, non committato):
-  su `/de/endreinigung-visp` l'H1 è corretto, il modulo ha
-  `postalCode=3930`/`city=Visp` precompilati, la domanda FAQ locale di
-  Visp è visibile, sono presenti i link a Brig-Glis e Naters ma non un
-  self-link; `/de/endreinigung-brig` e `/de/endreinigung-naters`
-  rispondono `200`.
-- `npm run build`, `npm run lint`, `npx vitest run` (26/26, prima 21)
-  tutti verdi.
+- Il modulo lead ha ora meno campi: passaggio 1 (CAP, Ort, Art der
+  Reinigung, Termin), passaggio 2 (Art der Immobilie, Zimmer, Fläche,
+  Möblierungszustand) — 4 campi ciascuno invece di 5. Passaggi 3 e 4
+  invariati.
+- Aspetto visivo del modulo invariato (Tailwind di default) — il
+  proprietario ha chiesto esplicitamente di aspettare il redesign
+  completo per la parte visiva.
+- `npm run build`, `npm run lint`, `npx vitest run` (26/26) tutti verdi.
+- Verificato con Playwright headless: i tre campi non sono più presenti
+  nel DOM; il flusso completo (4 step → submit → redirect `/de/danke`)
+  funziona.
 - Repository: modifiche di questa sessione non ancora committate al
   momento di scrivere questo file (da fare subito dopo).
 
 ## Files touched
 
-- `lib/locations.ts` — aggiunto `localFaq`, `getOtherLocationLandings`
-- `lib/faq-content.ts` — nuovo, FAQ generali estratte da `FaqPreview.tsx`
-- `components/marketing/FaqPreview.tsx` — ora importa da `lib/faq-content.ts`
-- `components/marketing/{NearbyLocations,LocalFaq,LocationLandingPage}.tsx` — nuovi
-- `components/lead-form/LeadForm.tsx` — prop `initialValues`
-- `app/de/endreinigung-{visp,brig,naters}/page.tsx` — riscritte per usare `LocationLandingPage`
-- `lib/__tests__/locations.test.ts` — nuovo, 5 test
-- `docs/IMPLEMENTATION_PLAN.md`, `docs/PROJECT_STATUS.md`, `docs/ARCHITECTURE.md` — aggiornati
+- `lib/lead-schema.ts` — rimossi dateFlexibility/floor/elevator
+- `components/lead-form/StepLocationService.tsx` — rimossa Terminflexibilität
+- `components/lead-form/StepProperty.tsx` — rimossi Stockwerk/Lift
+- `components/lead-form/LeadForm.tsx` — defaultValues/FIELD_LABELS aggiornati
+- `docs/DECISIONS.md` — nuova voce DEC-20260718-03
+- `docs/IMPLEMENTATION_PLAN.md`, `docs/PROJECT_STATUS.md`, `docs/CHANGELOG.md` — aggiornati
 
 ## Verification performed
 
-- `npm run build` — successo, 18 route (le tre landing locali ora
-  includono il bundle del modulo lead, ~133kB come la homepage)
+- `npm run build` — successo, 18 route
 - `npm run lint` — nessun warning/errore
-- `npx vitest run` — 26/26 verdi (21 schema lead + 5 dati location)
-- Playwright headless: H1/prefill/FAQ locale/link incrociati verificati
-  su Visp; le altre due landing verificate rispondere `200`
+- `npx vitest run` — 26/26 verdi (nessun test referenziava i campi
+  rimossi)
+- Playwright headless: confermato che `#floor`, `#elevator`,
+  `#dateFlexibility` non sono più visibili; flusso di invio completo
+  ancora funzionante fino al redirect `/de/danke`
 
 ## Known problems
 
-- Nessuno introdotto in questa sessione. Restano tutti i limiti già
-  documentati: persistenza lead solo in memoria, nessuna e-mail, pagine
-  informative (`so-funktionierts`, `faq`, `ueber-cleyra`, `kontakt`)
-  ancora placeholder minimi, sistema di design rimandato
-  intenzionalmente (DESIGN-001).
-- I comuni vicini elencati per ciascuna landing restano una stima
-  geografica non confermata dal proprietario (invariato da prima).
+- Nessuno introdotto. Il modello dati `CleaningLead` ora ha meno campi
+  di quelli elencati nella spec sezione 11 — se in futuro servissero
+  (es. per il routing dei partner), vanno reintrodotti con una nuova
+  decisione, non ripristinati silenziosamente.
+- Restano tutti i limiti già documentati: persistenza lead solo in
+  memoria, nessuna e-mail, pagine informative placeholder, design
+  rimandato (DESIGN-001).
 
 ## Exact next actions
 
 1. API-002 — Scegliere un provider database e sostituire `inMemoryLeads`
    in `app/api/leads/route.ts` con una persistenza reale.
 2. INFO-001 — Copy completo per `so-funktionierts`, `faq`,
-   `ueber-cleyra`, `kontakt` (oggi solo H1 placeholder).
+   `ueber-cleyra`, `kontakt`.
 3. QA-001/QA-002 — Component test per gli step del modulo e una suite
-   e2e Playwright committata (finora solo script ad-hoc non salvati).
+   e2e Playwright committata.
 4. API-003/FORM-005 — Storage privato per allegati e upload reale.
-5. SEO-001 — Metadata avanzati, canonical, sitemap.xml, robots.txt.
+5. Quando il proprietario lo richiederà: redesign visivo del modulo
+   lead (non solo contenuto) insieme al resto del sito (DESIGN-001).
 
 ## Before continuing
 
 - Leggere `CLEYRA_WEBSITE_SPEC.md`, `docs/PROJECT_STATUS.md` e questo
   file prima di qualsiasi modifica.
-- Non reintrodurre il sistema di design annullato (DEC-20260718-02)
-  senza richiesta esplicita del proprietario.
-- Non pubblicare le landing locali con i comuni vicini attuali (stima,
-  non confermata) senza verifica del proprietario.
-- Non riaprire le altre decisioni in `docs/DECISIONS.md` senza un motivo
-  concreto.
+- Non reintrodurre `dateFlexibility`/`floor`/`elevator` senza una nuova
+  decisione esplicita del proprietario (DEC-20260718-03).
+- Non reintrodurre il sistema di design annullato senza richiesta
+  esplicita (DEC-20260718-02).
 - Verificare `git status` prima di operazioni distruttive; committare e
   pushare le modifiche di questa sessione se non già fatto.

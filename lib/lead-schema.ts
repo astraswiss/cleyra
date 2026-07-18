@@ -19,12 +19,6 @@ export const serviceTypeSchema = z.enum([
   "other",
 ]);
 
-export const dateFlexibilitySchema = z.enum([
-  "fixed",
-  "plus_minus_1_day",
-  "plus_minus_3_days",
-]);
-
 export const propertyTypeSchema = z.enum(["apartment", "house"]);
 
 export const furnishedStateSchema = z.enum([
@@ -49,7 +43,6 @@ export const stepLocationServiceSchema = z.object({
   desiredDate: z
     .string()
     .refine(isNotBeforeToday, "Das Datum darf nicht in der Vergangenheit liegen."),
-  dateFlexibility: dateFlexibilitySchema.optional(),
 });
 
 // Passaggio 2 — immobile (spec 10.3)
@@ -65,8 +58,6 @@ export const stepPropertySchema = z.object({
     .min(10, "Fläche muss mindestens 10 m² sein.")
     .max(2000, "Fläche darf höchstens 2000 m² sein."),
   furnishedState: furnishedStateSchema,
-  floor: z.string().trim().optional(),
-  elevator: z.boolean().optional(),
 });
 
 // Passaggio 3 — dettagli (spec 10.4)

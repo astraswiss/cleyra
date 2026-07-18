@@ -92,6 +92,35 @@ Formato ADR leggero. Registrare solo decisioni durature, non correzioni minori.
   "Related files/tasks", ripristinati; `docs/IMPLEMENTATION_PLAN.md`
   (DESIGN-001)
 
+## DEC-20260718-03 — Rimozione di dateFlexibility, floor ed elevator dal modulo lead
+
+- Status: accepted
+- Date: 2026-07-18
+- Context: Il proprietario ha trovato il modulo lead troppo lungo e ha
+  chiesto esplicitamente di velocizzarlo eliminando i campi opzionali
+  `dateFlexibility` (Terminflexibilität, passaggio 1), `floor`
+  (Stockwerk, passaggio 2) ed `elevator` (Lift, passaggio 2), mantenendo
+  invece `notes` e le foto (passaggio 3). Questa è una **deviazione
+  consapevole** dalla spec sezioni 10.2/10.3, che elencava questi tre
+  campi come opzionali.
+- Decision: rimossi `dateFlexibilitySchema`, `dateFlexibility`, `floor`
+  ed `elevator` da `lib/lead-schema.ts` (`stepLocationServiceSchema`,
+  `stepPropertySchema`, e di conseguenza da `leadFormSchema` e
+  `cleaningLeadSchema`); rimossi i relativi campi dai componenti
+  `StepLocationService.tsx` e `StepProperty.tsx` e dai `defaultValues`/
+  `FIELD_LABELS` di `LeadForm.tsx`. Il numero di passaggi (4) e la loro
+  struttura restano invariati — solo il contenuto di due step è più
+  snello.
+- Alternatives considered: rendere questi campi nascosti/avanzati dietro
+  un accordion invece di rimuoverli — scartata, il proprietario ha
+  chiesto esplicitamente di eliminarli, non di nasconderli.
+- Consequences: il modello dati `CleaningLead` non include più questi tre
+  campi; se in futuro servissero (es. per instradare meglio i partner in
+  base al piano/lift), andranno reintrodotti con una nuova decisione. Il
+  modulo risulta più rapido da compilare.
+- Related files/tasks: `lib/lead-schema.ts`,
+  `components/lead-form/{StepLocationService,StepProperty,LeadForm}.tsx`
+
 ## DEC-20260717-03 — Placeholder legali non pubblicabili
 
 - Status: accepted

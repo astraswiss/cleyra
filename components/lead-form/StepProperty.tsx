@@ -2,7 +2,6 @@ import { useFormContext } from "react-hook-form";
 import type { LeadFormValues } from "@/lib/lead-schema";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
-import { Checkbox } from "@/components/ui/Checkbox";
 
 const propertyTypeOptions = [
   { value: "apartment", label: "Wohnung" },
@@ -64,20 +63,6 @@ export function StepProperty() {
         errorMessage={errors.furnishedState?.message}
         {...register("furnishedState")}
       />
-
-      <Input
-        id="floor"
-        label="Stockwerk (optional)"
-        errorMessage={errors.floor?.message}
-        {...register("floor")}
-      />
-
-      <Checkbox
-        id="elevator"
-        label="Lift vorhanden"
-        errorMessage={errors.elevator?.message}
-        {...register("elevator")}
-      />
     </fieldset>
   );
 }
@@ -87,6 +72,4 @@ export const stepPropertyFields = [
   "rooms",
   "approxSqm",
   "furnishedState",
-  "floor",
-  "elevator",
 ] as const;

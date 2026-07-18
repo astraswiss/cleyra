@@ -86,12 +86,15 @@ Piano eseguibile derivato da `CLEYRA_WEBSITE_SPEC.md` sezione 29.
   - Dipendenze: FOUND-005
   - Criteri di accettazione: schema condiviso client/server, copre tutti i campi spec sezione 11
   - Test richiesti: `npx vitest run` — 21 unit test verdi (CAP 4 cifre, data non passata, rooms 1–20, approxSqm 10–2000, email, privacyConsent)
+  - Nota (2026-07-18): rimossi `dateFlexibility`, `floor`, `elevator` su
+    richiesta esplicita del proprietario per velocizzare il modulo — vedi
+    DEC-20260718-03. Deviazione consapevole dalla spec 10.2/10.3.
 - [x] FORM-002 Stato multi-step + persistenza sessione
   - File previsti: `components/lead-form/LeadForm.tsx`
   - Criteri di accettazione: stato salvato in `sessionStorage` (`cleyra-lead-form-v1`), ripristinato al mount, navigazione avanti/indietro senza perdita dati
   - Test richiesti: verificato con Playwright headless (rooms=3 preservato dopo Zurück → Weiter)
-- [x] FORM-003 `StepLocationService.tsx`
-- [x] FORM-004 `StepProperty.tsx`
+- [x] FORM-003 `StepLocationService.tsx` (senza `dateFlexibility`, vedi DEC-20260718-03)
+- [x] FORM-004 `StepProperty.tsx` (senza `floor`/`elevator`, vedi DEC-20260718-03)
 - [x] FORM-005 (parziale) `StepExtras.tsx` + `PhotoUploader.tsx`
   - Criteri di accettazione: UI e validazione client (max 5 file, max 8MB, MIME JPEG/PNG/WebP/HEIC) implementate
   - Nota: **nessun upload reale** — i file restano solo lato client finché lo storage privato (API-003) non è collegato; alla sottomissione viene inviato solo `photoCount`, non i file
