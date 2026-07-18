@@ -102,3 +102,28 @@ Issues discovered: nessuno.
 Next recommended action: eseguire WEB-003 (Header, Hero, tre elementi di fiducia della
 landing `/de/endreinigung-oberwallis` con i testi definitivi da `docs/CONTENT.md`),
 impostato come unico task `in_progress` nel backlog.
+
+---
+
+## 2026-07-18 — WEB-003: Header, Hero, elementi di fiducia
+
+Task: WEB-003
+Summary: Completata la sezione Hero (H1, sottotitolo, CTA, microcopy) e i tre
+elementi di fiducia su `/de/endreinigung-oberwallis`, con i testi esatti da
+`docs/CONTENT.md`. Header e footer condivisi (già creati in WEB-002) coprono
+navigazione minima e link legali. La CTA "Kostenlose Anfrage starten" è
+un'ancora placeholder (`#anfrage`) senza funzionalità di invio, in attesa del form
+(WEB-006/WEB-007). Verificato manualmente con screenshot Playwright a viewport
+320×700 che la pagina è usabile su mobile senza overflow.
+Files changed: `src/app/de/endreinigung-oberwallis/page.tsx`,
+`docs/IMPLEMENTATION_PLAN.md`, `docs/PROJECT_STATUS.md`, `docs/SESSION_HANDOFF.md`.
+Commands run: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`,
+`npx playwright test`, `npm run build && npm run start` con screenshot Playwright
+manuale a 320px (script temporaneo, rimosso a fine verifica).
+Tests: `npm run lint` verde; `npm run typecheck` verde; `npm test` verde (2/2); `npm
+run build` verde; `npx playwright test` verde (1/1).
+Decisions: nessuna nuova decisione.
+Issues discovered: nessuno.
+Next recommended action: eseguire WEB-004 (processo in tre passaggi, sezione servizi,
+zona servita, disclaimer di intermediazione obbligatorio), impostato come unico task
+`in_progress` nel backlog.

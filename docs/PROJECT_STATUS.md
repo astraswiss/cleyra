@@ -1,28 +1,29 @@
 # Project Status
 
-Last updated: 2026-07-18 14:00 Europe/Zurich
+Last updated: 2026-07-18 15:00 Europe/Zurich
 Current phase: Fase 2 — landing
 Current branch: claude/new-session-lun8ys
-Current task: WEB-003 — Header, Hero, elementi di fiducia
+Current task: WEB-004 — Processo, servizi, zona servita, trasparenza
 Overall state: in progress
 
 ## Completed
 - WEB-000 — Memoria di progetto.
-- WEB-001 — Setup dello stack tecnico (Next.js 16, TypeScript strict, Tailwind v4,
-  ESLint, Vitest, Playwright).
-- WEB-002 — Environment validation (`src/lib/env.ts`, Zod) e scheletro di tutte le
-  rotte MVP (`/de/...`) con layout condiviso e `/de/danke` `noindex`. Root `/`
-  reindirizzata a `/de/endreinigung-oberwallis` (ADR-004).
+- WEB-001 — Setup dello stack tecnico.
+- WEB-002 — Environment validation e scheletro rotte (tutte le 9 rotte `/de/...`,
+  redirect root, `/de/danke` noindex).
+- WEB-003 — Hero e tre elementi di fiducia su `/de/endreinigung-oberwallis` con i
+  testi esatti da `CONTENT.md`. Header/footer condivisi già presenti da WEB-002.
+  Verificato mobile a 320px.
 - Backlog completo (WEB-000..WEB-021) registrato in `IMPLEMENTATION_PLAN.md`.
 - ADR-001 (stack tecnico) e ADR-004 (redirect root) registrate come `accepted`.
 
 ## In progress
-- WEB-003 — Header, Hero, elementi di fiducia della landing (non ancora iniziato).
+- WEB-004 — Processo, servizi, zona servita, trasparenza (non ancora iniziato).
 
 ## Next three tasks
-1. WEB-003 — Header, Hero, elementi di fiducia.
-2. WEB-004 — Processo, servizi, zona servita, trasparenza.
-3. WEB-005 — FAQ, footer, pagine legali.
+1. WEB-004 — Processo, servizi, zona servita, trasparenza.
+2. WEB-005 — FAQ, footer, pagine legali.
+3. WEB-006 — Form step 1 (richiesta) — UI e validazione client.
 
 ## Blockers
 - none

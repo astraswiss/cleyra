@@ -119,7 +119,7 @@ arrivano con WEB-003 (landing), WEB-005 (FAQ/footer/legal), WEB-012 (danke).
 ---
 
 ## WEB-003 — Header, Hero, elementi di fiducia
-Status: in_progress
+Status: done
 Priority: P0
 Dependencies: WEB-002
 
@@ -128,26 +128,37 @@ Implementare header, sezione hero e i tre elementi di fiducia della landing prin
 `/de/endreinigung-oberwallis`, con i testi definiti in `CONTENT.md`.
 
 ### Acceptance criteria
-- [ ] Header con navigazione minima (logo/nome Cleyra, link legali essenziali).
-- [ ] Hero con H1, sottotitolo, CTA e microcopy esatti da `CONTENT.md`.
-- [ ] Tre elementi di fiducia (Kostenlose Anfrage, Offerte vor Auftrag, Regionale
+- [x] Header con navigazione minima (logo/nome Cleyra, link legali essenziali) — logo
+      "Cleyra" nell'header condiviso (`src/app/de/layout.tsx`, da WEB-002), link legali
+      (Datenschutz/Impressum/Vermittlungsbedingungen/Kontakt) nel footer condiviso,
+      presente su ogni pagina incluso `/de/endreinigung-oberwallis`.
+- [x] Hero con H1, sottotitolo, CTA e microcopy esatti da `CONTENT.md`.
+- [x] Tre elementi di fiducia (Kostenlose Anfrage, Offerte vor Auftrag, Regionale
       Vermittlung) presenti e coerenti col copy approvato.
-- [ ] Nessun elemento vietato (recensioni, contatori, timer, urgenza finta).
-- [ ] Layout mobile-first, usabile a 320px.
+- [x] Nessun elemento vietato (recensioni, contatori, timer, urgenza finta) — verifica
+      manuale del markup, nessuno di questi elementi presente.
+- [x] Layout mobile-first, usabile a 320px — verificato con screenshot Playwright a
+      viewport 320×700, nessun overflow, contenuto leggibile.
 
 ### Validation
-- `npm run lint`
-- `npm run typecheck`
-- `npm test`
-- `npm run build`
+- `npm run lint` — verde
+- `npm run typecheck` — verde
+- `npm test` — verde (2/2)
+- `npm run build` — verde
+- `npx playwright test` — verde (1/1, heading Hero verificato via substring match)
 
 ### Notes
-—
+La CTA "Kostenlose Anfrage starten" punta per ora a un'ancora placeholder
+(`#anfrage`) senza funzionalità di invio: il form vero e proprio arriva con
+WEB-006/WEB-007, quando la sezione con `id="anfrage"` verrà creata. Il `<title>`
+della pagina resta il placeholder impostato in WEB-002 (`Endreinigung im Oberwallis —
+Cleyra`): il title/description SEO definitivi da spec sezione 13 sono compito di
+WEB-017.
 
 ---
 
 ## WEB-004 — Processo, servizi, zona servita, trasparenza
-Status: todo
+Status: in_progress
 Priority: P1
 Dependencies: WEB-003
 
