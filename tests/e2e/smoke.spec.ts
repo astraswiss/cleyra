@@ -1,6 +1,9 @@
 import { test, expect } from "@playwright/test";
 
-test("homepage renders", async ({ page }) => {
+test("root redirects to the main landing route", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: "Cleyra" })).toBeVisible();
+  await expect(page).toHaveURL(/\/de\/endreinigung-oberwallis$/);
+  await expect(
+    page.getByRole("heading", { name: "Endreinigung im Oberwallis" })
+  ).toBeVisible();
 });

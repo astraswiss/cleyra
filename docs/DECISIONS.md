@@ -63,3 +63,29 @@ Consequences: WEB-016 e WEB-017 (SEO/metadata) non sono bloccati da questa decis
 ma l'implementazione degli eventi lo è.
 Affected files: `docs/ANALYTICS.md`, `docs/IMPLEMENTATION_PLAN.md` (WEB-016).
 Supersedes: none
+
+---
+
+## ADR-004 — Redirect della root `/` verso la landing principale
+Date: 2026-07-18
+Status: accepted
+Context: La spec (`CLEYRA_WEBSITE_SPEC.md` sezione 5) elenca solo rotte sotto `/de/...`
+e non specifica cosa mostrare sulla root `/`. Il task WEB-002 richiede uno scheletro di
+rotte completo; lasciare la root come pagina separata o come 404 non è esplicitamente
+deciso dalla spec.
+Decision: Configurare un redirect (temporaneo, HTTP 307) da `/` a
+`/de/endreinigung-oberwallis` tramite `next.config.ts` (`redirects()`), invece di
+avere una pagina propria sulla root o lasciarla non gestita. Coerente con "una sola
+landing principale" e con il fatto che il MVP è solo in tedesco.
+Alternatives: (a) Pagina root separata con contenuto proprio: scartata, ridondante
+con l'unica landing principale prevista dalla spec. (b) Nessuna gestione della root
+(404): scartata, peggiore esperienza per visite dirette al dominio senza percorso.
+(c) Redirect permanente (308): scartato per ora, preferibile un redirect reversibile
+finché la struttura delle rotte non è stabile; da rivalutare in WEB-017 (SEO) prima
+del lancio in produzione.
+Consequences: `src/app/page.tsx` non esiste più; la root non ha una pagina propria.
+Il redirect va riverificato quando si introdurranno pagine per singole città (fuori
+scope MVP) o una eventuale versione multilingua futura.
+Affected files: `next.config.ts`, `src/app/page.tsx` (rimosso),
+`docs/ARCHITECTURE.md`, `docs/IMPLEMENTATION_PLAN.md` (WEB-002).
+Supersedes: none

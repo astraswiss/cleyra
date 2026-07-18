@@ -67,3 +67,38 @@ Issues discovered: nessuno.
 Next recommended action: eseguire WEB-002 (environment validation tipizzata + scheletro
 delle rotte `/de/...` con layout condiviso), impostato come unico task `in_progress`
 nel backlog.
+
+---
+
+## 2026-07-18 — WEB-002: environment validation e scheletro rotte
+
+Task: WEB-002
+Summary: Creato `src/lib/env.ts` con validazione tipizzata (Zod) delle variabili
+d'ambiente; schema attualmente vuoto in assenza di variabili richieste, pronto a
+espandersi nelle fasi successive. Create tutte le 9 rotte MVP sotto `src/app/de/...`
+(`endreinigung-oberwallis`, `so-funktionierts`, `faq`, `ueber-cleyra`, `kontakt`,
+`datenschutz`, `impressum`, `vermittlungsbedingungen`, `danke`) con contenuto
+placeholder minimo (H1 + "Seite in Aufbau.") e title di metadata specifico per
+pagina. Aggiunto layout condiviso `src/app/de/layout.tsx` con header (link a Cleyra)
+e footer (link alle pagine legali/contatto) placeholder. `/de/danke` marcata
+`noindex, nofollow` via `metadata.robots`. Rimossa la pagina placeholder sulla root
+(`src/app/page.tsx`) e sostituita con un redirect (307) verso
+`/de/endreinigung-oberwallis` configurato in `next.config.ts`, poiché la spec non
+assegna contenuto alla root — decisione registrata come ADR-004. Aggiornato lo smoke
+test Playwright per verificare il redirect e il rendering della landing. Aggiunto un
+test unitario per `env.ts`.
+Files changed: `src/lib/env.ts`, `src/app/page.tsx` (rimosso), `src/app/de/layout.tsx`,
+`src/app/de/*/page.tsx` (9 file), `next.config.ts`, `tests/unit/env.test.ts`,
+`tests/e2e/smoke.spec.ts`, `docs/ARCHITECTURE.md`, `docs/IMPLEMENTATION_PLAN.md`,
+`docs/PROJECT_STATUS.md`, `docs/DECISIONS.md`, `docs/SESSION_HANDOFF.md`.
+Commands run: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`,
+`npm run dev` (verifica manuale redirect root, meta robots su `/de/danke`, rendering
+`/de/kontakt`), `npx playwright test`.
+Tests: `npm run lint` verde; `npm run typecheck` verde; `npm test` verde (2/2); `npm
+run build` verde (9 rotte statiche `/de/*` generate); `npx playwright test` verde
+(1/1).
+Decisions: ADR-004 (redirect root `/` → `/de/endreinigung-oberwallis`, accepted).
+Issues discovered: nessuno.
+Next recommended action: eseguire WEB-003 (Header, Hero, tre elementi di fiducia della
+landing `/de/endreinigung-oberwallis` con i testi definitivi da `docs/CONTENT.md`),
+impostato come unico task `in_progress` nel backlog.

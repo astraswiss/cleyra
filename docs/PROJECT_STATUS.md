@@ -1,27 +1,28 @@
 # Project Status
 
-Last updated: 2026-07-18 13:00 Europe/Zurich
-Current phase: Fase 1 — fondazioni
+Last updated: 2026-07-18 14:00 Europe/Zurich
+Current phase: Fase 2 — landing
 Current branch: claude/new-session-lun8ys
-Current task: WEB-002 — Environment validation e scheletro rotte
+Current task: WEB-003 — Header, Hero, elementi di fiducia
 Overall state: in progress
 
 ## Completed
-- WEB-000 — Memoria di progetto: `CLAUDE.md`, `README.md`, `CLEYRA_WEBSITE_SPEC.md` e
-  tutti i file di `docs/` creati e inizializzati.
-- WEB-001 — Setup dello stack tecnico: Next.js 16 (App Router) + TypeScript strict +
-  Tailwind CSS v4 + ESLint + Vitest (con test di esempio) + Playwright (con smoke test
-  di esempio) inizializzati e verificati (lint, typecheck, test, build tutti verdi).
+- WEB-000 — Memoria di progetto.
+- WEB-001 — Setup dello stack tecnico (Next.js 16, TypeScript strict, Tailwind v4,
+  ESLint, Vitest, Playwright).
+- WEB-002 — Environment validation (`src/lib/env.ts`, Zod) e scheletro di tutte le
+  rotte MVP (`/de/...`) con layout condiviso e `/de/danke` `noindex`. Root `/`
+  reindirizzata a `/de/endreinigung-oberwallis` (ADR-004).
 - Backlog completo (WEB-000..WEB-021) registrato in `IMPLEMENTATION_PLAN.md`.
-- ADR-001 (stack tecnico) registrata come `accepted`.
+- ADR-001 (stack tecnico) e ADR-004 (redirect root) registrate come `accepted`.
 
 ## In progress
-- WEB-002 — Environment validation e scheletro rotte (non ancora iniziato).
+- WEB-003 — Header, Hero, elementi di fiducia della landing (non ancora iniziato).
 
 ## Next three tasks
-1. WEB-002 — Environment validation e scheletro rotte.
-2. WEB-003 — Header, Hero, elementi di fiducia della landing.
-3. WEB-004 — Processo, servizi, zona servita, trasparenza.
+1. WEB-003 — Header, Hero, elementi di fiducia.
+2. WEB-004 — Processo, servizi, zona servita, trasparenza.
+3. WEB-005 — FAQ, footer, pagine legali.
 
 ## Blockers
 - none
@@ -29,8 +30,8 @@ Overall state: in progress
 ## Test status
 - lint: verde (`npm run lint`)
 - typecheck: verde (`npm run typecheck`)
-- tests: verde (`npm test` — 1/1 unit test; `npx playwright test` — 1/1 e2e smoke test)
-- build: verde (`npm run build`)
+- tests: verde (`npm test` — 2/2 unit test; `npx playwright test` — 1/1 e2e)
+- build: verde (`npm run build` — 9 rotte `/de/*` generate come contenuto statico)
 
 ## Deployment
 - Nessun ambiente configurato. Vedi `docs/DEPLOYMENT.md`.

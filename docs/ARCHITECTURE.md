@@ -3,8 +3,9 @@
 Questo documento descrive lo stack e la struttura tecnica del progetto. Ogni modifica
 strutturale deve aggiornare questo file nella stessa sessione in cui avviene.
 
-Stato: fondazioni tecniche inizializzate (WEB-001 completato). Le rotte `/de/...`, il
-form, il backend e le pagine non esistono ancora: questo è previsto da WEB-002 in poi.
+Stato: fondazioni tecniche (WEB-001) e scheletro rotte (WEB-002) completati. Tutte le
+rotte MVP esistono con contenuto placeholder minimo. Form, backend, contenuti finali,
+notifiche e analytics non esistono ancora: previsti da WEB-003 in poi.
 
 ## Stack
 
@@ -29,7 +30,7 @@ Principi guida: mobile-first, validazione server autorevole, poco JavaScript cli
 niente segreti nel browser, niente global state non necessario, niente microservizi,
 niente overengineering, niente librerie pesanti senza motivo.
 
-## Struttura cartelle (stato reale dopo WEB-001)
+## Struttura cartelle (stato reale dopo WEB-002)
 
 ```text
 /
@@ -38,29 +39,46 @@ niente overengineering, niente librerie pesanti senza motivo.
 ├── CLEYRA_WEBSITE_SPEC.md
 ├── docs/
 ├── src/
-│   └── app/
-│       ├── layout.tsx
-│       ├── page.tsx           (placeholder "Cleyra — Projekt in Aufbau", non la landing finale)
-│       ├── globals.css
-│       └── favicon.ico
+│   ├── app/
+│   │   ├── layout.tsx          (root layout: html lang="de", metadata di default)
+│   │   ├── globals.css
+│   │   ├── favicon.ico
+│   │   └── de/
+│   │       ├── layout.tsx      (header/footer placeholder condiviso)
+│   │       ├── endreinigung-oberwallis/page.tsx
+│   │       ├── so-funktionierts/page.tsx
+│   │       ├── faq/page.tsx
+│   │       ├── ueber-cleyra/page.tsx
+│   │       ├── kontakt/page.tsx
+│   │       ├── datenschutz/page.tsx
+│   │       ├── impressum/page.tsx
+│   │       ├── vermittlungsbedingungen/page.tsx
+│   │       └── danke/page.tsx  (metadata.robots noindex,nofollow)
+│   └── lib/
+│       └── env.ts              (validazione env con Zod, schema vuoto per ora)
 ├── tests/
 │   ├── unit/
-│   │   └── sanity.test.ts
+│   │   ├── sanity.test.ts
+│   │   └── env.test.ts
 │   ├── integration/            (vuota, popolata da WEB-009/WEB-010)
 │   └── e2e/
-│       └── smoke.spec.ts
-├── public/
+│       └── smoke.spec.ts       (verifica redirect `/` → `/de/endreinigung-oberwallis`)
+├── public/                     (vuota: nessun asset ancora necessario)
 ├── package.json
 ├── tsconfig.json
 ├── vitest.config.ts
 ├── playwright.config.ts
 ├── eslint.config.mjs
-├── next.config.ts
+├── next.config.ts              (redirects: `/` → `/de/endreinigung-oberwallis`, ADR-004)
 └── postcss.config.mjs
 ```
 
-Struttura target ancora da realizzare (WEB-002 in poi): rotte `/de/...`, `src/components/`,
-`src/lib/` (env, validation, email, db), `src/content/`, `prisma/schema.prisma`.
+Non esiste più `src/app/page.tsx`: la root `/` è gestita da un redirect (307) verso
+`/de/endreinigung-oberwallis`, vedi ADR-004 in `DECISIONS.md`.
+
+Struttura ancora da realizzare (WEB-003 in poi): `src/components/`, contenuti finali
+delle pagine da `docs/CONTENT.md`, `src/lib/validation/`, `src/lib/email/`,
+`src/lib/db/`, `prisma/schema.prisma`.
 
 ## Rotte
 

@@ -77,7 +77,7 @@ scaricato automaticamente nell'ambiente di sviluppo: `playwright.config.ts` punt
 ---
 
 ## WEB-002 — Environment validation e scheletro rotte
-Status: in_progress
+Status: done
 Priority: P0
 Dependencies: WEB-001
 
@@ -87,28 +87,39 @@ spec) con validazione delle variabili d'ambiente tipizzata, layout di base e sty
 condiviso, senza ancora contenuti finali.
 
 ### Acceptance criteria
-- [ ] Rotte create per: `/de/endreinigung-oberwallis`, `/de/so-funktionierts`,
+- [x] Rotte create per: `/de/endreinigung-oberwallis`, `/de/so-funktionierts`,
       `/de/faq`, `/de/ueber-cleyra`, `/de/kontakt`, `/de/datenschutz`,
       `/de/impressum`, `/de/vermittlungsbedingungen`, `/de/danke`.
-- [ ] Layout condiviso (header/footer placeholder) applicato a tutte le rotte.
-- [ ] Validazione tipizzata delle variabili d'ambiente (fallisce al build se mancano
-      variabili richieste).
-- [ ] `/de/danke` marcata `noindex`.
-- [ ] Ogni pagina renderizza senza errori con contenuto placeholder minimo.
+- [x] Layout condiviso (header/footer placeholder) applicato a tutte le rotte
+      (`src/app/de/layout.tsx`).
+- [x] Validazione tipizzata delle variabili d'ambiente con Zod (`src/lib/env.ts`);
+      schema attualmente vuoto in assenza di variabili richieste, pronto a
+      espandersi (es. `DATABASE_URL` in WEB-010) e a fallire il parsing/build quando
+      variabili obbligatorie mancano.
+- [x] `/de/danke` marcata `noindex` (`metadata.robots`, verificato via HTML renderizzato:
+      `<meta name="robots" content="noindex, nofollow"/>`).
+- [x] Ogni pagina renderizza senza errori con contenuto placeholder minimo (verificato
+      con `next build` — 9 rotte statiche generate — e controllo manuale di
+      `/de/kontakt` e `/de/danke` via server di sviluppo).
 
 ### Validation
-- `npm run lint`
-- `npm run typecheck`
-- `npm test`
-- `npm run build`
+- `npm run lint` — verde
+- `npm run typecheck` — verde
+- `npm test` — verde (2/2, incluso nuovo test per `env.ts`)
+- `npm run build` — verde (9 rotte `/de/*` generate come contenuto statico)
+- `npx playwright test` — verde (smoke test aggiornato per il redirect della root)
 
 ### Notes
-Aggiornare `ARCHITECTURE.md` con la struttura cartelle e le rotte definitive.
+`docs/ARCHITECTURE.md` aggiornato con la struttura cartelle e le rotte reali. La root
+`/` non ha più una pagina propria: redirect (307) verso `/de/endreinigung-oberwallis`
+configurato in `next.config.ts`, decisione registrata in ADR-004. Contenuti delle
+pagine ancora placeholder minimi (solo H1 + "Seite in Aufbau."): i testi finali
+arrivano con WEB-003 (landing), WEB-005 (FAQ/footer/legal), WEB-012 (danke).
 
 ---
 
 ## WEB-003 — Header, Hero, elementi di fiducia
-Status: todo
+Status: in_progress
 Priority: P0
 Dependencies: WEB-002
 
