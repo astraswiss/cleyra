@@ -3,6 +3,7 @@ import { faqItems } from "@/content/faq";
 import { Section } from "@/components/Section";
 import { PrimaryButton } from "@/components/PrimaryButton";
 import { Card } from "@/components/Card";
+import { RequestForm } from "@/components/RequestForm";
 
 export const metadata: Metadata = {
   title: "Endreinigung im Oberwallis — Cleyra",
@@ -78,6 +79,10 @@ export default function EndreinigungOberwallisPage() {
             />
           ))}
         </ul>
+      </Section>
+
+      <Section id="anfrage">
+        <RequestForm />
       </Section>
 
       <Section>

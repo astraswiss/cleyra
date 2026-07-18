@@ -27,6 +27,35 @@ visibile e richiesto; l'altro campo non viene inviato/validato.
 
 Pulsante: `Weiter zu den Kontaktdaten`
 
+### Messaggi di errore (Passaggio 1)
+
+Scritti in WEB-006 (2026-07-18), fonte di verità per `src/lib/validation/requestStep1.ts`:
+
+| Campo | Messaggio |
+|---|---|
+| `postalCode` | `Bitte geben Sie eine 4-stellige Postleitzahl ein.` |
+| `city` | `Bitte geben Sie einen Ort ein.` |
+| `serviceType` | `Bitte wählen Sie eine Reinigungsart.` |
+| `dateMode` | `Bitte wählen Sie eine Option.` |
+| `desiredDate` (mancante) | `Bitte wählen Sie ein Datum.` |
+| `desiredDate` (data passata) | `Das Datum darf nicht in der Vergangenheit liegen.` |
+| `desiredPeriod` | `Bitte wählen Sie einen Zeitraum.` |
+| `rooms` | `Bitte wählen Sie die Zimmerzahl.` |
+| `propertyEmpty` | `Bitte wählen Sie eine Option.` |
+| `notes` (troppo lungo) | `Bitte kürzen Sie Ihre Bemerkung.` |
+
+### Stato implementazione (WEB-006)
+
+Il passaggio 1 è implementato con validazione client (Zod, `src/lib/validation/requestStep1.ts`,
+condiviso in futuro con la validazione server di WEB-009) e cattura dei campi tecnici
+nascosti (UTM/GCLID/referrer/timestamp/versione form/lingua) come input nascosti nel
+form. Un campo honeypot (`honeypot`, input nascosto) è presente nel markup ma non
+ancora verificato lato server (WEB-011). Dopo un submit valido del passaggio 1, il
+form mostra un segnaposto per il passaggio 2 (`Wie dürfen wir Sie kontaktieren?`) con
+un link per tornare al passaggio 1 senza perdere i dati inseriti; il passaggio 2 reale
+(campi, consenso privacy, invio) è compito di WEB-007. Nessun invio al server: quello
+è WEB-009.
+
 ## Passaggio 2 — contatti
 
 Titolo: `Wie dürfen wir Sie kontaktieren?`

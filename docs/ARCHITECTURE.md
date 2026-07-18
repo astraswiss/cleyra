@@ -4,9 +4,9 @@ Questo documento descrive lo stack e la struttura tecnica del progetto. Ogni mod
 strutturale deve aggiornare questo file nella stessa sessione in cui avviene.
 
 Stato: fondazioni tecniche (WEB-001), scheletro rotte (WEB-002), landing completa nei
-contenuti (WEB-003..WEB-005, con riserva su ISSUE-001 per le pagine legali) e design
-system (WEB-022) completati. Form, backend, notifiche e analytics non esistono
-ancora: previsti da WEB-006 in poi.
+contenuti (WEB-003..WEB-005, con riserva su ISSUE-001 per le pagine legali), design
+system (WEB-022) e form passaggio 1 (WEB-006) completati. Passaggio 2 del form,
+backend, notifiche e analytics non esistono ancora: previsti da WEB-007 in poi.
 
 ## Stack
 
@@ -56,17 +56,21 @@ niente overengineering, niente librerie pesanti senza motivo.
 │   │       ├── vermittlungsbedingungen/page.tsx (placeholder "in Vorbereitung", noindex — ISSUE-001)
 │   │       └── danke/page.tsx  (metadata.robots noindex,nofollow)
 │   ├── lib/
-│   │   └── env.ts              (validazione env con Zod, schema vuoto per ora)
+│   │   ├── env.ts              (validazione env con Zod, schema vuoto per ora)
+│   │   └── validation/
+│   │       └── requestStep1.ts (schema Zod + validateRequestStep1, condiviso client/server in futuro)
 │   ├── content/
 │   │   └── faq.ts              (domande/risposte condivise tra landing e /de/faq)
 │   └── components/
 │       ├── Section.tsx         (wrapper di sezione: max-w-3xl, padding, variante muted)
 │       ├── PrimaryButton.tsx   (bottone primario riutilizzabile, colore brand)
-│       └── Card.tsx            (card per trust point/servizi, <li> con heading configurabile)
+│       ├── Card.tsx            (card per trust point/servizi, <li> con heading configurabile)
+│       └── RequestForm.tsx     (client component, form passaggio 1 + placeholder passaggio 2)
 ├── tests/
 │   ├── unit/
 │   │   ├── sanity.test.ts
-│   │   └── env.test.ts
+│   │   ├── env.test.ts
+│   │   └── requestStep1.test.ts
 │   ├── integration/            (vuota, popolata da WEB-009/WEB-010)
 │   └── e2e/
 │       └── smoke.spec.ts       (verifica redirect `/` → `/de/endreinigung-oberwallis`)

@@ -1,6 +1,6 @@
 # Session Handoff
 
-Updated: 2026-07-18 18:00 Europe/Zurich
+Updated: 2026-07-18 19:00 Europe/Zurich
 
 ## Current objective
 
@@ -11,9 +11,8 @@ automatico).
 
 ## Current task
 
-Task ID: WEB-006 — Form step 1 (richiesta) — UI e validazione client
-Status: da impostare `in_progress` all'inizio della prossima sessione (non ancora
-iniziato).
+Task ID: WEB-007 — Form step 2 (contatti) — UI, consenso e validazione client
+Status: in_progress (non ancora iniziato)
 
 ## Completed
 
@@ -24,51 +23,53 @@ iniziato).
 - WEB-004 — Problema/soluzione, processo, servizi, zona servita, disclaimer.
 - WEB-005 — CTA finale, FAQ, footer con disclaimer. Pagine legali placeholder
   esplicito + noindex (ISSUE-001, status `workaround`, blocca WEB-021).
-- WEB-022 — Design system completo: palette (`brand` `#0f766e`), tipografia,
-  componenti `Section`/`PrimaryButton`/`Card`, header/footer rifiniti. La landing
-  MVP è ora sia funzionalmente che visivamente completa (fino al punto in cui manca
-  ancora il form vero e proprio).
+- WEB-022 — Design system: palette (`brand` `#0f766e`), tipografia, componenti
+  `Section`/`PrimaryButton`/`Card`, header/footer rifiniti.
+- WEB-006 — Form step 1 completo: tutti i campi, validazione client Zod
+  (`src/lib/validation/requestStep1.ts`), logica condizionale `dateMode`, campi
+  tecnici nascosti catturati, accessibilità di base, 8 test unitari. Il passaggio 2
+  è per ora solo un segnaposto in `src/components/RequestForm.tsx`.
 - ADR-001 (stack) e ADR-004 (redirect root) `accepted`.
 
 ## Remaining
 
-- WEB-006 in poi: form (client + server), backend, notifiche, analytics/SEO,
-  test/QA/deploy. Vedi `docs/IMPLEMENTATION_PLAN.md`.
+- WEB-007 in poi: passaggio 2 reale del form, stati/errori/accessibilità completa
+  (WEB-008), backend (WEB-009..WEB-012), notifiche, analytics/SEO, test/QA/deploy.
+  Vedi `docs/IMPLEMENTATION_PLAN.md`.
 
 ## Exact next action
 
-1. Imposta WEB-006 come unico task `in_progress` in `docs/IMPLEMENTATION_PLAN.md`
-   prima di iniziare a scrivere codice.
-2. Apri `docs/FORM_SPEC.md` per i campi esatti del passaggio 1: `postalCode`,
-   `city`, `serviceType`, `dateMode`, `desiredDate`/`desiredPeriod` (condizionali),
-   `rooms`, `propertyEmpty`, `notes`.
-3. Crea la sezione form sulla landing (`src/app/de/endreinigung-oberwallis/page.tsx`)
-   con `id="anfrage"`: le due CTA esistenti (`PrimaryButton` in Hero e in fondo
-   pagina) puntano già a `#anfrage`, quindi devono ancorarsi a un elemento reale.
-4. Il form dovrà essere un componente client (gestione stato/step): valuta se
-   crearlo in `src/components/` (es. `RequestForm.tsx`) seguendo lo stile del
-   design system appena definito (usa `PrimaryButton`, token `brand`/`error` per
-   gli stati, `Section` per il contenitore).
-5. Implementa solo il passaggio 1 con validazione client (CAP 4 cifre, data non
-   passata, campi obbligatori) e logica condizionale `dateMode`. Non implementare
-   ancora l'invio al server (quello è WEB-009).
-6. Verifica `npm run lint && npm run typecheck && npm test && npm run build`.
-7. Segna WEB-006 `done` solo se tutti i criteri sono verificati, e imposta WEB-007
+1. Apri `docs/IMPLEMENTATION_PLAN.md` (task WEB-007) e `docs/FORM_SPEC.md` (sezione
+   "Passaggio 2 — contatti") per i campi esatti: `fullName`, `phone`, `email`,
+   `preferredContact` (facoltativo), `privacyConsent` (checkbox obbligatoria, testo
+   esatto in `docs/CONTENT.md`).
+2. In `src/components/RequestForm.tsx`, sostituisci il segnaposto dello step 2
+   (attualmente un `<div>` con solo un link "Zurück zu Schritt 1") con i campi
+   reali, seguendo lo stesso pattern del passaggio 1 (stesso stile di label/errori,
+   componenti del design system).
+3. Valuta se estendere lo schema Zod in un nuovo file
+   `src/lib/validation/requestStep2.ts` (pattern analogo a `requestStep1.ts`) per
+   telefono/email/consenso, riusabile poi da WEB-009 per la validazione server.
+4. Il pulsante finale deve avere il testo esatto `Kostenlose Anfrage senden` (non
+   ancora un invio reale al server: quello è WEB-009).
+5. Verifica `npm run lint && npm run typecheck && npm test && npm run build`, oltre
+   a `npx playwright test`.
+6. Segna WEB-007 `done` solo se tutti i criteri sono verificati, e imposta WEB-008
    come prossimo `in_progress`.
-8. Aggiorna `docs/PROJECT_STATUS.md`, aggiungi una voce a `docs/SESSION_LOG.md` e
-   riscrivi questo file (`SESSION_HANDOFF.md`).
+7. Aggiorna `docs/PROJECT_STATUS.md`, `docs/FORM_SPEC.md` (se emergono nuovi
+   messaggi di errore, come fatto in WEB-006), aggiungi una voce a
+   `docs/SESSION_LOG.md` e riscrivi questo file (`SESSION_HANDOFF.md`).
 
 ## Relevant files
 
-- `docs/IMPLEMENTATION_PLAN.md` — task WEB-006 con criteri completi.
-- `docs/FORM_SPEC.md` — specifica completa del form.
-- `docs/CONTENT.md` — testi/etichette dei campi del form.
-- `docs/ARCHITECTURE.md` — sezione "Design system" per palette/tipografia/componenti
-  da riusare nel form.
-- `src/app/de/endreinigung-oberwallis/page.tsx` — dove va agganciata la sezione form
-  (`id="anfrage"`).
-- `src/components/Section.tsx`, `PrimaryButton.tsx`, `Card.tsx` — componenti del
-  design system da riutilizzare.
+- `docs/IMPLEMENTATION_PLAN.md` — task WEB-007 con criteri completi.
+- `docs/FORM_SPEC.md` — specifica passaggio 2 + pattern di documentazione errori
+  già usato per il passaggio 1.
+- `docs/CONTENT.md` — testo esatto della checkbox di consenso privacy.
+- `src/components/RequestForm.tsx` — componente da estendere (segnaposto step 2 da
+  sostituire).
+- `src/lib/validation/requestStep1.ts` — pattern di riferimento per lo schema Zod
+  del passaggio 2.
 
 ## Commands to run first
 
@@ -77,20 +78,19 @@ iniziato).
 
 ## Blockers
 
-- ISSUE-001 (workaround attivo): non blocca WEB-006, blocca solo WEB-021.
+- ISSUE-001 (workaround attivo): non blocca WEB-007, blocca solo WEB-021.
 
 ## Do not forget
 
-- Le tre pagine legali restano placeholder onesti (`noindex`): non toccarle in
-  WEB-006/WEB-007 a meno che l'utente non fornisca i dati reali.
-- Il disclaimer di intermediazione è testo obbligatorio non negoziabile, presente
-  sia nella sezione dedicata della landing sia nel footer: non modificarne il testo.
+- La checkbox di consenso privacy non deve essere preselezionata.
+- Non implementare ancora l'invio al server (WEB-009): solo UI, stato locale e
+  validazione client.
+- Usa i componenti/token del design system (`PrimaryButton`, colore `brand`/`error`)
+  invece di stili ad-hoc.
+- Il pattern di validazione con Zod + normalizzazione errori in tedesco fisso
+  (vedi `requestStep1.ts`) va replicato per coerenza, non reinventato.
+- Le tre pagine legali restano placeholder onesti (`noindex`).
 - Non cambiare lo stack deciso in ADR-001 senza registrare una nuova decisione.
-- Usa i componenti del design system (`Section`, `PrimaryButton`, `Card`, token
-  colore `brand`/`success`/`error`) invece di introdurre nuovi stili ad-hoc, per
-  restare coerenti con quanto definito in WEB-022.
-- Il redirect della root (ADR-004) è temporaneo (307): da rivalutare in WEB-017.
-- ADR-002 (provider e-mail) e ADR-003 (strumento analytics) sono ancora aperte.
 - Il browser Chromium per Playwright è preinstallato in `/opt/pw-browsers/chromium`:
   non eseguire `npx playwright install`.
 - Un solo task `in_progress` alla volta nel backlog.

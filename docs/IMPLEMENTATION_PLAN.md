@@ -302,7 +302,7 @@ minimale di WEB-003 fino a quando WEB-022 non viene eseguito.
 ---
 
 ## WEB-006 — Form step 1 (richiesta) — UI e validazione client
-Status: todo
+Status: done
 Priority: P0
 Dependencies: WEB-003
 
@@ -312,27 +312,43 @@ desiredDate/desiredPeriod, rooms, propertyEmpty, notes) secondo `FORM_SPEC.md`, 
 validazione client e logica condizionale.
 
 ### Acceptance criteria
-- [ ] Tutti i campi del passaggio 1 implementati con i tipi ed etichette esatte.
-- [ ] Logica condizionale `dateMode` → `desiredDate` / `desiredPeriod` funzionante.
-- [ ] Validazione client (CAP a 4 cifre, data non passata, campi obbligatori).
-- [ ] Indicatore `Schritt 1 von 2` e microcopy tempo stimato.
-- [ ] Campi tecnici nascosti (UTM/GCLID/referrer/timestamp/versioni) catturati
-      client-side.
-- [ ] Accessibilità di base: label associate, errori collegati ai campi, tastiera.
+- [x] Tutti i campi del passaggio 1 implementati con i tipi ed etichette esatte.
+- [x] Logica condizionale `dateMode` → `desiredDate` / `desiredPeriod` funzionante.
+- [x] Validazione client (CAP a 4 cifre, data non passata, campi obbligatori) — Zod
+      (`src/lib/validation/requestStep1.ts`), coperta da 8 test unitari.
+- [x] Indicatore `Schritt 1 von 2` e microcopy tempo stimato.
+- [x] Campi tecnici nascosti (UTM/GCLID/referrer/timestamp/versioni) catturati
+      client-side (input `type="hidden"`, popolati via `useEffect` da
+      `URLSearchParams`/`document.referrer`).
+- [x] Accessibilità di base: label associate (`htmlFor`/`id`), errori collegati ai
+      campi (`aria-describedby`, `aria-invalid`), `fieldset`/`legend` per i gruppi
+      radio, navigabile da tastiera (elementi nativi).
 
 ### Validation
-- `npm run lint`
-- `npm run typecheck`
-- `npm test`
-- `npm run build`
+- `npm run lint` — verde
+- `npm run typecheck` — verde
+- `npm test` — verde (10/10, incluso `requestStep1.test.ts` con 8 casi)
+- `npm run build` — verde
+- `npx playwright test` — verde (1/1)
+- Verifica manuale con Playwright: submit vuoto mostra 6 errori sui campi
+  obbligatori; correggere un campo ne rimuove l'errore immediatamente; submit valido
+  passa al segnaposto del passaggio 2. Verificato anche a 320px.
 
 ### Notes
-Non implementare ancora l'invio al server: solo UI e stato locale del form.
+Non implementato l'invio al server: solo UI e stato locale del form, come previsto.
+Durante l'implementazione dei test unitari è emerso un bug reale nello schema Zod:
+`desiredPeriod`/`desiredDate` come `z.enum(...).optional()` non accettavano stringa
+vuota (solo `undefined`), causando falsi negativi quando lo stato React inizializza i
+campi a `""`. Corretto normalizzando le stringhe vuote a `undefined` prima del parse
+in `validateRequestStep1`. Il pulsante "Weiter zu den Kontaktdaten" porta a un
+segnaposto per il passaggio 2 (non ancora i campi reali, quello è WEB-007), con
+possibilità di tornare al passaggio 1 senza perdere i dati. Dettagli completi in
+`docs/FORM_SPEC.md` (sezione "Messaggi di errore" e "Stato implementazione").
 
 ---
 
 ## WEB-007 — Form step 2 (contatti) — UI, consenso e validazione client
-Status: todo
+Status: in_progress
 Priority: P0
 Dependencies: WEB-006
 

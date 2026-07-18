@@ -255,3 +255,49 @@ Issues discovered: nessuno di nuovo.
 Next recommended action: eseguire WEB-006 (form step 1 — richiesta: postalCode,
 city, serviceType, dateMode, desiredDate/desiredPeriod, rooms, propertyEmpty,
 notes), da impostare come unico task `in_progress` nel backlog prima di iniziare.
+
+---
+
+## 2026-07-18 — WEB-006: form step 1 (richiesta) — UI e validazione client
+
+Task: WEB-006
+Summary: Implementato lo schema di validazione Zod per il passaggio 1
+(`src/lib/validation/requestStep1.ts`, con `validateRequestStep1` che normalizza gli
+errori in messaggi tedeschi fissi indipendenti dal testo interno di Zod) e il
+componente client `src/components/RequestForm.tsx`, inserito nella landing
+(`id="anfrage"`, target delle due CTA esistenti) tra i trust point e la sezione
+problema/soluzione, rispettando l'ordine della spec. Tutti i campi del passaggio 1
+implementati con logica condizionale su `dateMode` (mostra `desiredDate` o
+`desiredPeriod`), validazione client, indicatore `Schritt 1 von 2`, cattura dei campi
+tecnici nascosti (UTM/GCLID/referrer/sourceUrl/timestamp/formVersion/lingua) come
+input nascosti popolati via `useEffect`, e un campo honeypot non ancora verificato
+(WEB-011). Accessibilità di base: label associate, `aria-invalid`/
+`aria-describedby`, `fieldset`/`legend` per i gruppi radio. Dopo un submit valido, il
+form passa a un segnaposto per il passaggio 2 (`Wie dürfen wir Sie kontaktieren?`),
+con link per tornare indietro senza perdere i dati. Scritti 8 test unitari per lo
+schema di validazione: hanno fatto emergere un bug reale (stringhe vuote non
+accettate da `z.enum(...).optional()`), corretto normalizzando `""` a `undefined`
+prima del parse. Migliorata anche l'UX: gli errori di un campo si puliscono non
+appena l'utente lo modifica, invece di restare visibili fino al prossimo submit.
+Verificato manualmente con Playwright (submit vuoto → 6 errori; correzione singolo
+campo → errore rimosso; submit valido → step 2 visibile) e con screenshot a 320px.
+Aggiornati `FORM_SPEC.md` (messaggi di errore esatti, stato implementazione) e
+`ARCHITECTURE.md` (nuovi moduli).
+Files changed: `src/lib/validation/requestStep1.ts` (nuovo),
+`src/components/RequestForm.tsx` (nuovo), `tests/unit/requestStep1.test.ts` (nuovo),
+`src/app/de/endreinigung-oberwallis/page.tsx`, `docs/FORM_SPEC.md`,
+`docs/ARCHITECTURE.md`, `docs/IMPLEMENTATION_PLAN.md`, `docs/PROJECT_STATUS.md`,
+`docs/SESSION_HANDOFF.md`.
+Commands run: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`,
+`npx playwright test`, `npm run build && npm run start` con verifica funzionale e
+screenshot Playwright (script temporanei, rimossi a fine verifica).
+Tests: `npm run lint` verde; `npm run typecheck` verde; `npm test` verde (10/10,
+incluso il nuovo `requestStep1.test.ts` con 8 casi); `npm run build` verde; `npx
+playwright test` verde (1/1).
+Decisions: nessuna nuova ADR.
+Issues discovered: bug nello schema di validazione (stringhe vuote vs `optional()`
+di Zod v4) — trovato e corretto nella stessa sessione grazie ai test, non richiede
+una voce separata in `KNOWN_ISSUES.md`.
+Next recommended action: eseguire WEB-007 (form step 2 — contatti: fullName, phone,
+email, preferredContact, privacyConsent, pulsante "Kostenlose Anfrage senden"),
+impostato come unico task `in_progress` nel backlog.
