@@ -34,39 +34,50 @@ Nessun codice applicativo scritto in questa fase, come richiesto dalla specifica
 ---
 
 ## WEB-001 — Setup dello stack tecnico
-Status: in_progress
+Status: done
 Priority: P0
 Dependencies: WEB-000
 
 ### Goal
 Inizializzare il progetto Next.js (App Router) con TypeScript strict, Tailwind CSS,
 ESLint, Vitest e Playwright, secondo lo stack di default registrato in ADR-001. Il
-repository è vuoto: nessuno stack esistente da rispettare.
+repository era vuoto: nessuno stack esistente da rispettare.
 
 ### Acceptance criteria
-- [ ] Progetto Next.js con App Router inizializzato.
-- [ ] `tsconfig.json` con `strict: true`.
-- [ ] Tailwind CSS configurato e funzionante.
-- [ ] ESLint configurato con regole Next.js/TypeScript.
-- [ ] Vitest configurato con almeno un test di esempio verde.
-- [ ] Playwright configurato con almeno uno smoke test di esempio.
-- [ ] `package.json` con script `lint`, `typecheck`, `test`, `build`.
-- [ ] Progetto avviabile in locale (`npm run dev`) senza errori.
-- [ ] Nessuna dipendenza non necessaria aggiunta.
+- [x] Progetto Next.js con App Router inizializzato (Next.js 16, `src/app`).
+- [x] `tsconfig.json` con `strict: true`.
+- [x] Tailwind CSS configurato e funzionante.
+- [x] ESLint configurato con regole Next.js/TypeScript (`eslint.config.mjs`).
+- [x] Vitest configurato con almeno un test di esempio verde
+      (`tests/unit/sanity.test.ts`).
+- [x] Playwright configurato con almeno uno smoke test di esempio
+      (`tests/e2e/smoke.spec.ts`, eseguito con Chromium preinstallato
+      dell'ambiente).
+- [x] `package.json` con script `lint`, `typecheck`, `test`, `build` (più `dev`,
+      `start`, `e2e`).
+- [x] Progetto avviabile in locale (`npm run dev`) senza errori — verificato con
+      richiesta HTTP 200 su `/`.
+- [x] Nessuna dipendenza non necessaria aggiunta (solo Next/React/Tailwind/Zod/
+      Vitest/Playwright/ESLint e relativi type/plugin).
 
 ### Validation
-- `npm run lint`
-- `npm run typecheck`
-- `npm test`
-- `npm run build`
+- `npm run lint` — verde
+- `npm run typecheck` — verde
+- `npm test` — verde (1/1 test)
+- `npm run build` — verde
 
 ### Notes
-Non implementare ancora landing, form o backend: solo fondazioni di progetto.
+Non implementate ancora landing, form o backend: solo fondazioni di progetto, come
+previsto. La home page (`src/app/page.tsx`) è un placeholder minimo ("Cleyra — Projekt
+in Aufbau"), non la landing finale (task WEB-003). Zod installato ma non ancora
+utilizzato (verrà usato da WEB-006 in poi). Il browser Chromium per Playwright non è
+scaricato automaticamente nell'ambiente di sviluppo: `playwright.config.ts` punta a
+`/opt/pw-browsers/chromium` preinstallato.
 
 ---
 
 ## WEB-002 — Environment validation e scheletro rotte
-Status: todo
+Status: in_progress
 Priority: P0
 Dependencies: WEB-001
 

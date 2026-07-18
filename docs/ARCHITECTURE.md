@@ -3,32 +3,33 @@
 Questo documento descrive lo stack e la struttura tecnica del progetto. Ogni modifica
 strutturale deve aggiornare questo file nella stessa sessione in cui avviene.
 
-Stato: repository inizializzato con la sola memoria di progetto (Fase 0). Nessun codice
-applicativo esiste ancora. La sezione "Struttura cartelle" descrive il target previsto
-per WEB-001/WEB-002, non lo stato attuale su disco.
+Stato: fondazioni tecniche inizializzate (WEB-001 completato). Le rotte `/de/...`, il
+form, il backend e le pagine non esistono ancora: questo è previsto da WEB-002 in poi.
 
 ## Stack
 
 Deciso in `DECISIONS.md` (ADR-001), stack di default per repository vuoto (spec sezione 4):
 
-- Next.js con App Router
+- Next.js 16 con App Router (Turbopack per dev/build)
 - TypeScript in modalità `strict`
-- Tailwind CSS
-- Zod per la validazione (client e server)
+- Tailwind CSS v4
+- Zod per la validazione (client e server) — dipendenza installata in WEB-001, non
+  ancora utilizzata
 - Server action o route handler server-side per il form (nessuna API pubblica non
-  necessaria)
-- Database PostgreSQL compatibile
-- Prisma come layer di accesso tipizzato
+  necessaria) — da introdurre in WEB-009
+- Database PostgreSQL compatibile — da introdurre in WEB-010
+- Prisma come layer di accesso tipizzato — da introdurre in WEB-010
 - Adapter e-mail server-side (provider da decidere in WEB-013)
 - Vitest per unit/integration test
-- Playwright per test end-to-end
+- Playwright per test end-to-end (browser Chromium preinstallato dell'ambiente, vedi
+  `playwright.config.ts` per `executablePath`)
 - ESLint
 
 Principi guida: mobile-first, validazione server autorevole, poco JavaScript client,
 niente segreti nel browser, niente global state non necessario, niente microservizi,
 niente overengineering, niente librerie pesanti senza motivo.
 
-## Struttura cartelle (target)
+## Struttura cartelle (stato reale dopo WEB-001)
 
 ```text
 /
@@ -36,35 +37,30 @@ niente overengineering, niente librerie pesanti senza motivo.
 ├── README.md
 ├── CLEYRA_WEBSITE_SPEC.md
 ├── docs/
-├── prisma/
-│   └── schema.prisma
 ├── src/
-│   ├── app/
-│   │   └── de/
-│   │       ├── endreinigung-oberwallis/
-│   │       ├── so-funktionierts/
-│   │       ├── faq/
-│   │       ├── ueber-cleyra/
-│   │       ├── kontakt/
-│   │       ├── datenschutz/
-│   │       ├── impressum/
-│   │       ├── vermittlungsbedingungen/
-│   │       └── danke/
-│   ├── components/
-│   ├── lib/
-│   │   ├── env.ts
-│   │   ├── validation/
-│   │   ├── email/
-│   │   └── db/
-│   └── content/
+│   └── app/
+│       ├── layout.tsx
+│       ├── page.tsx           (placeholder "Cleyra — Projekt in Aufbau", non la landing finale)
+│       ├── globals.css
+│       └── favicon.ico
 ├── tests/
 │   ├── unit/
-│   ├── integration/
+│   │   └── sanity.test.ts
+│   ├── integration/            (vuota, popolata da WEB-009/WEB-010)
 │   └── e2e/
-└── public/
+│       └── smoke.spec.ts
+├── public/
+├── package.json
+├── tsconfig.json
+├── vitest.config.ts
+├── playwright.config.ts
+├── eslint.config.mjs
+├── next.config.ts
+└── postcss.config.mjs
 ```
 
-Da confermare/aggiustare nella sessione che esegue WEB-001/WEB-002.
+Struttura target ancora da realizzare (WEB-002 in poi): rotte `/de/...`, `src/components/`,
+`src/lib/` (env, validation, email, db), `src/content/`, `prisma/schema.prisma`.
 
 ## Rotte
 

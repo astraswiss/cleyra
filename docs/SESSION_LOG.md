@@ -32,3 +32,38 @@ Vermittlungsbedingungen) non ancora disponibile, necessario prima di WEB-005.
 Next recommended action: eseguire WEB-001 (setup dello stack tecnico: Next.js App
 Router, TypeScript strict, Tailwind, ESLint, Vitest, Playwright), impostato come unico
 task `in_progress` nel backlog.
+
+---
+
+## 2026-07-18 — WEB-001: setup dello stack tecnico
+
+Task: WEB-001
+Summary: Inizializzato il progetto Next.js 16 (App Router, `src/app`) con TypeScript
+strict, Tailwind CSS v4, ESLint (flat config), Vitest (con test di esempio in
+`tests/unit/sanity.test.ts`) e Playwright (con smoke test in
+`tests/e2e/smoke.spec.ts`, configurato per usare il Chromium preinstallato
+dell'ambiente via `executablePath`). Aggiunta la dipendenza Zod (non ancora usata,
+prevista da WEB-006 in poi). Sostituito il contenuto boilerplate di
+`create-next-app` (`page.tsx`, `layout.tsx`) con un placeholder minimo neutro
+("Cleyra — Projekt in Aufbau"), `lang="de"` sull'html, metadata di base. Rimossi gli
+asset SVG di default non utilizzati. Script `package.json` aggiornati con `lint`,
+`typecheck`, `test`, `build`, `e2e`.
+Files changed: `package.json`, `package-lock.json`, `tsconfig.json`,
+`eslint.config.mjs`, `next.config.ts`, `postcss.config.mjs`, `next-env.d.ts`,
+`.gitignore`, `vitest.config.ts`, `playwright.config.ts`, `src/app/layout.tsx`,
+`src/app/page.tsx`, `src/app/globals.css`, `src/app/favicon.ico`, `public/`,
+`tests/unit/sanity.test.ts`, `tests/e2e/smoke.spec.ts`,
+`docs/ARCHITECTURE.md`, `docs/IMPLEMENTATION_PLAN.md`, `docs/PROJECT_STATUS.md`,
+`docs/SESSION_HANDOFF.md`.
+Commands run: `npx create-next-app@latest` (in directory temporanea, poi file copiati
+nella root del repo), `npm install`, `npm run lint`, `npm run typecheck`, `npm test`,
+`npm run build`, `npm run dev` (verifica manuale HTTP 200 su `/`), `npx playwright
+test`.
+Tests: `npm run lint` verde; `npm run typecheck` verde; `npm test` verde (1/1); `npm
+run build` verde; `npx playwright test` verde (1/1, con `executablePath` puntato a
+`/opt/pw-browsers/chromium`).
+Decisions: nessuna nuova decisione; applicato quanto già registrato in ADR-001.
+Issues discovered: nessuno.
+Next recommended action: eseguire WEB-002 (environment validation tipizzata + scheletro
+delle rotte `/de/...` con layout condiviso), impostato come unico task `in_progress`
+nel backlog.
