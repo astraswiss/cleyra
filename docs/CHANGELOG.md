@@ -1,3 +1,31 @@
+## 2026-07-18 (4)
+
+### Removed
+
+- Annullato completamente il sistema di design introdotto in questa
+  stessa giornata (palette `brand`/`clay`/`ink`, font Manrope/Inter,
+  icone SVG proprietarie, card/pill/ombre), su richiesta esplicita del
+  proprietario. Tutti i file di stile ripristinati allo stato precedente
+  (commit `da2b64e`); `components/ui/Icon.tsx` rimosso.
+
+### Changed
+
+- Nessuna modifica di logica applicativa — solo styling/markup
+  ripristinato ai valori di default Tailwind.
+
+### Added
+
+- Task di backlog `DESIGN-001` in `docs/IMPLEMENTATION_PLAN.md`
+  ("Backlog design", marcato `BLOCKED`) per riprendere il lavoro sul
+  design a fine progetto, su richiesta del proprietario.
+- Decisione DEC-20260718-02 in `docs/DECISIONS.md` che documenta il
+  rollback e supersede (senza cancellare) DEC-20260718-01.
+
+### Verification
+
+- `npm run build`, `npm run lint`, `npx vitest run` (21/21) verdi dopo
+  il rollback.
+
 ## 2026-07-18 (3)
 
 ### Fixed

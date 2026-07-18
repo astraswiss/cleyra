@@ -35,11 +35,9 @@ const faqItems = [
 
 export function FaqPreview() {
   return (
-    <section className="py-14">
-      <h2 className="font-display text-3xl font-bold tracking-tight text-ink-900">
-        Häufige Fragen
-      </h2>
-      <div className="mt-7">
+    <section className="py-12">
+      <h2 className="text-3xl font-semibold">Häufige Fragen</h2>
+      <div className="mt-6">
         <Accordion items={faqItems} />
       </div>
     </section>

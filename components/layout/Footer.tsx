@@ -19,23 +19,21 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-brand-700/60 bg-brand-900 text-brand-100">
+    <footer className="border-t border-slate-200 bg-slate-50">
       <Container>
-        <div className="grid gap-10 py-14 sm:grid-cols-3">
+        <div className="grid gap-8 py-12 sm:grid-cols-3">
           <div>
-            <p className="font-display text-xl font-bold text-white">
-              Cleyra
-            </p>
-            <p className="mt-3 text-sm leading-relaxed text-brand-200">
+            <p className="text-lg font-semibold">Cleyra</p>
+            <p className="mt-2 text-sm text-slate-600">
               Kostenlose Vermittlung von Endreinigungen im Wallis.
             </p>
           </div>
 
           <nav aria-label="Footer Hauptlinks">
-            <ul className="space-y-2.5 text-sm">
+            <ul className="space-y-2 text-sm">
               {mainLinks.map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="hover:text-white">
+                  <Link href={item.href} className="hover:text-slate-600">
                     {item.label}
                   </Link>
                 </li>
@@ -45,10 +43,10 @@ export function Footer() {
 
           <div className="text-sm">
             <nav aria-label="Footer rechtliche Links">
-              <ul className="space-y-2.5">
+              <ul className="space-y-2">
                 {legalLinks.map((item) => (
                   <li key={item.href}>
-                    <Link href={item.href} className="hover:text-white">
+                    <Link href={item.href} className="hover:text-slate-600">
                       {item.label}
                     </Link>
                   </li>
@@ -58,20 +56,14 @@ export function Footer() {
 
             {siteConfig.contactEmail ? (
               <p className="mt-4">
-                <a
-                  href={`mailto:${siteConfig.contactEmail}`}
-                  className="hover:text-white"
-                >
+                <a href={`mailto:${siteConfig.contactEmail}`}>
                   {siteConfig.contactEmail}
                 </a>
               </p>
             ) : null}
             {siteConfig.contactPhone ? (
               <p>
-                <a
-                  href={`tel:${siteConfig.contactPhone}`}
-                  className="hover:text-white"
-                >
+                <a href={`tel:${siteConfig.contactPhone}`}>
                   {siteConfig.contactPhone}
                 </a>
               </p>
@@ -79,7 +71,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-brand-700/60 py-6 text-xs text-brand-300">
+        <div className="border-t border-slate-200 py-6 text-xs text-slate-500">
           <p>{siteConfig.intermediaryDisclaimer}</p>
           <p className="mt-2">
             © {year} {siteConfig.name}

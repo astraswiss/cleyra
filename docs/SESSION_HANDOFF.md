@@ -1,111 +1,104 @@
 # Session handoff
 
-Last updated: 2026-07-18 00:45 Europe/Zurich
-Session objective: Il proprietario ha segnalato che il sito "non ha molto
-carattere" a livello di design; rivedere il sistema di design (palette,
-tipografia, icone) mantenendo lo stile "pulito, affidabile, locale,
-contemporaneo, non luxury" richiesto dalla spec (sezione 6).
+Last updated: 2026-07-18 01:00 Europe/Zurich
+Session objective: Il proprietario ha chiesto di annullare completamente
+il sistema di design introdotto nella sessione precedente ("cancella
+tutto lo stile riportalo a come era prima") e di rimandare il lavoro sul
+design a fine progetto, segnandolo da qualche parte perché non si perda.
 Result: completed
 
 ## What changed
 
-- Nuova palette in `tailwind.config.ts`: `brand` (verde alpino, per CTA
-  primarie, link, footer, sezione CTA finale), `clay` (terracotta caldo,
-  uso sobrio per accenti/icone), `ink` (neutri caldi al posto di
-  slate/gray).
-- Tipografia: `Manrope` (display, per H1/H2/H3/legend) + `Inter` (corpo),
-  self-hosted tramite `next/font/google` in `app/layout.tsx` (nessuna
-  richiesta esterna a runtime — verificato che il fetch dei font
-  funziona in build attraverso il proxy di rete dell'ambiente).
-- Nuovo `components/ui/Icon.tsx`: piccolo set di icone SVG inline
-  (check, mapPin, handshake, document, spark, phone) usato in TrustStrip,
-  ServiceList, RegionLinks, BenefitsGrid, PartnerTransparency — al posto
-  di bullet/checkmark testuali, senza aggiungere una libreria di icone.
-- Tutti i componenti `components/marketing/*`, `components/layout/*`,
-  `components/ui/{Input,Select,Checkbox,RadioGroup,Textarea,ProgressBar,
-  Alert,Accordion,Button}.tsx` e `components/lead-form/*` aggiornati dalla
-  palette Tailwind di default alla nuova palette (card con `shadow-soft`/
-  `shadow-card`, pill arrotondate, badge colorati).
-- Header reso "sticky" con sfondo semi-trasparente sfumato; footer e
-  sezione CTA finale in verde alpino scuro (`brand-900`) per dare un
-  bookending visivo coerente alla pagina.
-- Registrata la decisione in `docs/DECISIONS.md` (DEC-20260718-01).
+- Ripristinati a `git checkout da2b64e -- <file>` tutti i file toccati
+  dal sistema di design (DEC-20260718-01) e dal fix successivo sulla
+  transizione CTA→footer: `tailwind.config.ts`, `app/layout.tsx`,
+  `app/globals.css`, tutte le pagine `app/de/*/page.tsx`, tutti i
+  componenti `components/{ui,layout,marketing,lead-form}/*`.
+- Rimosso `components/ui/Icon.tsx` (non esisteva prima del sistema di
+  design).
+- Il sito è tornato ai colori Tailwind di default (slate/gray), font di
+  sistema, nessuna icona SVG custom, nessuna card/pill/ombra dedicata.
+- **Nessuna modifica di logica applicativa**: il modulo lead, l'endpoint
+  `/api/leads`, gli schemi Zod, l'attribution, il rate limiting sono
+  tutti invariati — solo styling/markup è stato ripristinato.
+- Documentata la decisione come rollback esplicito in `docs/DECISIONS.md`
+  (DEC-20260718-02), che supersede DEC-20260718-01 senza cancellarla
+  (storico preservato).
+- Aggiunto un task di backlog `DESIGN-001` (marcato `BLOCKED`, bloccato
+  su richiesta del proprietario) in `docs/IMPLEMENTATION_PLAN.md`, sezione
+  "Backlog design (rimandato dal proprietario)", così il lavoro sul
+  design non si perde e non verrà ripreso senza una richiesta esplicita.
 
 ## Exact current state
 
-- Tutto quanto costruito nelle sessioni precedenti (routes, header/footer,
-  homepage, modulo lead, endpoint `/api/leads`) è invariato
-  funzionalmente: questa sessione ha toccato solo styling/markup visivo,
-  non la logica applicativa.
+- Aspetto visivo del sito identico a come era subito dopo il commit
+  `da2b64e` (prima di qualsiasi lavoro sul design): nessun carattere
+  visivo distintivo, di proposito, in attesa di essere ripreso più avanti.
+- Tutta la funzionalità (routes, modulo lead, endpoint API, homepage
+  completa con tutte le sezioni 8.1–8.9) resta quella descritta nel
+  changelog delle sessioni precedenti — solo lo stile è cambiato.
 - `npm run build`, `npm run lint`, `npx vitest run` (21/21) tutti verdi
-  dopo le modifiche.
-- Verificato **visivamente**, non solo con build/lint: screenshot
-  Playwright a 1440px (hero, service list, region pills, form card, CTA
-  finale, footer) e a 375px (hero mobile) — non salvati nel repository,
-  solo ispezionati durante la sessione.
+  dopo il rollback.
 - Repository: modifiche di questa sessione non ancora committate al
   momento di scrivere questo file (da fare subito dopo).
 
 ## Files touched
 
-- `tailwind.config.ts` — palette `brand`/`clay`/`ink`, `fontFamily`,
-  `boxShadow`, `borderRadius`
-- `app/layout.tsx` — `next/font/google` (Manrope + Inter) via CSS variables
-- `app/globals.css` — background/testo di base, `prefers-reduced-motion`
-- `components/ui/Icon.tsx` — nuovo
-- `components/ui/{Button,Input,Select,Checkbox,RadioGroup,Textarea,ProgressBar,Alert,Accordion}.tsx` — ricolorati
-- `components/layout/{Header,Footer,MobileMenu}.tsx` — ricolorati, header sticky, footer scuro
-- `components/marketing/*` — tutti i 9 componenti aggiornati con icone e nuova palette
-- `components/lead-form/*` — colori aggiornati (nessuna modifica alla logica)
-- `app/de/*/page.tsx` (tutte le pagine placeholder) — h1/testo allineati alla nuova palette/tipografia
-- `docs/DECISIONS.md` — nuova voce DEC-20260718-01
-- `docs/PROJECT_STATUS.md`, `docs/ARCHITECTURE.md`, `docs/CHANGELOG.md` — aggiornati
+- `tailwind.config.ts`, `app/layout.tsx`, `app/globals.css` — ripristinati
+- Tutte le pagine `app/de/*/page.tsx` — ripristinate (solo classi
+  Tailwind, nessun cambio di copy/struttura)
+- `components/ui/{Button,Input,Select,Checkbox,RadioGroup,Textarea,ProgressBar,Alert,Accordion}.tsx` — ripristinati
+- `components/ui/Icon.tsx` — rimosso
+- `components/layout/{Header,Footer,MobileMenu}.tsx` — ripristinati
+- `components/marketing/*` (tutti e 9) — ripristinati
+- `components/lead-form/*` — ripristinati (solo classi, nessuna modifica
+  a schema/logica)
+- `docs/DECISIONS.md` — nuova voce DEC-20260718-02 (rollback), status di
+  DEC-20260718-01 aggiornato a "superseded" con nota, non cancellata
+- `docs/IMPLEMENTATION_PLAN.md` — nuova sezione "Backlog design" con
+  DESIGN-001
+- `docs/PROJECT_STATUS.md` — aggiornato
+- `docs/SESSION_HANDOFF.md` — questo file
+- `docs/CHANGELOG.md` — nuova voce
 
 ## Verification performed
 
-- `npm run build` — successo, 18 route (font Google scaricati e
-  self-hosted correttamente in fase di build attraverso il proxy)
+- `npm run build` — successo, 18 route
 - `npm run lint` — nessun warning/errore
-- `npx vitest run` — 21/21 verdi (nessuna modifica alla logica, solo a
-  markup/stile)
-- Screenshot Playwright headless a due viewport (1440px, 375px) ispezionati
-  visivamente per hero, service list, region links, form card, CTA
-  finale, footer — nessuno script committato nel repository
+- `npx vitest run` — 21/21 verdi (conferma che il rollback non ha
+  toccato la logica del modulo/schema)
 
 ## Known problems
 
-- Nessuna regressione funzionale nota. Restano tutti i limiti già
+- Nessuno introdotto da questo rollback. Restano tutti i limiti già
   documentati in precedenza (persistenza lead solo in memoria, nessuna
   e-mail, landing locali/pagine informative ancora placeholder minimi,
   nessun favicon).
-- Contrasto colore non verificato con uno strumento automatico (solo
-  ispezione visiva) — da includere nell'audit accessibilità di QA-003.
+- Il sito è di nuovo visivamente "senza carattere" — **intenzionale**,
+  non un regressione da correggere: il proprietario ha chiesto
+  esplicitamente questo stato, rimandando il design a più avanti.
 
 ## Exact next actions
 
-1. QA-003 (parziale) — Verificare il contrasto colore della nuova
-   palette con uno strumento (es. axe, Lighthouse) prima di considerare
-   il design system finale.
+1. Non riprendere il lavoro sul design (DESIGN-001) finché il
+   proprietario non lo richiede esplicitamente — è marcato `BLOCKED` di
+   proposito.
 2. API-002 — Scegliere un provider database e sostituire `inMemoryLeads`
    in `app/api/leads/route.ts` con una persistenza reale.
 3. LOCAL-002/003/004 — Espandere le landing locali con la struttura a 10
-   sezioni, ora che i componenti marketing/UI hanno uno stile coerente
-   da riusare.
+   sezioni (spec 9.4).
 4. QA-001/QA-002 — Formalizzare test automatici (component test per gli
    step del modulo, suite e2e Playwright committata).
 5. INFO-001 — Copy completo per `so-funktionierts`, `faq`, `ueber-cleyra`,
-   `kontakt`, ora riutilizzando lo stesso stile della homepage.
+   `kontakt`.
 
 ## Before continuing
 
 - Leggere `CLEYRA_WEBSITE_SPEC.md`, `docs/PROJECT_STATUS.md` e questo
   file prima di qualsiasi modifica.
-- Non tornare alla palette Tailwind di default (slate/gray) senza
-  discuterne con il proprietario — è stata sostituita su suo feedback
-  esplicito (DEC-20260718-01).
-- Non introdurre una libreria di icone come dipendenza senza necessità
-  concreta: il set attuale in `components/ui/Icon.tsx` copre i casi
-  d'uso attuali ed è facilmente estendibile.
+- **Non reintrodurre la palette/tipografia/icone del sistema di design
+  precedente senza che il proprietario lo richieda esplicitamente** — è
+  stato annullato di proposito (DEC-20260718-02), non per errore.
 - Non riaprire le altre decisioni in `docs/DECISIONS.md` senza un motivo
   concreto.
 - Verificare `git status` prima di operazioni distruttive; committare e

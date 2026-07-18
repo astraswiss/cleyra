@@ -12,7 +12,7 @@ export function Accordion({ items }: { items: AccordionItem[] }) {
   const baseId = useId();
 
   return (
-    <div className="divide-y divide-ink-100 rounded-2xl border border-ink-100 bg-white px-2 shadow-soft sm:px-4">
+    <div className="divide-y divide-slate-200 border-y border-slate-200">
       {items.map((item, index) => {
         const isOpen = openIndex === index;
         const buttonId = `${baseId}-button-${index}`;
@@ -27,17 +27,10 @@ export function Accordion({ items }: { items: AccordionItem[] }) {
                 aria-expanded={isOpen}
                 aria-controls={panelId}
                 onClick={() => setOpenIndex(isOpen ? null : index)}
-                className="flex w-full items-center justify-between gap-4 py-5 text-left text-lg font-semibold text-ink-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
+                className="flex w-full items-center justify-between py-4 text-left text-lg font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900"
               >
                 <span>{item.question}</span>
-                <span
-                  aria-hidden="true"
-                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-100 text-brand-700 transition-transform ${
-                    isOpen ? "rotate-45" : ""
-                  }`}
-                >
-                  +
-                </span>
+                <span aria-hidden="true">{isOpen ? "−" : "+"}</span>
               </button>
             </h3>
             <div
@@ -45,7 +38,7 @@ export function Accordion({ items }: { items: AccordionItem[] }) {
               role="region"
               aria-labelledby={buttonId}
               hidden={!isOpen}
-              className="pb-5 text-base leading-relaxed text-ink-600"
+              className="pb-4 text-base text-slate-700"
             >
               {item.answer}
             </div>

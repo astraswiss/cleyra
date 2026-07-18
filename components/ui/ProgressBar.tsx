@@ -9,7 +9,7 @@ export function ProgressBar({
 
   return (
     <div className="mb-6">
-      <p className="mb-2 text-sm font-semibold text-ink-700">
+      <p className="mb-2 text-sm font-medium">
         Schritt {step} von {totalSteps}
       </p>
       <div
@@ -18,10 +18,10 @@ export function ProgressBar({
         aria-valuemin={1}
         aria-valuemax={totalSteps}
         aria-label={`Schritt ${step} von ${totalSteps}`}
-        className="h-2 w-full overflow-hidden rounded-full bg-ink-100"
+        className="h-2 w-full overflow-hidden rounded-full bg-slate-200"
       >
         <div
-          className="h-full rounded-full bg-brand-700 transition-all"
+          className="h-full rounded-full bg-slate-900 transition-all"
           style={{ width: `${percent}%` }}
         />
       </div>

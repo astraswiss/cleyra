@@ -26,7 +26,7 @@ export function StepExtras({
 
   return (
     <fieldset className="flex flex-col gap-5">
-      <legend className="font-display text-2xl font-bold tracking-tight text-ink-900">
+      <legend className="text-2xl font-semibold">
         Was soll berücksichtigt werden?
       </legend>
 

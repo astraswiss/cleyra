@@ -125,6 +125,29 @@ Piano eseguibile derivato da `CLEYRA_WEBSITE_SPEC.md` sezione 29.
 - [ ] QA-005 Controlli manuali pre-lancio (sezione 28)
 - [ ] QA-006 Controllo legale (sostituzione placeholder legali)
 
+## Backlog design (rimandato dal proprietario)
+
+- [ ] DESIGN-001 BLOCKED — Rivedere il sistema di design (palette,
+  tipografia, icone) per dare carattere visivo al sito
+  - Dipendenze: nessuna tecnica; **bloccato su richiesta esplicita del
+    proprietario di rimandarlo a fine progetto** ("ce ne occupiamo alla
+    fine")
+  - Contesto: è stato tentato un primo sistema di design (palette verde
+    alpino/terracotta, font Manrope+Inter, set di icone SVG) in
+    DEC-20260718-01, poi completamente annullato su richiesta del
+    proprietario in DEC-20260718-02 perché non voleva occuparsene ora.
+    Il sito è tornato intenzionalmente ai colori/font di default
+    Tailwind.
+  - File previsti quando si riprenderà: `tailwind.config.ts`,
+    `app/layout.tsx`, `app/globals.css`, tutti i componenti
+    `components/{ui,layout,marketing,lead-form}/*`
+  - Criteri di accettazione: da ridefinire con il proprietario quando si
+    riprende il lavoro; la versione precedente (rollback in
+    DEC-20260718-02) può servire da punto di partenza ma va riproposta,
+    non semplicemente ripristinata senza conferma
+  - Non iniziare questo task senza che il proprietario lo richieda
+    esplicitamente
+
 ## Next recommended tasks
 
 1. LOCAL-002/003/004 — Contenuto completo a 10 sezioni per le landing Visp/Brig/Naters (oggi solo hero minimo)

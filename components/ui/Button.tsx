@@ -21,13 +21,13 @@ type ButtonAsLink = CommonProps & {
 type ButtonProps = ButtonAsButton | ButtonAsLink;
 
 const baseClasses =
-  "inline-flex min-h-[50px] items-center justify-center rounded-full px-7 text-base font-semibold transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-60";
+  "inline-flex min-h-[50px] items-center justify-center rounded-md px-6 text-base font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-60";
 
 const variantClasses: Record<NonNullable<CommonProps["variant"]>, string> = {
   primary:
-    "bg-brand-700 text-white shadow-soft hover:bg-brand-800 hover:shadow-card active:bg-brand-900 focus-visible:outline-brand-700",
+    "bg-slate-900 text-white hover:bg-slate-700 focus-visible:outline-slate-900",
   secondary:
-    "bg-white text-brand-800 border border-ink-200 hover:border-brand-300 hover:bg-brand-50 focus-visible:outline-brand-700",
+    "bg-white text-slate-900 border border-slate-300 hover:bg-slate-50 focus-visible:outline-slate-900",
 };
 
 export function Button(props: ButtonProps) {

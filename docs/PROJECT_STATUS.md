@@ -1,5 +1,5 @@
-Last updated: 2026-07-18 00:45 Europe/Zurich
-Current phase: Fase 1–2–3 avanzate in parallelo (fondazioni, homepage, modulo lead); Fase 4 (backend) parziale; sistema di design rivisto
+Last updated: 2026-07-18 01:00 Europe/Zurich
+Current phase: Fase 1–2–3 avanzate in parallelo (fondazioni, homepage, modulo lead); Fase 4 (backend) parziale; sistema di design ripristinato ai default, rimandato a fine progetto
 Overall status: in_progress
 Current branch: claude/new-session-huwuyt
 Last verified commit: da2b64e (homepage + lead form + API-001) — questa sessione aggiunge un nuovo commit sopra
@@ -7,15 +7,14 @@ Last verified commit: da2b64e (homepage + lead form + API-001) — questa sessio
 ## Cosa è già funzionante
 
 - Tutto il checkpoint precedente (Fase 0/1: continuity docs, scaffold, 14 rotte, header/footer/menu mobile).
-- **Sistema di design rivisto** (DEC-20260718-01): palette dedicata
-  `brand` (verde alpino)/`clay` (terracotta)/`ink` (neutri caldi) al
-  posto dei colori di default Tailwind; tipografia `Manrope` (display) +
-  `Inter` (corpo), self-hosted via `next/font/google`; set di icone SVG
-  proprietarie (`components/ui/Icon.tsx`); card, pill, badge e ombre
-  morbide (`shadow-soft`/`shadow-card`) applicate in modo coerente su
-  homepage, form e footer/header. Verificato visivamente con screenshot
-  Playwright (desktop 1440px e mobile 375px) prima e dopo, non solo con
-  build/lint.
+- **Sistema di design**: era stato introdotto un sistema di design
+  dedicato (palette verde alpino/terracotta, font Manrope+Inter, icone
+  SVG — DEC-20260718-01), ma **il proprietario ha chiesto di annullarlo
+  completamente e tornare com'era prima**, rimandando il lavoro sul
+  design a fine progetto (DEC-20260718-02, task DESIGN-001 in
+  `docs/IMPLEMENTATION_PLAN.md`). Il sito usa di nuovo i colori/font di
+  default di Tailwind. Nessuna logica applicativa è stata toccata da
+  questo rollback — solo styling/markup.
 - Homepage `/de` completa con tutte le sezioni 8.1–8.9 (Hero, TrustStrip,
   Problem, ProcessSteps, ServiceList, RegionLinks, BenefitsGrid,
   PartnerTransparency con la dichiarazione di intermediazione, FaqPreview

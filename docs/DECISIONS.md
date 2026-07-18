@@ -59,6 +59,38 @@ Formato ADR leggero. Registrare solo decisioni durature, non correzioni minori.
 - Related files/tasks: `tailwind.config.ts`, `app/layout.tsx`,
   `app/globals.css`, `components/ui/Icon.tsx`, tutti i componenti
   `components/marketing/*`
+- **Status update (2026-07-18, stesso giorno): superseded.** Il
+  proprietario ha chiesto di annullare completamente questa modifica di
+  stile e tornare all'aspetto precedente (Tailwind slate/gray di
+  default, font di sistema, nessun set di icone), rimandando il lavoro
+  sul design a una fase successiva ("ce ne occupiamo alla fine"). Vedi
+  DEC-20260718-02 per la decisione di rollback e il task di backlog
+  aperto in `docs/IMPLEMENTATION_PLAN.md` (DESIGN-001).
+
+## DEC-20260718-02 — Rollback del sistema di design, rimandato a fine progetto
+
+- Status: accepted
+- Date: 2026-07-18
+- Context: Dopo l'implementazione di DEC-20260718-01, il proprietario ha
+  chiesto esplicitamente di cancellare tutto lo stile introdotto e
+  tornare com'era prima, indicando che il lavoro sul design verrà ripreso
+  più avanti, non ora.
+- Decision: ripristinati tutti i file toccati da DEC-20260718-01 (e dal
+  fix successivo sulla transizione CTA→footer) allo stato del commit
+  `da2b64e` (prima di qualsiasi modifica di stile): palette Tailwind di
+  default (slate/gray), nessun font custom, `components/ui/Icon.tsx`
+  rimosso. Nessuna modifica di logica applicativa è stata toccata da
+  questo rollback.
+- Alternatives considered: mantenere la nuova palette ma disattivarla
+  dietro un flag — scartata, il proprietario ha chiesto esplicitamente la
+  cancellazione completa, non una via di mezzo.
+- Consequences: il sito torna visivamente "senza carattere" come prima
+  della sessione di design; questo è intenzionale e temporaneo. Il
+  lavoro sul sistema di design va ripreso a fine progetto (vedi task
+  DESIGN-001 in `docs/IMPLEMENTATION_PLAN.md`, sezione "Backlog design").
+- Related files/tasks: tutti i file elencati in DEC-20260718-01 sotto
+  "Related files/tasks", ripristinati; `docs/IMPLEMENTATION_PLAN.md`
+  (DESIGN-001)
 
 ## DEC-20260717-03 — Placeholder legali non pubblicabili
 

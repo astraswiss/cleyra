@@ -22,11 +22,11 @@ export default function HomePage() {
       <Hero />
       <TrustStrip />
 
-      <section className="py-14">
-        <h2 className="font-display text-3xl font-bold tracking-tight text-ink-900">
+      <section className="py-12">
+        <h2 className="text-3xl font-semibold">
           Ein Umzug ist schon aufwendig genug
         </h2>
-        <p className="mt-4 max-w-2xl text-lg leading-relaxed text-ink-600">
+        <p className="mt-4 max-w-2xl text-lg">
           Kurz vor der Wohnungsabgabe bleibt oft wenig Zeit, mehrere
           Reinigungsfirmen anzurufen, Leistungen zu vergleichen und freie
           Termine zu suchen. Cleyra vereinfacht diesen Prozess. Sie senden
@@ -43,16 +43,16 @@ export default function HomePage() {
       <PartnerTransparency />
       <FaqPreview />
 
-      <section id="anfrage" className="scroll-mt-20 py-14">
-        <h2 className="font-display text-3xl font-bold tracking-tight text-ink-900">
-          Kostenlose Anfrage
-        </h2>
-        <div className="mt-7 max-w-2xl rounded-2xl border border-ink-100 bg-white p-6 shadow-card sm:p-8">
+      <section id="anfrage" className="scroll-mt-20 py-12">
+        <h2 className="text-3xl font-semibold">Kostenlose Anfrage</h2>
+        <div className="mt-6 max-w-2xl">
           <LeadForm />
         </div>
       </section>
 
-      <FinalCta />
+      <div className="pb-16">
+        <FinalCta />
+      </div>
     </main>
   );
 }

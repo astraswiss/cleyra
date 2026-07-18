@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function UmzugsreinigungPage() {
   return (
     <main className="mx-auto max-w-content px-4 py-16">
-      <h1 className="font-display text-3xl font-bold tracking-tight text-ink-900">
+      <h1 className="text-3xl font-semibold">
         Umzugsreinigung im Oberwallis einfach anfragen
       </h1>
       <p className="mt-4 text-lg">
