@@ -127,3 +127,44 @@ Issues discovered: nessuno.
 Next recommended action: eseguire WEB-004 (processo in tre passaggi, sezione servizi,
 zona servita, disclaimer di intermediazione obbligatorio), impostato come unico task
 `in_progress` nel backlog.
+
+---
+
+## 2026-07-18 — WEB-004: processo, servizi, zona servita, trasparenza + nuovo task WEB-022
+
+Task: WEB-004
+Summary: Su richiesta esplicita dell'utente, prima di procedere è stato registrato un
+nuovo task nel backlog, **WEB-022 — Design system: stile, layout e identità
+visiva** (P1, dipende da WEB-005): il sito è ancora visivamente "grezzo" (solo
+utility Tailwind neutre, nessuna palette/tipografia/identità di brand definita) e
+questo va affrontato come task dedicato prima della QA finale (WEB-020). Registrato
+anche in `PROJECT_STATUS.md` tra i prossimi task.
+Poi completato WEB-004: aggiunte a `/de/endreinigung-oberwallis` le sezioni
+problema/soluzione, processo in tre passaggi (testi esatti), servizi (coerenti con
+`serviceType`, nessuna promessa di prezzo), zona servita (Visp/Brig-Glis/Naters,
+senza promettere copertura totale) e trasparenza (disclaimer di intermediazione
+obbligatorio, testo identico allo standard). Individuata durante la stesura una
+lacuna nel backlog originale (WEB-000): la sezione "problema/soluzione" e la "CTA
+finale" della spec (sezione 6) non erano assegnate a nessun task; "problema/soluzione"
+aggiunta ai criteri di WEB-004, "CTA finale" spostata nei criteri di WEB-005. Copy
+nuovo (non presente letteralmente nella spec) scritto rispettando i vincoli (nessun
+dato/recensione/certificazione/garanzia inventati) e aggiunto anche a
+`docs/CONTENT.md` come fonte di verità, con nota che indica che è stato scritto in
+questa sessione e non è testo letterale della spec originale.
+Files changed: `src/app/de/endreinigung-oberwallis/page.tsx`, `docs/CONTENT.md`,
+`docs/IMPLEMENTATION_PLAN.md` (aggiunto WEB-022, aggiornati WEB-004/WEB-005/WEB-006),
+`docs/PROJECT_STATUS.md`, `docs/SESSION_HANDOFF.md`.
+Commands run: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`,
+`npx playwright test`, `npm run build && npm run start` con screenshot Playwright
+manuale a 320px e ispezione dell'ordine dei tag heading (script temporaneo, rimosso a
+fine verifica).
+Tests: `npm run lint` verde; `npm run typecheck` verde; `npm test` verde (2/2); `npm
+run build` verde; `npx playwright test` verde (1/1).
+Decisions: nessuna nuova ADR; registrato invece il nuovo task WEB-022 nel backlog.
+Issues discovered: lacuna nel backlog originale (sezioni "problema/soluzione" e "CTA
+finale" della spec non assegnate a nessun task) — risolta redistribuendo i criteri
+tra WEB-004 e WEB-005, non richiede una voce separata in `KNOWN_ISSUES.md`.
+Next recommended action: eseguire WEB-005 (CTA finale, FAQ, footer con disclaimer,
+pagine legali reali — nota ISSUE-001 sui contenuti legali reali non ancora
+disponibili), impostato come unico task `in_progress` nel backlog. WEB-022 (design
+system) resta registrato e da pianificare dopo WEB-005.

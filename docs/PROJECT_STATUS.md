@@ -1,28 +1,31 @@
 # Project Status
 
-Last updated: 2026-07-18 15:00 Europe/Zurich
+Last updated: 2026-07-18 16:00 Europe/Zurich
 Current phase: Fase 2 — landing
 Current branch: claude/new-session-lun8ys
-Current task: WEB-004 — Processo, servizi, zona servita, trasparenza
+Current task: WEB-005 — FAQ, footer, pagine legali
 Overall state: in progress
 
 ## Completed
 - WEB-000 — Memoria di progetto.
 - WEB-001 — Setup dello stack tecnico.
-- WEB-002 — Environment validation e scheletro rotte (tutte le 9 rotte `/de/...`,
-  redirect root, `/de/danke` noindex).
-- WEB-003 — Hero e tre elementi di fiducia su `/de/endreinigung-oberwallis` con i
-  testi esatti da `CONTENT.md`. Header/footer condivisi già presenti da WEB-002.
-  Verificato mobile a 320px.
-- Backlog completo (WEB-000..WEB-021) registrato in `IMPLEMENTATION_PLAN.md`.
+- WEB-002 — Environment validation e scheletro rotte.
+- WEB-003 — Hero e tre elementi di fiducia.
+- WEB-004 — Problema/soluzione, processo in tre passaggi, servizi, zona servita,
+  disclaimer di intermediazione, tutti su `/de/endreinigung-oberwallis`. Copy nuovo
+  aggiunto anche a `CONTENT.md`. Verificato mobile a 320px.
+- Backlog completo (WEB-000..WEB-021 + WEB-022) registrato in
+  `IMPLEMENTATION_PLAN.md`.
 - ADR-001 (stack tecnico) e ADR-004 (redirect root) registrate come `accepted`.
 
 ## In progress
-- WEB-004 — Processo, servizi, zona servita, trasparenza (non ancora iniziato).
+- WEB-005 — FAQ, footer, pagine legali (non ancora iniziato).
 
 ## Next three tasks
-1. WEB-004 — Processo, servizi, zona servita, trasparenza.
-2. WEB-005 — FAQ, footer, pagine legali.
+1. WEB-005 — FAQ, footer, pagine legali.
+2. WEB-022 — Design system: stile, layout e identità visiva (task trasversale,
+   aggiunto su richiesta esplicita — l'intero sito è ancora visivamente "grezzo",
+   solo utility Tailwind di base, nessuna identità visiva/brand definita).
 3. WEB-006 — Form step 1 (richiesta) — UI e validazione client.
 
 ## Blockers

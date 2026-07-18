@@ -158,44 +158,62 @@ WEB-017.
 ---
 
 ## WEB-004 — Processo, servizi, zona servita, trasparenza
-Status: in_progress
+Status: done
 Priority: P1
 Dependencies: WEB-003
 
 ### Goal
-Implementare le sezioni: processo in tre passaggi, cosa può comprendere la pulizia, zona
-servita, spiegazione dell'intermediazione (disclaimer legale obbligatorio).
+Implementare le sezioni: problema/soluzione, processo in tre passaggi, cosa può
+comprendere la pulizia, zona servita, spiegazione dell'intermediazione (disclaimer
+legale obbligatorio).
 
 ### Acceptance criteria
-- [ ] Sezione processo con i tre passaggi testuali esatti.
-- [ ] Sezione servizi coerente con `serviceType` del form (nessuna promessa di prezzo).
-- [ ] Sezione zona servita che menziona Visp, Brig-Glis, Naters senza creare pagine
-      dedicate per città.
-- [ ] Disclaimer di intermediazione (testo obbligatorio) visibile e non modificato.
-- [ ] Copy coerente con `CONTENT.md`.
+- [x] Sezione problema/soluzione (spec `CLEYRA_WEBSITE_SPEC.md` sezione 6, punto 5 —
+      non elencata esplicitamente nella stesura originale di questo task, aggiunta
+      ora per coerenza con l'ordine della landing) prima della sezione processo.
+- [x] Sezione processo con i tre passaggi testuali esatti.
+- [x] Sezione servizi coerente con `serviceType` del form (nessuna promessa di prezzo,
+      nessun dato inventato).
+- [x] Sezione zona servita che menziona Visp, Brig-Glis, Naters senza creare pagine
+      dedicate per città, senza promettere copertura totale della regione.
+- [x] Disclaimer di intermediazione (testo obbligatorio) visibile e non modificato.
+- [x] Copy coerente con `CONTENT.md` (testi nuovi aggiunti a `CONTENT.md` nella
+      stessa sessione, essendo la spec priva di copy letterale per queste sezioni al
+      di fuori del disclaimer e dei tre passaggi del processo).
 
 ### Validation
-- `npm run lint`
-- `npm run typecheck`
-- `npm test`
-- `npm run build`
+- `npm run lint` — verde
+- `npm run typecheck` — verde
+- `npm test` — verde (2/2)
+- `npm run build` — verde
+- `npx playwright test` — verde (1/1)
 
 ### Notes
-—
+La "CTA finale" della landing (spec sezione 6, punto 11) non è coperta da questo task:
+si accompagna naturalmente a FAQ/footer ed è spostata nelle competenze di WEB-005.
+
+Tutte le sezioni implementate in `src/app/de/endreinigung-oberwallis/page.tsx`:
+problema/soluzione, processo (tre passaggi esatti), servizi (coerenti con
+`serviceType`, nessuna promessa di prezzo), zona servita (Visp/Brig-Glis/Naters,
+nessuna promessa di copertura totale), trasparenza (disclaimer obbligatorio testuale
+identico allo standard). Copy nuovo aggiunto anche a `docs/CONTENT.md` nella stessa
+sessione. Verificato con screenshot mobile 320px: nessun overflow, ordine heading
+H1→H2→H3 corretto, nessun elemento vietato.
 
 ---
 
 ## WEB-005 — FAQ, footer, pagine legali
-Status: todo
+Status: in_progress
 Priority: P1
 Dependencies: WEB-004
 
 ### Goal
-Implementare la sezione FAQ e il footer della landing, oltre alle pagine
-`/de/datenschutz`, `/de/impressum`, `/de/vermittlungsbedingungen` con contenuto reale
-(non placeholder).
+Implementare la CTA finale, la sezione FAQ e il footer della landing (spec sezione 6,
+punti 10-12), oltre alle pagine `/de/datenschutz`, `/de/impressum`,
+`/de/vermittlungsbedingungen` con contenuto reale (non placeholder).
 
 ### Acceptance criteria
+- [ ] CTA finale prima del footer (rimanda alla stessa richiesta della CTA hero).
 - [ ] Sezione FAQ con domande/risposte coerenti con `CONTENT.md`.
 - [ ] Footer con link a tutte le pagine legali e disclaimer di intermediazione.
 - [ ] Pagine `/de/datenschutz`, `/de/impressum`, `/de/vermittlungsbedingungen`
@@ -212,6 +230,52 @@ Implementare la sezione FAQ e il footer della landing, oltre alle pagine
 Il contenuto legale definitivo (Impressum/Datenschutz) richiede dati reali
 dell'organizzazione: se non disponibili, registrare un blocco in `KNOWN_ISSUES.md`
 invece di inventare dati.
+
+---
+
+## WEB-022 — Design system: stile, layout e identità visiva
+Status: todo
+Priority: P1
+Dependencies: WEB-005
+
+### Goal
+Definire e applicare uno stile visivo coerente per l'intero sito (tipografia, palette
+colori, spaziature, componenti UI ricorrenti come bottoni/card/sezioni) e rifinire il
+layout condiviso (header/footer), oltre alla sola struttura funzionale creata in
+WEB-002/WEB-003/WEB-004. Attualmente le pagine usano solo utility Tailwind di base
+(grigio neutro), senza un'identità visiva definita.
+
+### Acceptance criteria
+- [ ] Palette colori definita (colore primario/brand, colori di stato per
+      errori/successo del form) e documentata in `docs/ARCHITECTURE.md`.
+- [ ] Scala tipografica coerente (dimensioni heading/testo/microcopy) applicata a
+      tutte le pagine, non solo alla landing.
+- [ ] Componenti UI ricorrenti (bottone primario/secondario, card trust point,
+      wrapper di sezione) uniformati in uno stile condiviso.
+- [ ] Header/footer condivisi rifiniti visivamente (non solo strutturalmente).
+- [ ] Nessuna libreria di componenti pesante aggiunta senza necessità: restare su
+      Tailwind CSS, coerente con ADR-001 (niente overengineering).
+- [ ] Nessun elemento vietato introdotto in fase di stile (timer, badge inventati,
+      falsa urgenza, ecc. — vedi `CLEYRA_WEBSITE_SPEC.md` sezione 6).
+- [ ] Verifica visiva manuale desktop e mobile (320px) dopo l'applicazione dello
+      stile.
+
+### Validation
+- `npm run lint`
+- `npm run typecheck`
+- `npm test`
+- `npm run build`
+- Verifica visiva manuale (screenshot desktop + mobile 320px)
+
+### Notes
+Task trasversale, aggiunto su richiesta esplicita durante la sessione WEB-004
+(2026-07-18): finché non viene eseguito, tutte le pagine restano visivamente
+"grezze" (solo struttura funzionale con stile Tailwind di default). Da eseguire
+quando i contenuti di tutte le sezioni della landing (WEB-003..WEB-005) sono stabili,
+e comunque prima della QA finale (WEB-020), così da non dover rifare due volte il
+lavoro di rifinitura visiva. Non blocca l'avanzamento di WEB-004/WEB-005/WEB-006 in
+sé, ma va tenuto presente: le pagine create in quei task useranno lo stesso stile
+minimale di WEB-003 fino a quando WEB-022 non viene eseguito.
 
 ---
 

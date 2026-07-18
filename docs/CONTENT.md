@@ -55,11 +55,99 @@ Regionale Vermittlung
 Ihre Anfrage wird an einen passenden Partner für Ihre Region weitergeleitet.
 ```
 
+## Problema/soluzione
+
+Testo aggiunto durante WEB-004 (2026-07-18): la spec non fornisce un testo letterale
+per questa sezione, solo la sua posizione nell'ordine della landing. Rispetta i
+vincoli (nessun dato inventato, nessuna promessa non verificabile).
+
+Titolo:
+
+```text
+Die Endreinigung muss stimmen — die Suche kostet Zeit
+```
+
+Testo:
+
+```text
+Bei der Wohnungsabgabe zählt eine saubere Endreinigung. Statt selbst einen passenden Anbieter zu suchen, senden Sie Ihre Anfrage an Cleyra. Wir vermitteln sie an einen regionalen Reinigungspartner für Ihre Zone und Ihren Wunschtermin.
+```
+
 ## Processo in tre passaggi
+
+Titolo sezione:
+
+```text
+So funktioniert's
+```
 
 1. `Anfrage ausfüllen`
 2. `Anfrage wird geprüft`
 3. `Offerte erhalten und entscheiden`
+
+## Servizi (cosa può comprendere la pulizia)
+
+Testo aggiunto durante WEB-004 (2026-07-18). Le tre opzioni corrispondono
+esattamente a `serviceType` nel form (vedi `FORM_SPEC.md`): nessuna promessa di
+prezzo, nessuna lista tecnica dettagliata (quella la raccoglie Mirdita nel contatto
+diretto).
+
+Titolo sezione:
+
+```text
+Welche Reinigung Sie anfragen können
+```
+
+```text
+Endreinigung zur Wohnungsabgabe
+Für die Rückgabe Ihrer Mietwohnung.
+```
+
+```text
+Umzugsreinigung
+Für den Umzug in eine neue Wohnung.
+```
+
+```text
+Andere Reinigung
+Für weitere Reinigungsanliegen im Oberwallis.
+```
+
+## Zona servita
+
+Testo aggiunto durante WEB-004 (2026-07-18). Non promette copertura totale della
+regione; non crea pagine dedicate per singola città (vietato dalla spec in questa
+fase).
+
+Titolo sezione:
+
+```text
+Serviceregion
+```
+
+```text
+Cleyra vermittelt Anfragen aus dem Oberwallis, unter anderem aus Visp, Brig-Glis und Naters.
+```
+
+## Spiegazione dell'intermediazione (trasparenza)
+
+Titolo sezione:
+
+```text
+Cleyra ist Vermittler, nicht Ausführender
+```
+
+Testo: il disclaimer di intermediazione obbligatorio (vedi sezione dedicata in cima a
+questo documento), riportato identico anche in questa sezione della landing.
+
+## CTA finale
+
+Testo aggiunto durante WEB-004/WEB-005 (2026-07-18): stessa CTA della hero, ripetuta
+prima del footer.
+
+```text
+Kostenlose Anfrage starten
+```
 
 ## Form — Schritt 1 (Anfrage)
 

@@ -19,6 +19,30 @@ const trustPoints = [
   },
 ];
 
+const processSteps = [
+  "Anfrage ausfüllen",
+  "Anfrage wird geprüft",
+  "Offerte erhalten und entscheiden",
+];
+
+const services = [
+  {
+    title: "Endreinigung zur Wohnungsabgabe",
+    text: "Für die Rückgabe Ihrer Mietwohnung.",
+  },
+  {
+    title: "Umzugsreinigung",
+    text: "Für den Umzug in eine neue Wohnung.",
+  },
+  {
+    title: "Andere Reinigung",
+    text: "Für weitere Reinigungsanliegen im Oberwallis.",
+  },
+];
+
+const disclaimerText =
+  "Cleyra ist ein Vermittlungsservice. Cleyra führt keine Reinigungsarbeiten aus. Der Vertrag über die Reinigung entsteht direkt zwischen dem Kunden und dem ausführenden Partnerunternehmen.";
+
 export default function EndreinigungOberwallisPage() {
   return (
     <main>
@@ -51,6 +75,59 @@ export default function EndreinigungOberwallisPage() {
             </li>
           ))}
         </ul>
+      </section>
+
+      <section className="mx-auto max-w-3xl px-6 py-16">
+        <h2 className="text-2xl font-semibold">
+          Die Endreinigung muss stimmen — die Suche kostet Zeit
+        </h2>
+        <p className="mt-3 text-zinc-600">
+          Bei der Wohnungsabgabe zählt eine saubere Endreinigung. Statt selbst einen
+          passenden Anbieter zu suchen, senden Sie Ihre Anfrage an Cleyra. Wir
+          vermitteln sie an einen regionalen Reinigungspartner für Ihre Zone und Ihren
+          Wunschtermin.
+        </p>
+      </section>
+
+      <section className="mx-auto max-w-3xl px-6 pb-16">
+        <h2 className="text-2xl font-semibold">So funktioniert&apos;s</h2>
+        <ol className="mt-4 grid gap-4 sm:grid-cols-3">
+          {processSteps.map((step, index) => (
+            <li key={step} className="flex items-start gap-3">
+              <span className="font-semibold text-zinc-400">{index + 1}.</span>
+              <span>{step}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="mx-auto max-w-3xl px-6 pb-16">
+        <h2 className="text-2xl font-semibold">
+          Welche Reinigung Sie anfragen können
+        </h2>
+        <ul className="mt-4 grid gap-6 sm:grid-cols-3">
+          {services.map((service) => (
+            <li key={service.title}>
+              <h3 className="font-semibold">{service.title}</h3>
+              <p className="mt-1 text-sm text-zinc-600">{service.text}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="mx-auto max-w-3xl px-6 pb-16">
+        <h2 className="text-2xl font-semibold">Serviceregion</h2>
+        <p className="mt-3 text-zinc-600">
+          Cleyra vermittelt Anfragen aus dem Oberwallis, unter anderem aus Visp,
+          Brig-Glis und Naters.
+        </p>
+      </section>
+
+      <section className="mx-auto max-w-3xl px-6 pb-16">
+        <h2 className="text-2xl font-semibold">
+          Cleyra ist Vermittler, nicht Ausführender
+        </h2>
+        <p className="mt-3 text-zinc-600">{disclaimerText}</p>
       </section>
     </main>
   );
