@@ -1,104 +1,103 @@
 # Session handoff
 
-Last updated: 2026-07-18 01:00 Europe/Zurich
-Session objective: Il proprietario ha chiesto di annullare completamente
-il sistema di design introdotto nella sessione precedente ("cancella
-tutto lo stile riportalo a come era prima") e di rimandare il lavoro sul
-design a fine progetto, segnandolo da qualche parte perché non si perda.
+Last updated: 2026-07-18 01:50 Europe/Zurich
+Session objective: Proseguire dal punto indicato nella documentazione
+(`docs/PROJECT_STATUS.md`, "Prossime attività consigliate") con
+LOCAL-002/003/004: contenuto completo a 10 sezioni per le tre landing
+locali (Visp, Brig-Glis, Naters), che erano ancora placeholder minimi.
 Result: completed
 
 ## What changed
 
-- Ripristinati a `git checkout da2b64e -- <file>` tutti i file toccati
-  dal sistema di design (DEC-20260718-01) e dal fix successivo sulla
-  transizione CTA→footer: `tailwind.config.ts`, `app/layout.tsx`,
-  `app/globals.css`, tutte le pagine `app/de/*/page.tsx`, tutti i
-  componenti `components/{ui,layout,marketing,lead-form}/*`.
-- Rimosso `components/ui/Icon.tsx` (non esisteva prima del sistema di
-  design).
-- Il sito è tornato ai colori Tailwind di default (slate/gray), font di
-  sistema, nessuna icona SVG custom, nessuna card/pill/ombra dedicata.
-- **Nessuna modifica di logica applicativa**: il modulo lead, l'endpoint
-  `/api/leads`, gli schemi Zod, l'attribution, il rate limiting sono
-  tutti invariati — solo styling/markup è stato ripristinato.
-- Documentata la decisione come rollback esplicito in `docs/DECISIONS.md`
-  (DEC-20260718-02), che supersede DEC-20260718-01 senza cancellarla
-  (storico preservato).
-- Aggiunto un task di backlog `DESIGN-001` (marcato `BLOCKED`, bloccato
-  su richiesta del proprietario) in `docs/IMPLEMENTATION_PLAN.md`, sezione
-  "Backlog design (rimandato dal proprietario)", così il lavoro sul
-  design non si perde e non verrà ripreso senza una richiesta esplicita.
+- Esteso `lib/locations.ts`: aggiunto `localFaq` (domanda+risposta unica
+  per città) al tipo `LocationLanding` e a ciascuna delle tre landing;
+  aggiunta `getOtherLocationLandings(slug)` per i link reciproci.
+- Estratto `lib/faq-content.ts` con le domande frequenti generali
+  (prima duplicate solo in `FaqPreview.tsx`), ora condivise tra homepage
+  e landing locali.
+- Nuovi componenti:
+  - `components/marketing/NearbyLocations.tsx` — zone vicine (testo) +
+    link verso le altre due landing (nessun self-link)
+  - `components/marketing/LocalFaq.tsx` — FAQ locale (domanda unica
+    della città + le domande generali)
+  - `components/marketing/LocationLandingPage.tsx` — template
+    riutilizzabile che assembla le 10 sezioni richieste dalla spec
+    sezione 9 a partire da un oggetto `LocationLanding`
+- `components/lead-form/LeadForm.tsx`: aggiunta prop opzionale
+  `initialValues` per precompilare `city`/`postalCode` (usata dalle
+  landing locali, spec 9 "modulo con città precompilata").
+- Le tre pagine `app/de/endreinigung-{visp,brig,naters}/page.tsx` ora
+  usano `LocationLandingPage` invece del placeholder minimo precedente.
+- Nuovo `lib/__tests__/locations.test.ts` (5 test): unicità di
+  slug/meta/H1/FAQ locale, presenza di almeno una zona vicina per
+  landing, corretto comportamento di `getOtherLocationLandings`.
 
 ## Exact current state
 
-- Aspetto visivo del sito identico a come era subito dopo il commit
-  `da2b64e` (prima di qualsiasi lavoro sul design): nessun carattere
-  visivo distintivo, di proposito, in attesa di essere ripreso più avanti.
-- Tutta la funzionalità (routes, modulo lead, endpoint API, homepage
-  completa con tutte le sezioni 8.1–8.9) resta quella descritta nel
-  changelog delle sessioni precedenti — solo lo stile è cambiato.
-- `npm run build`, `npm run lint`, `npx vitest run` (21/21) tutti verdi
-  dopo il rollback.
+- Le tre landing locali hanno ora: hero locale, trust strip, modulo con
+  città/CAP precompilati, sezione "come funziona", lista servizi, zone
+  vicine con link reciproci, trasparenza Cleyra, FAQ locale, CTA finale,
+  footer globale — cioè tutte le 10 sezioni richieste dalla spec 9.
+- Verificato con Playwright headless (script ad-hoc, non committato):
+  su `/de/endreinigung-visp` l'H1 è corretto, il modulo ha
+  `postalCode=3930`/`city=Visp` precompilati, la domanda FAQ locale di
+  Visp è visibile, sono presenti i link a Brig-Glis e Naters ma non un
+  self-link; `/de/endreinigung-brig` e `/de/endreinigung-naters`
+  rispondono `200`.
+- `npm run build`, `npm run lint`, `npx vitest run` (26/26, prima 21)
+  tutti verdi.
 - Repository: modifiche di questa sessione non ancora committate al
   momento di scrivere questo file (da fare subito dopo).
 
 ## Files touched
 
-- `tailwind.config.ts`, `app/layout.tsx`, `app/globals.css` — ripristinati
-- Tutte le pagine `app/de/*/page.tsx` — ripristinate (solo classi
-  Tailwind, nessun cambio di copy/struttura)
-- `components/ui/{Button,Input,Select,Checkbox,RadioGroup,Textarea,ProgressBar,Alert,Accordion}.tsx` — ripristinati
-- `components/ui/Icon.tsx` — rimosso
-- `components/layout/{Header,Footer,MobileMenu}.tsx` — ripristinati
-- `components/marketing/*` (tutti e 9) — ripristinati
-- `components/lead-form/*` — ripristinati (solo classi, nessuna modifica
-  a schema/logica)
-- `docs/DECISIONS.md` — nuova voce DEC-20260718-02 (rollback), status di
-  DEC-20260718-01 aggiornato a "superseded" con nota, non cancellata
-- `docs/IMPLEMENTATION_PLAN.md` — nuova sezione "Backlog design" con
-  DESIGN-001
-- `docs/PROJECT_STATUS.md` — aggiornato
-- `docs/SESSION_HANDOFF.md` — questo file
-- `docs/CHANGELOG.md` — nuova voce
+- `lib/locations.ts` — aggiunto `localFaq`, `getOtherLocationLandings`
+- `lib/faq-content.ts` — nuovo, FAQ generali estratte da `FaqPreview.tsx`
+- `components/marketing/FaqPreview.tsx` — ora importa da `lib/faq-content.ts`
+- `components/marketing/{NearbyLocations,LocalFaq,LocationLandingPage}.tsx` — nuovi
+- `components/lead-form/LeadForm.tsx` — prop `initialValues`
+- `app/de/endreinigung-{visp,brig,naters}/page.tsx` — riscritte per usare `LocationLandingPage`
+- `lib/__tests__/locations.test.ts` — nuovo, 5 test
+- `docs/IMPLEMENTATION_PLAN.md`, `docs/PROJECT_STATUS.md`, `docs/ARCHITECTURE.md` — aggiornati
 
 ## Verification performed
 
-- `npm run build` — successo, 18 route
+- `npm run build` — successo, 18 route (le tre landing locali ora
+  includono il bundle del modulo lead, ~133kB come la homepage)
 - `npm run lint` — nessun warning/errore
-- `npx vitest run` — 21/21 verdi (conferma che il rollback non ha
-  toccato la logica del modulo/schema)
+- `npx vitest run` — 26/26 verdi (21 schema lead + 5 dati location)
+- Playwright headless: H1/prefill/FAQ locale/link incrociati verificati
+  su Visp; le altre due landing verificate rispondere `200`
 
 ## Known problems
 
-- Nessuno introdotto da questo rollback. Restano tutti i limiti già
-  documentati in precedenza (persistenza lead solo in memoria, nessuna
-  e-mail, landing locali/pagine informative ancora placeholder minimi,
-  nessun favicon).
-- Il sito è di nuovo visivamente "senza carattere" — **intenzionale**,
-  non un regressione da correggere: il proprietario ha chiesto
-  esplicitamente questo stato, rimandando il design a più avanti.
+- Nessuno introdotto in questa sessione. Restano tutti i limiti già
+  documentati: persistenza lead solo in memoria, nessuna e-mail, pagine
+  informative (`so-funktionierts`, `faq`, `ueber-cleyra`, `kontakt`)
+  ancora placeholder minimi, sistema di design rimandato
+  intenzionalmente (DESIGN-001).
+- I comuni vicini elencati per ciascuna landing restano una stima
+  geografica non confermata dal proprietario (invariato da prima).
 
 ## Exact next actions
 
-1. Non riprendere il lavoro sul design (DESIGN-001) finché il
-   proprietario non lo richiede esplicitamente — è marcato `BLOCKED` di
-   proposito.
-2. API-002 — Scegliere un provider database e sostituire `inMemoryLeads`
+1. API-002 — Scegliere un provider database e sostituire `inMemoryLeads`
    in `app/api/leads/route.ts` con una persistenza reale.
-3. LOCAL-002/003/004 — Espandere le landing locali con la struttura a 10
-   sezioni (spec 9.4).
-4. QA-001/QA-002 — Formalizzare test automatici (component test per gli
-   step del modulo, suite e2e Playwright committata).
-5. INFO-001 — Copy completo per `so-funktionierts`, `faq`, `ueber-cleyra`,
-   `kontakt`.
+2. INFO-001 — Copy completo per `so-funktionierts`, `faq`,
+   `ueber-cleyra`, `kontakt` (oggi solo H1 placeholder).
+3. QA-001/QA-002 — Component test per gli step del modulo e una suite
+   e2e Playwright committata (finora solo script ad-hoc non salvati).
+4. API-003/FORM-005 — Storage privato per allegati e upload reale.
+5. SEO-001 — Metadata avanzati, canonical, sitemap.xml, robots.txt.
 
 ## Before continuing
 
 - Leggere `CLEYRA_WEBSITE_SPEC.md`, `docs/PROJECT_STATUS.md` e questo
   file prima di qualsiasi modifica.
-- **Non reintrodurre la palette/tipografia/icone del sistema di design
-  precedente senza che il proprietario lo richieda esplicitamente** — è
-  stato annullato di proposito (DEC-20260718-02), non per errore.
+- Non reintrodurre il sistema di design annullato (DEC-20260718-02)
+  senza richiesta esplicita del proprietario.
+- Non pubblicare le landing locali con i comuni vicini attuali (stima,
+  non confermata) senza verifica del proprietario.
 - Non riaprire le altre decisioni in `docs/DECISIONS.md` senza un motivo
   concreto.
 - Verificare `git status` prima di operazioni distruttive; committare e

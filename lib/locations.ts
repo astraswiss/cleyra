@@ -8,10 +8,12 @@ export type LocationLanding = {
   metaDescription: string;
   h1: string;
   intro: string;
+  localFaq: {
+    question: string;
+    answer: string;
+  };
 };
 
-// TODO(LOCAL-002/003/004): arricchire con FAQ locale e link reciproci
-// quando si implementa il contenuto completo delle landing (Fase 2).
 export const locationLandings: LocationLanding[] = [
   {
     slug: "endreinigung-visp",
@@ -25,6 +27,11 @@ export const locationLandings: LocationLanding[] = [
     h1: "Endreinigung in Visp einfach anfragen",
     intro:
       "Senden Sie uns einmal die wichtigsten Angaben. Cleyra prüft Ihre Anfrage und vermittelt sie an einen ausgewählten Reinigungspartner für Visp und Umgebung.",
+    localFaq: {
+      question: "Deckt Cleyra auch die Gemeinden rund um Visp ab?",
+      answer:
+        "Anfragen aus Visp und den umliegenden Gemeinden wie Eyholz, Baltschieder, Lalden und Eggerberg werden geprüft und, wenn ein Reinigungspartner die Region und den Termin abdecken kann, entsprechend vermittelt.",
+    },
   },
   {
     slug: "endreinigung-brig",
@@ -38,6 +45,11 @@ export const locationLandings: LocationLanding[] = [
     h1: "Endreinigung in Brig-Glis einfach anfragen",
     intro:
       "Senden Sie uns einmal die wichtigsten Angaben. Cleyra prüft Ihre Anfrage und vermittelt sie an einen ausgewählten Reinigungspartner für Brig-Glis und Umgebung.",
+    localFaq: {
+      question: "Werden auch Gamsen, Ried-Brig und Termen abgedeckt?",
+      answer:
+        "Anfragen aus Brig-Glis und den umliegenden Gemeinden wie Gamsen, Ried-Brig, Termen und Lalden werden geprüft und, wenn ein Reinigungspartner die Region und den Termin abdecken kann, entsprechend vermittelt.",
+    },
   },
   {
     slug: "endreinigung-naters",
@@ -51,5 +63,14 @@ export const locationLandings: LocationLanding[] = [
     h1: "Endreinigung in Naters einfach anfragen",
     intro:
       "Senden Sie uns einmal die wichtigsten Angaben. Cleyra prüft Ihre Anfrage und vermittelt sie an einen ausgewählten Reinigungspartner für Naters und Umgebung.",
+    localFaq: {
+      question: "Ist eine Anfrage auch aus Birgisch oder Mund möglich?",
+      answer:
+        "Anfragen aus Naters und den umliegenden Gemeinden wie Blatten bei Naters, Birgisch und Mund werden geprüft und, wenn ein Reinigungspartner die Region und den Termin abdecken kann, entsprechend vermittelt.",
+    },
   },
 ];
+
+export function getOtherLocationLandings(slug: string): LocationLanding[] {
+  return locationLandings.filter((location) => location.slug !== slug);
+}

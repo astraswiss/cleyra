@@ -84,7 +84,13 @@ const defaultValues: LeadFormValues = {
   marketingConsent: false,
 };
 
-export function LeadForm() {
+type LeadFormProps = {
+  // Precompila luogo/CAP quando la provenienza è chiara (landing locale),
+  // spec sezione 9 "modulo con città precompilata".
+  initialValues?: Partial<Pick<LeadFormValues, "postalCode" | "city">>;
+};
+
+export function LeadForm({ initialValues }: LeadFormProps = {}) {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [photos, setPhotos] = useState<File[]>([]);
@@ -94,7 +100,7 @@ export function LeadForm() {
 
   const methods = useForm<LeadFormValues>({
     resolver: zodResolver(leadFormSchema),
-    defaultValues,
+    defaultValues: { ...defaultValues, ...initialValues },
     mode: "onBlur",
   });
 

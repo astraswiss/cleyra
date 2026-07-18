@@ -1,3 +1,32 @@
+## 2026-07-18 (5)
+
+### Added
+
+- Contenuto completo (10 sezioni, spec 9) per le tre landing locali
+  (Visp, Brig-Glis, Naters): `components/marketing/LocationLandingPage.tsx`
+  (template condiviso), `NearbyLocations.tsx` (zone vicine + link
+  reciproci), `LocalFaq.tsx` (FAQ locale unica per città).
+- `lib/faq-content.ts`: FAQ generali estratte e condivise tra homepage e
+  landing locali.
+- Prop `initialValues` su `LeadForm` per precompilare città/CAP dalle
+  landing locali.
+- `lib/__tests__/locations.test.ts`: 5 unit test sui dati delle landing
+  (unicità slug/meta/H1/FAQ, zone vicine presenti).
+
+### Changed
+
+- `lib/locations.ts`: aggiunto `localFaq` a ogni landing e
+  `getOtherLocationLandings()`.
+- Le tre pagine `app/de/endreinigung-{visp,brig,naters}/page.tsx` usano
+  ora il template condiviso invece del placeholder minimo precedente.
+
+### Verification
+
+- `npm run build`, `npm run lint`, `npx vitest run` (26/26) verdi.
+- Verifica e2e manuale Playwright: H1, prefill città/CAP, FAQ locale e
+  link incrociati (senza self-link) confermati su Visp; le altre due
+  landing rispondono `200`.
+
 ## 2026-07-18 (4)
 
 ### Removed

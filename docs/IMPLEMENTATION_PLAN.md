@@ -50,16 +50,26 @@ Piano eseguibile derivato da `CLEYRA_WEBSITE_SPEC.md` sezione 29.
   - File previsti: `app/de/page.tsx`, `components/marketing/{Hero,TrustStrip,ProcessSteps,ServiceList,RegionLinks,BenefitsGrid,PartnerTransparency,FaqPreview,FinalCta}.tsx`, `components/ui/Accordion.tsx`
   - Criteri di accettazione: tutte le sezioni 8.1–8.9 presenti nell'ordine indicato con il copy della spec; CTA collegate a `/de#anfrage` dove il modulo è effettivamente incorporato
   - Test richiesti: `npm run build`/`npm run lint` verdi; verifica e2e manuale (Playwright headless) che la pagina carica e il modulo `#anfrage` è raggiungibile e funzionante (vedi FORM-007)
-- [x] LOCAL-001 (parziale) Dati struttura `LocationLanding`
+- [x] LOCAL-001 Dati struttura `LocationLanding`
   - Dipendenze: nessuna
-  - File previsti: `lib/locations.ts`
-  - Criteri di accettazione: modello dati con H1/intro/meta unici per Visp, Brig-Glis, Naters
-  - Test richiesti: nessun unit test ancora scritto (TODO in Fase 6)
-  - Nota: manca ancora il template a 10 sezioni (`components/marketing/*`) e la FAQ locale — pagine attuali sono placeholder minimi (hero + intro + nearby places), non la struttura completa spec 9.4
-- [ ] LOCAL-002 Landing Visp — [ ] LOCAL-003 Brig-Glis — [ ] LOCAL-004 Naters (contenuto completo)
-  - Dipendenze: LOCAL-001, HOME-001
-  - Criteri di accettazione: struttura a 10 sezioni, FAQ locale con almeno una domanda locale, link reciproci tra le tre landing
-  - Nota: le route esistono già come placeholder (200 OK, meta uniche); resta da fare il contenuto completo
+  - File previsti: `lib/locations.ts`, `lib/faq-content.ts`
+  - Criteri di accettazione: modello dati con H1/intro/meta/FAQ locale unici per Visp, Brig-Glis, Naters
+  - Test richiesti: `lib/__tests__/locations.test.ts` — slug/meta/H1/FAQ unici, ogni landing ha almeno una zona vicina
+- [x] LOCAL-002 Landing Visp — [x] LOCAL-003 Brig-Glis — [x] LOCAL-004 Naters (contenuto completo)
+  - Dipendenze: LOCAL-001
+  - File previsti: `components/marketing/LocationLandingPage.tsx` (template condiviso),
+    `components/marketing/{NearbyLocations,LocalFaq}.tsx`,
+    `app/de/endreinigung-{visp,brig,naters}/page.tsx`
+  - Criteri di accettazione: struttura a 10 sezioni (hero locale, trust
+    strip, modulo con città/CAP precompilati, come funziona, servizi,
+    zone vicine, trasparenza Cleyra, FAQ con almeno una domanda locale,
+    CTA finale, footer globale), link reciproci tra le tre landing
+    (nessun self-link), meta uniche
+  - Test richiesti: `npm run build`/`lint`/`vitest` verdi; verifica
+    manuale Playwright — H1 corretto, modulo precompilato con
+    `city`/`postalCode` della landing, domanda FAQ locale visibile,
+    link verso le altre due città presenti e nessun link verso se
+    stessa, le tre route rispondono `200`
 - [ ] INFO-001 `/de/so-funktionierts`, `/de/faq`, `/de/ueber-cleyra`, `/de/kontakt` (contenuto completo)
   - Dipendenze: LAYOUT-001 (fatto)
   - Criteri di accettazione: copy conforme a spec sezione 16, nessun dato aziendale inventato
@@ -150,8 +160,8 @@ Piano eseguibile derivato da `CLEYRA_WEBSITE_SPEC.md` sezione 29.
 
 ## Next recommended tasks
 
-1. LOCAL-002/003/004 — Contenuto completo a 10 sezioni per le landing Visp/Brig/Naters (oggi solo hero minimo)
-2. API-002 — Scegliere e collegare un database reale, sostituendo l'array in memoria in `app/api/leads/route.ts`
-3. INFO-001 — Copy completo per `so-funktionierts`, `faq`, `ueber-cleyra`, `kontakt`
-4. API-003/FORM-005 — Storage privato per allegati e upload reale (oggi i file restano solo lato client)
-5. QA-001/QA-002 — Formalizzare test automatici: component test per gli step del modulo e una suite e2e Playwright (oggi la verifica e2e è stata solo manuale/ad-hoc, nessun file di test committato)
+1. API-002 — Scegliere e collegare un database reale, sostituendo l'array in memoria in `app/api/leads/route.ts`
+2. INFO-001 — Copy completo per `so-funktionierts`, `faq`, `ueber-cleyra`, `kontakt`
+3. API-003/FORM-005 — Storage privato per allegati e upload reale (oggi i file restano solo lato client)
+4. QA-001/QA-002 — Formalizzare test automatici: component test per gli step del modulo e una suite e2e Playwright (oggi la verifica e2e è stata solo manuale/ad-hoc, nessun file di test committato)
+5. SEO-001 — Metadata avanzati, canonical, sitemap.xml, robots.txt (oggi solo title/description per pagina)

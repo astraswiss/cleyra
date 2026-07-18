@@ -55,9 +55,9 @@ invio riuscito e redirect.
 │   └── de/
 │       ├── layout.tsx              # Header + Footer + skip link
 │       ├── page.tsx                # homepage completa (sezioni 8.1-8.9) + LeadForm in #anfrage
-│       ├── endreinigung-visp/page.tsx        # placeholder minimo
-│       ├── endreinigung-brig/page.tsx        # placeholder minimo
-│       ├── endreinigung-naters/page.tsx      # placeholder minimo
+│       ├── endreinigung-visp/page.tsx        # completa, via LocationLandingPage
+│       ├── endreinigung-brig/page.tsx        # completa, via LocationLandingPage
+│       ├── endreinigung-naters/page.tsx      # completa, via LocationLandingPage
 │       ├── umzugsreinigung-oberwallis/page.tsx  # placeholder minimo
 │       ├── so-funktionierts/page.tsx         # placeholder minimo
 │       ├── faq/page.tsx                      # placeholder minimo
@@ -81,6 +81,8 @@ invio riuscito e redirect.
 │   │   ├── Hero.tsx, TrustStrip.tsx, ProcessSteps.tsx, ServiceList.tsx
 │   │   ├── RegionLinks.tsx, BenefitsGrid.tsx, PartnerTransparency.tsx
 │   │   ├── FaqPreview.tsx, FinalCta.tsx
+│   │   ├── LocationLandingPage.tsx  # template condiviso landing locali
+│   │   ├── NearbyLocations.tsx, LocalFaq.tsx
 │   └── lead-form/
 │       ├── LeadForm.tsx            # orchestratore client, RHF + zodResolver
 │       ├── Step{LocationService,Property,Extras,Contact}.tsx
@@ -88,13 +90,14 @@ invio riuscito e redirect.
 │       ├── FormNavigation.tsx, FormErrorSummary.tsx
 ├── lib/
 │   ├── site-config.ts
-│   ├── locations.ts                # modello LocationLanding + dati Visp/Brig/Naters
+│   ├── locations.ts                # modello LocationLanding + dati Visp/Brig/Naters + FAQ locale
+│   ├── faq-content.ts              # domande frequenti generali (condivise homepage + landing)
 │   ├── lead-schema.ts              # Zod: CleaningLead + schema per step
 │   ├── attribution.ts              # cattura UTM/click-id al primo touch
 │   ├── rate-limit.ts               # rate limiter in memoria (per istanza)
 │   ├── sanitize.ts                 # sanitizzazione notes, normalizzazione email/telefono
 │   ├── lead-id.ts                  # generazione leadId "CLY-YYYY-XXXXXX"
-│   └── __tests__/lead-schema.test.ts  # 21 unit test (Vitest)
+│   └── __tests__/{lead-schema,locations}.test.ts  # 26 unit test (Vitest)
 ├── vitest.config.ts
 ├── next.config.mjs
 ├── tailwind.config.ts
@@ -110,9 +113,9 @@ invio riuscito e redirect.
 |---|---|
 | `/` | redirect a `/de` — implementato e verificato (307) |
 | `/de` | **completo**: tutte le sezioni 8.1–8.9, modulo lead funzionante in `#anfrage` |
-| `/de/endreinigung-visp` | placeholder minimo — struttura 10 sezioni mancante (LOCAL-002) |
-| `/de/endreinigung-brig` | placeholder minimo — struttura 10 sezioni mancante (LOCAL-003) |
-| `/de/endreinigung-naters` | placeholder minimo — struttura 10 sezioni mancante (LOCAL-004) |
+| `/de/endreinigung-visp` | **completa**: 10 sezioni via `LocationLandingPage`, modulo precompilato, FAQ locale, link incrociati |
+| `/de/endreinigung-brig` | **completa**: idem |
+| `/de/endreinigung-naters` | **completa**: idem |
 | `/de/umzugsreinigung-oberwallis` | placeholder minimo (LOCAL-005) |
 | `/de/so-funktionierts` | placeholder minimo (INFO-001) |
 | `/de/faq` | placeholder minimo, nessuna domanda ancora (INFO-001) — nota: la homepage ha già una FAQ breve completa (`FaqPreview`) |
