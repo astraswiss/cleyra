@@ -52,9 +52,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <div className="pb-20">
-        <FinalCta />
-      </div>
+      <FinalCta />
     </main>
   );
 }

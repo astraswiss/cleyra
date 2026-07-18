@@ -2,12 +2,12 @@ import { Button } from "@/components/ui/Button";
 
 export function FinalCta() {
   return (
-    <section className="relative overflow-hidden rounded-2xl bg-brand-900 px-6 py-14 text-white sm:px-12">
+    <section className="relative left-1/2 right-1/2 -mx-[50vw] w-screen overflow-hidden bg-brand-900 text-white">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand-700/40 blur-3xl"
       />
-      <div className="relative">
+      <div className="relative mx-auto max-w-content px-4 py-16 sm:px-6">
         <h2 className="font-display text-3xl font-bold tracking-tight">
           Endreinigung jetzt unverbindlich anfragen
         </h2>
